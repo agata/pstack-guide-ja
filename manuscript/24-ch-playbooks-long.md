@@ -162,14 +162,12 @@ end 응답
 - **처음부터 다시 검증하고 싶을 때.** 흔적을 신뢰할 수 없는 것으로 다루는 신호입니다. 이전 흔적은 권위 있는 입력이므로 다시 도출하려는 편향에 저항합니다.
 - **이전 에이전트의 자기 보고가 통과일 때.** 증거가 아닙니다. 실제 산출물로 확인합니다.
 - **대본을 어디서 찾을지.** 활성 작업공간의 `agent-transcripts/` 아래를 읽습니다. `~/.cursor/projects/*/` 전체를 글롭하지 않습니다. 작업공간 경계를 넘어 관계없는 프로젝트의 비공개 채팅을 읽게 되기 때문입니다.
-- **판정이 넷 중 무엇인지.** 실행 이어가기, 끝난 권고 배포, 이전 결론 비준이나 뒤집기, 실패한 실행의 사후 분석 가운데 하나를 고르고, 그 이후는 라우팅한 플레이북이 맡습니다.
 
 ### 호출하는 스킬과 스크립트
 
 | 이름 | 종류 | 부르는 단계 |
 | --- | --- | --- |
-| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window) | 원칙 | 1 |
-| [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 5 |
+| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window), [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 본문의 각 단계 |
 | `git log`, `git diff` | 명령 | 2 |
 | 상황에 맞는 플레이북 | 플레이북 | 4 |
 
@@ -349,9 +347,7 @@ end 응답
 | `scripts/worktree-audit.sh` | 스크립트(읽기 전용) | 1. `git worktree list`에서 경로를 읽음 |
 | `git worktree remove`, `git worktree prune` | 명령 | 5 |
 | `xcrun simctl` | 명령 | 6 |
-| [`build-the-lever`](principles.md#skill-principle-build-the-lever), [`encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure) | 원칙 | 1 |
-| [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 2 |
-| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window) | 원칙 | 3 |
+| [`build-the-lever`](principles.md#skill-principle-build-the-lever), [`encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure), [`prove-it-works`](principles.md#skill-principle-prove-it-works), [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window) | 원칙 | 본문의 각 단계 |
 
 ## Multi-phase or multi-PR plan {#playbook-multi-phase-plan}
 
@@ -474,8 +470,7 @@ end 운영자의 명시적인 go 이후에 실행이 시작됨
 | [Prototype](playbooks-work.md#playbook-prototype) | 플레이북 | 2 |
 | [`never-block-on-the-human`](principles.md#skill-principle-never-block-on-the-human) | 원칙 | 2 |
 | `poteto-agent` 서브에이전트 | 에이전트 | 3 |
-| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window) | 원칙 | 3 |
-| [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 4 |
+| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window), [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 본문의 각 단계 |
 | [`/technical-writing`](writing.md#skill-technical-writing), [`/unslop`](writing.md#skill-unslop) | 스킬 | 5 |
 | `scripts/check-plan.mjs` | 스크립트 | 6. `node pstack/skills/poteto-mode/scripts/check-plan.mjs <plan.md>` |
 | [`encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure) | 원칙 | 6 |
@@ -678,8 +673,7 @@ end 응답
 | `scripts/orch/orch.ts` (`orch`) | 스크립트 | 2 `orch init`, `orch frontier set`. 5 `orch inbox push`, `orch inbox drain`, `orch unit add`, `orch unit set`, `orch ledger record`, `orch ledger check`, `orch status` |
 | [`show-me-your-work`](personal.md#skill-show-me-your-work) | 스킬 | 2, 7 (기록 열기와 감사) |
 | [`arena`](arena-swarm.md#skill-arena) | 스킬 | 1, 논쟁적인 분해나 되돌릴 수 없는 결정 |
-| [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state) | 원칙 | 워커당 워크트리나 브랜치 하나 |
-| [`encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure) | 원칙 | `preferences.md`에 줄을 덧붙임 |
+| [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state), [`encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure) | 원칙 | 본문의 각 단계 |
 | [Babysit](playbooks-pr.md#playbook-babysit) | 플레이북 | 스택당 하나, 불변 프런티어 세대에 한정 |
 | [Autonomous run](playbooks-long.md#playbook-autonomous-run) | 플레이북 | 1, 예산 안에 끝나는 일 |
 | `gt` | 명령 | 스태커 하나만 프런티어 계산과 스택 수술에 사용 |

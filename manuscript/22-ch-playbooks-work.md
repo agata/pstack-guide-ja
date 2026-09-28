@@ -76,7 +76,6 @@ PR, babysit, 코드 변경은 이 플레이북의 산출물이 아닙니다.
 
 - **조사가 코드 변경으로 이어질 때.** 이 플레이북 안에서 고치지 않습니다. 사용자에게 돌려주고 Bug fix나 Feature로 다시 라우팅합니다.
 - **질문의 전제가 틀렸을 때.** "확실한가?" 같은 질문에는 이유가 있는 진짜 판단을 냅니다. 전제가 틀렸으면 반박합니다(Autonomy의 "No is an acceptable answer").
-- **질문이 사실 질문인지 동기 질문인지 불분명할 때.** 동기를 묻는 질문에만 `why`를 더합니다. 원문은 두 스킬의 순서나 병행 방식을 따로 정하지 않습니다.
 
 ### 호출하는 스킬과 스크립트
 
@@ -168,7 +167,6 @@ end 응답
 - **증거가 가설을 반박할 때.** 그 가설이 만든 변경을 되돌립니다. 증거가 정당화하는 가장 작은 변경만 배포합니다.
 - **검증 결과가 "결론 없음"이거나 표면이 틀렸을 때.** 통과가 아닙니다. 그렇게 표시합니다.
 - **버그에 값싼 로컬 테스트 경로가 없을 때.** 테스트가 비싸거나 통합에 무겁거나 불분명하면 실패하는 테스트를 먼저 쓰는 리듬을 건너뜁니다.
-- **원문이 따로 정하지 않은 것.** 수정 뒤에도 재현이 실패하는 경우의 되돌아가기 절차는 원문에 없습니다. 위의 규칙(통과가 아니면 표시한다)만 적용됩니다.
 
 ### 호출하는 스킬과 스크립트
 
@@ -380,11 +378,7 @@ end 응답
 | [`how`](how.md#skill-how) | 스킬 | 1 |
 | [`build-the-lever`](principles.md#skill-principle-build-the-lever) | 원칙 | 2 |
 | [`show-me-your-work`](personal.md#skill-show-me-your-work) | 스킬 | 3, `decision.tsv` |
-| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window) | 원칙 | 5, 서브에이전트가 치고 부모는 감독 |
-| [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state) | 원칙 | 5, 병렬 가설은 워크트리마다 |
-| [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 5 |
-| [`laziness-protocol`](principles.md#skill-principle-laziness-protocol) | 원칙 | 6 |
-| [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 전 단계, 코드를 읽는 것으로 승리를 주장하지 않음 |
+| [`guard-the-context-window`](principles.md#skill-principle-guard-the-context-window), [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state), [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units), [`laziness-protocol`](principles.md#skill-principle-laziness-protocol), [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 본문의 각 단계 |
 | [Autonomous run](playbooks-long.md#playbook-autonomous-run) | 플레이북 | 무인일 때 깨우는 장치만 |
 | [Opening a PR](playbooks-pr.md#playbook-opening-a-pr) | 플레이북 | 8 |
 
@@ -450,7 +444,6 @@ end 응답
 
 - **요청이 없으면 고치지 않습니다.** 원인이 밝혀지면 Bug fix나 Perf로 넘깁니다.
 - **가설을 믿기 전에 증명합니다.** 신호만으로 원인을 단정하지 않고 계측이나 핫픽스로 값싸게 확인합니다.
-- **원문이 따로 정하지 않은 것.** 신호가 잡히지 않는 경우의 절차는 원문에 없습니다.
 
 ### 호출하는 스킬과 스크립트
 
@@ -633,8 +626,7 @@ end 응답
 | --- | --- | --- |
 | [`how`](how.md#skill-how) | 스킬 | 1 |
 | [`architect`](architect.md#skill-architect) | 스킬 | 2 |
-| [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state) | 원칙 | 3 |
-| [`model-the-domain`](principles.md#skill-principle-model-the-domain) | 원칙 | 4 |
+| [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state), [`model-the-domain`](principles.md#skill-principle-model-the-domain) | 원칙 | 본문의 각 단계 |
 | [`arena`](arena-swarm.md#skill-arena) | 스킬 | 4, 유효한 모양이 여럿일 때 |
 | [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 6 |
 | [`interrogate`](interrogate.md#skill-interrogate) | 스킬 | 7 |
@@ -726,14 +718,9 @@ end 응답
 | 이름 | 종류 | 부르는 단계 |
 | --- | --- | --- |
 | [`how`](how.md#skill-how) | 스킬 | 1 |
-| [`model-the-domain`](principles.md#skill-principle-model-the-domain) | 원칙 | 2 |
-| [`foundational-thinking`](principles.md#skill-principle-foundational-thinking), [`redesign-from-first-principles`](principles.md#skill-principle-redesign-from-first-principles) | 원칙 | 3 |
+| [`model-the-domain`](principles.md#skill-principle-model-the-domain), [`foundational-thinking`](principles.md#skill-principle-foundational-thinking), [`redesign-from-first-principles`](principles.md#skill-principle-redesign-from-first-principles) | 원칙 | 본문의 각 단계 |
 | [`architect`](architect.md#skill-architect) | 스킬 | 3, 목표가 함수 경계를 넘을 때 |
-| [`subtract-before-you-add`](principles.md#skill-principle-subtract-before-you-add), [`laziness-protocol`](principles.md#skill-principle-laziness-protocol) | 원칙 | 4 |
-| [`migrate-callers-then-delete-legacy-apis`](principles.md#skill-principle-migrate-callers-then-delete-legacy-apis) | 원칙 | 5 |
-| [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 6 |
-| [`minimize-reader-load`](principles.md#skill-principle-minimize-reader-load) | 원칙 | 7 |
-| [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 8 |
+| [`subtract-before-you-add`](principles.md#skill-principle-subtract-before-you-add), [`laziness-protocol`](principles.md#skill-principle-laziness-protocol), [`migrate-callers-then-delete-legacy-apis`](principles.md#skill-principle-migrate-callers-then-delete-legacy-apis), [`prove-it-works`](principles.md#skill-principle-prove-it-works), [`minimize-reader-load`](principles.md#skill-principle-minimize-reader-load), [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 본문의 각 단계 |
 | [`figure-it-out`](arena-swarm.md#skill-figure-it-out) | 스킬 | 큰 구조 작업일 때 |
 | [Opening a PR](playbooks-pr.md#playbook-opening-a-pr) | 플레이북 | 8 |
 

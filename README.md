@@ -6,7 +6,15 @@ Lauren Tan의 Cursor 플러그인 [pstack](https://github.com/cursor/plugins/tre
 
 ## 판
 
-현재 판은 v0.2.1입니다. v0.2.0은 v0.1.0에 더해 원칙 스킬 23개와 플레이북 23개를 깊게 다뤘고, v0.2.1은 배포 허락에 관한 안내 문구만 바꾼 판입니다. 원칙마다 적용하는 때와 아닌 때, 전후 예시, 함정, 함께 보는 원칙이 붙고, 플레이북마다 흐름도, 단계별 산출물, 예시, 실패와 중단 처리, 호출하는 스킬과 스크립트의 표가 붙습니다. 예시는 이 책의 저자가 만든 것이고 원본에 없습니다. 점선 테두리 블록의 첫 줄에 "예시 (이 책의 저자가 만든 것, 원본에 없음)"이라고 밝혔고, 원문에 없는 해석은 "해설 (이 책의 해석, 원본에 없음)"으로 표시했습니다.
+현재 판은 v0.2.1입니다. 파일은 [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases)에서 받을 수 있습니다.
+
+| 판 | 내용 |
+| --- | --- |
+| v0.1.0 | 첫 공개판. 스킬 47개와 플레이북 23개, 334쪽 |
+| v0.2.0 | 원칙과 플레이북을 깊게 다룸. 저자가 쓴 예시를 붙였고 419쪽 |
+| v0.2.1 | 원저자의 배포 허락에 관한 안내 문구만 바꿈 |
+
+예시는 이 책의 저자가 만든 것이고 원본에 없습니다. 점선 테두리 블록의 첫 줄에 "예시 (이 책의 저자가 만든 것, 원본에 없음)"이라고 밝혔고, 원문에 없는 해석은 "해설 (이 책의 해석, 원본에 없음)"으로 표시했습니다.
 
 ## 내려받기
 
@@ -91,6 +99,16 @@ AI의 도움으로 고정한 커밋의 원문을 읽고 한국어로 다시 설�
 
 틀린 곳을 발견하면 [GitHub Issues](https://github.com/jayjongcheolpark/pstack-guide-ko/issues)에 알려 주십시오. 위치(장과 절)와 원문의 해당 문장을 함께 적어 주시면 확인이 빠릅니다.
 
+## 기여하는 방법
+
+`main` 브랜치는 보호되어 있어 변경은 모두 풀 리퀘스트(PR)로 받습니다. 정정은 Issue나 PR로 환영합니다. 유지관리자가 검토하고 병합합니다.
+
+- 정정에는 장과 절을 밝히고, 고정한 커밋의 원문 permalink를 함께 적어 주십시오.
+- "예시"와 "해설" 라벨은 그대로 유지합니다.
+- PR을 열기 전에 위 빌드 절의 검사 두 가지(`tools/check.mjs`를 `PSTACK_SRC`와 함께, `tools/check-layout.mjs`)를 실행합니다.
+- 한국어 문장은 합니다체로 쓰고 영어 식별자는 바꾸지 않습니다. 자세한 규칙은 `STYLE.md`에 있습니다.
+- PR의 제목과 설명은 한국어나 영어로 쓰면 됩니다.
+
 ## 라이선스
 
 MIT입니다. 원저작물 pstack은 Copyright (c) 2026 Lauren Tan, 이 한국어 해설서는 Copyright (c) 2026 Jay Park입니다. 전문은 [LICENSE](LICENSE), 출처와 삽화 표기는 [NOTICE.md](NOTICE.md)에 있습니다. 책의 여섯 삽화는 pstack의 `docs/guide/images/`에서 가져왔습니다.
@@ -99,11 +117,20 @@ MIT입니다. 원저작물 pstack은 Copyright (c) 2026 Lauren Tan, 이 한국�
 
 # pstack Guide (Korean)
 
-An unofficial Korean explanation of [pstack](https://github.com/cursor/plugins/tree/main/pstack), Lauren Tan's Cursor plugin (v0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`). It covers all 47 skills, the 23 `poteto-mode` playbooks, the agents, the `benny` automation pack and the guide docs, with a permalink to the pinned source at each skill section. This is edition v0.2.1: every principle and every playbook now has worked examples, pitfalls and flow charts. Those examples are written for this book, are not in the original, and are labeled as such in the text.
+An unofficial Korean explanation of [pstack](https://github.com/cursor/plugins/tree/main/pstack), Lauren Tan's Cursor plugin (v0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`). It covers all 47 skills, the 23 `poteto-mode` playbooks, the agents, the `benny` automation pack and the guide docs, with a permalink to the pinned source at each skill section.
+
+The current edition is v0.2.1. Files are on the [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases) page.
+
+- v0.1.0: first public edition (47 skills, 23 playbooks, 334 pages).
+- v0.2.0: principles and playbooks deepened, with worked examples (419 pages).
+- v0.2.1: wording about the original author's permission only.
+
+Examples written for this book are not in the original and are labeled `예시 (이 책의 저자가 만든 것, 원본에 없음)`; interpretation the source does not state is labeled `해설 (이 책의 해석, 원본에 없음)`.
 
 **This book is unofficial and was written with AI assistance. It may contain errors, and the original is authoritative.** The original author, Lauren Tan (X: @poteto), gave permission on 2026-09-28 to distribute the guide for free ([reply on X](https://x.com/poteto/status/2104671461827055941)). The author has not reviewed the content, and neither the author nor Cursor endorses or guarantees it.
 
 - Download the EPUB and PDF from the [latest release](https://github.com/jayjongcheolpark/pstack-guide-ko/releases/latest).
 - Build: `bun install`, then `bun tools/build.mjs` (needs Bun and Google Chrome). Checks are described in the Korean section above.
 - Report errors through [GitHub Issues](https://github.com/jayjongcheolpark/pstack-guide-ko/issues).
+- Contribute: `main` is protected, so changes come through pull requests, and the maintainer reviews and merges them. Corrections are welcome as Issues or PRs. Name the chapter and section and cite the original permalink at the pinned commit, keep the example and commentary labels, and run `tools/check.mjs` (with `PSTACK_SRC`) and `tools/check-layout.mjs` before opening a PR. Korean text stays in 합니다체 and English identifiers stay unchanged (see `STYLE.md`). PR titles and descriptions may be in Korean or English.
 - License: MIT. Copyright (c) 2026 Lauren Tan (original pstack) and Copyright (c) 2026 Jay Park (this explanation). See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md). The six illustrations come from pstack's `docs/guide/images/`.

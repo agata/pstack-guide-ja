@@ -14,7 +14,7 @@
 
 ### 동작 방식
 
-운영 자세는 "신중하고 조심스럽고 정확한 조사자"입니다. 아는 것과 추론하는 것을 정직하게 구분하고, 종합자는 `references/epistemics.md`의 신뢰도 틀을 따라야 합니다. 서브에이전트를 띄울 때는 `pstack-models.mdc` 규칙의 해당 역할 줄을 읽어 모델을 정합니다(`how`와 같은 규칙입니다).
+운영 자세는 "신중하고 조심스럽고 정확한 조사자"입니다. 아는 것과 추론하는 것을 정직하게 구분하고, 종합자는 `references/epistemics.md`의 신뢰도 틀을 따라야 합니다. 서브에이전트를 띄울 때는 `pstack-models.mdc` 규칙(rule)의 해당 역할 줄을 읽어 모델을 정합니다(`how`와 같은 규칙입니다).
 
 1. **대상과 질문을 이해합니다.** 대상은 보통 코드 덩어리, 패턴, 기능, 이름 붙은 설계 결정입니다. 질문은 보통 설계 근거, 트레이드오프, 동기가 된 엣지 케이스, 외부 제약, 죽은 코드, 넓은 이력 훑기입니다. 대상이 모호하면("왜 이렇게 하나요?"만 있고 지시 대상이 없으면) 대화 맥락(열린 파일, 최근 편집, 커서 위치, 방금 이야기한 것)에서 가장 그럴듯한 추측을 하고 해석을 밝힌 뒤 진행합니다.
 2. **코드 앵커를 세웁니다.** 조사자를 띄우기 전에 조사를 구체적 코드에 닻을 내립니다. 관련 파일 경로와 줄 범위, 핵심 심볼(함수, 클래스, 상수), 대상을 건드린 최근 커밋의 초기 목록, 병합 커밋에서 뽑은 PR 번호(제목의 `(#1234)` 패턴)가 필요합니다. 원문의 명령은 다음과 같습니다.
@@ -47,8 +47,8 @@
    | 오류, 예외 추적 | Sentry, Rollbar, Bugsnag, Airbrake | 방어적이거나 교정하는 코드를 낳은 구체적 예외와 오류 궤적. catch 블록, 널 가드, 타입 검사, 재시도에 강함 |
    | 제품 분석 웨어하우스 | Databricks, Snowflake, BigQuery, ClickHouse, dbt, Redshift | 코드를 빚은 제품과 데이터의 현실. 플래그로 감싼 코드, 실험 기반 출시, 데이터 마이그레이션, "이 숫자는 어디서 왔나"에 강함 |
 
-   **조사자를 건너뛰는 경우**는 최종 "Sources Consulted" 절에 남기는 명시적 서면 정당화가 있을 때뿐이고, 유효한 이유는 둘입니다. 그 범주에 맞는 MCP가 없는 경우(선택이 아니라 공백으로 표시합니다. 예: "실시간 팀 채팅은 건너뜀. 맞는 MCP가 없어 대화 기록을 검색하지 못함"), 그리고 출처가 "아마 무관"이 아니라 명백히 무관한 경우(높은 기준, 예: 런타임 코드 경로가 없는 빌드 타임 스크립트에서 오류 추적)입니다. 단일 커밋의 사소한 대상이고 PR 설명에 답이 다 있다면, 일곱 범주 검색이 모두 중복임을 확인한 뒤에만 직접 답할 수 있습니다. 이는 드물어야 합니다.
-4. **종합합니다.** 종합자 서브에이전트 하나를 띄웁니다. 모델은 `why synthesizer` 줄(기본 `claude-opus-5-5-max`)이고 `readonly: false`입니다. 종합자의 품질 점검이 인용을 표본 검증하는데 그때 MCP 접근이 필요할 수 있기 때문입니다. 종합자는 조사자 결과(널 결과와 정당화된 건너뜀 포함), 코드 앵커, 원래 질문, `references/epistemics.md`의 인식론 틀, `references/synthesizer-prompt.md`의 프롬프트 템플릿을 받습니다.
+   **조사자를 건너뛰는 경우**는 최종 "Sources Consulted" 절에 남기는 명시적 서면 정당화가 있을 때뿐이고, 유효한 이유는 둘입니다. 그 범주에 맞는 MCP가 없는 경우(선택이 아니라 공백으로 표시합니다. 예: "실시간 팀 채팅은 건너뜀. 맞는 MCP가 없어 대화 기록을 검색하지 못함"), 그리고 출처가 "아마 무관"이 아니라 명백히 무관한 경우(높은 기준(bar), 예: 런타임 코드 경로가 없는 빌드 타임 스크립트에서 오류 추적)입니다. 단일 커밋의 사소한 대상이고 PR 설명에 답이 다 있다면, 일곱 범주 검색이 모두 중복임을 확인한 뒤에만 직접 답할 수 있습니다. 이는 드물어야 합니다.
+4. **종합합니다.** 종합자 서브에이전트 하나를 띄웁니다. 모델은 `why synthesizer` 줄(기본 `claude-opus-5-5-max`)이고 `readonly: false`입니다. 종합자의 품질 점검이 인용을 표본 검증(verification)하는데 그때 MCP 접근이 필요할 수 있기 때문입니다. 종합자는 조사자 결과(널 결과와 정당화된 건너뜀 포함), 코드 앵커, 원래 질문, `references/epistemics.md`의 인식론 틀, `references/synthesizer-prompt.md`의 프롬프트 템플릿을 받습니다.
 5. **제시합니다.** 종합자의 출력을 사용자에게 보여 줍니다. 명료성을 위한 가벼운 편집이나 대화 맥락 추가는 되지만 **신뢰도 표현은 다시 쓰지 않습니다.**
 
 출력 구조는 `references/synthesizer-prompt.md`의 것입니다. The Question, The Code in Question, What We Found, What We Can Reasonably Infer, Competing Hypotheses, What We Don't Know, Sources Consulted, Confidence Summary입니다. 필요하면 조정하되 신뢰도 구분은 그대로 유지하고, Sources Consulted는 조사자마다 한 줄씩(아무것도 못 찾았거나 건너뛴 것도 이유와 함께) 둡니다. Sources Consulted 뒤에, `why` 질문이 이 코드를 실제로 바꾸기 위한 전 단계라면, 계보 조사 결과를 변경 계획에 쓸 수 있는 Preserve / Change / Avoid / Risk 제약 집합으로 바꿉니다.
@@ -65,7 +65,7 @@
 | Speculative | 그럴듯한 가설이지만 증거가 얇고 다른 설명도 똑같이 맞습니다 | 명시적으로 추측이라고. "한 가능성은 X이지만 직접 증거는 없다." 보통 Competing Hypotheses 절에 놓입니다 |
 | Unknown | 찾아봤지만 알아내지 못했습니다. 유효하고 중요한 결과이므로 기록합니다 | "X, Y, Z를 검색했지만 이유의 증거를 찾지 못했다." 무엇을 검색했는지 구체적으로 |
 
-표현 지침도 있습니다. "because", "the reason is", "was designed to", "fixes", "the team decided"는 Direct나 Supported의 신뢰도를 담으므로 추론에 쓰지 않고, 쓸 때는 바로 옆에 인용이 있어야 합니다. 추론에는 "appears to", "seems to", "likely", "suggests", "is consistent with", "plausibly" 같은 헤지를 씁니다. 피할 말은 "obviously"(분명했다면 사용자가 묻지 않았을 것), "clearly", "of course", 그리고 "just"(성능 때문에 그냥 X다 같은 무시하는 표현), "I think"/"I believe"(증거를 종합하는 것이지 개인 의견이 아니므로 "the evidence suggests"를 씁니다)입니다.
+표현 지침(guide)도 있습니다. "because", "the reason is", "was designed to", "fixes", "the team decided"는 Direct나 Supported의 신뢰도를 담으므로 추론에 쓰지 않고, 쓸 때는 바로 옆에 인용이 있어야 합니다. 추론에는 "appears to", "seems to", "likely", "suggests", "is consistent with", "plausibly" 같은 헤지를 씁니다. 피할 말은 "obviously"(분명했다면 사용자가 묻지 않았을 것), "clearly", "of course", 그리고 "just"(성능 때문에 그냥 X다 같은 무시하는 표현), "I think"/"I believe"(증거를 종합하는 것이지 개인 의견이 아니므로 "the evidence suggests"를 씁니다)입니다.
 
 합리화를 피하라는 경고도 있습니다. 오늘 말이 되는 코드가 더는 적용되지 않는 이유로, 혹은 처음부터 틀린 이유로 쓰였을 수 있습니다. 지저분한 이력에 깔끔한 근거를 덧씌우지 않습니다. 작성자가 "옳은 일"을 했다고 가정하고 거꾸로 정당화하지 않고, 코드베이스 전반의 일관된 패턴이 복사 붙여넣기일 수 있는데 의도적이라고 가정하지 않고, 증거의 부재를 부재의 증거로 바꾸지("아무도 보안 우려를 언급하지 않았으니 우려가 없었을 것") 않습니다.
 

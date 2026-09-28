@@ -53,7 +53,26 @@ for (const f of readdirSync(".").filter((f) => f.endsWith(".md"))) {
   if (readFileSync(f, "utf8").includes("—")) fail(`${f}: contains em dash`);
 }
 
-// 2. EPUB structure and validity.
+// 2. Notation: the glossary lists the Korean words that do not map one to one to the source.
+// Each row pairs a Korean word with one English term and names the chapter that introduces the pair,
+// and that chapter must contain the pair in the fixed form 한국어(영어).
+const TERMS_HEADING = "일대일로 옮겨지지 않는 용어";
+const glossary = items.find((i) => i.file === "92-app-glossary.md");
+const termsSection = glossary?.source.split(/^## /m).find((s) => s.startsWith(TERMS_HEADING));
+if (!termsSection) fail(`glossary has no "${TERMS_HEADING}" section`);
+else {
+  const rows = termsSection.split("\n").filter((l) => l.startsWith("| ")).slice(2).map((l) => l.split("|").slice(1, -1).map((c) => c.trim().replaceAll("`", "")));
+  if (rows[0]?.[0] !== "원칙") fail("glossary terms table must start with 원칙");
+  for (const [ko, en, slug] of rows) {
+    const chapter = items.find((i) => i.slug === slug);
+    if (!chapter) fail(`glossary terms table: unknown chapter "${slug}" for ${ko}(${en})`);
+    else if (!chapter.source.includes(`${ko}(${en})`)) fail(`${chapter.file}: missing ${ko}(${en}), the glossary says this chapter introduces it`);
+    for (const item of items) if (item.source.includes(`${ko} (${en})`)) fail(`${item.file}: write ${ko}(${en}) without a space`);
+  }
+  console.log(`notation: ${rows.length} Korean(English) pairs`);
+}
+
+// 3. EPUB structure and validity.
 // The book version is BOOK_VERSION. The colophon, EPUB metadata, output file names and README must all agree.
 const version = BOOK_VERSION;
 const colophon = items.find((i) => i.file === "01-front-colophon.md");

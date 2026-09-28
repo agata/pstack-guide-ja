@@ -65,3 +65,21 @@ figure { margin: 1em 0; }
 .hljs-keyword, .hljs-selector-tag, .hljs-literal { color: #b3282e; }
 .hljs-string, .hljs-attr, .hljs-meta .hljs-string { color: #0b6b3a; }
 .hljs-number, .hljs-built_in, .hljs-title, .hljs-section { color: #1a4fa0; }
+
+/* Worked examples written for this book: dashed rule and no fill so they never read as source text. */
+blockquote.example { border-left: 3px dashed #777; background: #fff; border-top: 1px dashed #bbb; border-bottom: 1px dashed #bbb; }
+blockquote.example > p:first-child { font-family: var(--sans, sans-serif); font-size: 0.9em; }
+blockquote.example pre { background: #f6f6f6; }
+/* Flow charts (tools/lib/flow.mjs). */
+figure.flow { margin: 1.2em 0; text-align: center; page-break-inside: avoid; break-inside: avoid; }
+figure.flow svg { width: 100%; max-width: 520px; height: auto; font-family: var(--sans, sans-serif); }
+.fl-box { fill: #fff; stroke: #333; stroke-width: 1.2; }
+.fl-end { fill: #eee; stroke: #333; stroke-width: 1.2; }
+.fl-alt { fill: #f6f6f6; stroke: #777; stroke-width: 1; }
+.fl-stop { fill: #fff; stroke: #333; stroke-width: 1.2; stroke-dasharray: 5 3; }
+.fl-line { fill: none; stroke: #333; stroke-width: 1.2; }
+.fl-dash { stroke-dasharray: 4 3; }
+.fl-head { fill: #333; }
+.fl-t { font-size: 14px; font-weight: 700; fill: #111; }
+.fl-d { font-size: 12.5px; fill: #222; }
+.fl-sl { font-size: 12.5px; font-weight: 700; fill: #111; }

@@ -9,6 +9,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
+import { renderFlow } from "./flow.mjs";
 
 export const SOURCE = {
   repo: "https://github.com/cursor/plugins",
@@ -25,6 +26,9 @@ export const BOOK = {
   identifier: "urn:uuid:5f6d1c1e-4a0b-4c7e-9a52-7d1b3c0e9a11",
   date: "2026-09-28",
 };
+
+// Worked examples written for this book (not from the source) open with this label.
+export const EXAMPLE_LABEL = "예시 (이 책의 저자가 만든 것, 원본에 없음)";
 
 const KINDS = new Set(["front", "part", "ch", "app"]);
 
@@ -53,6 +57,14 @@ const md = new MarkdownIt({
 });
 
 const escapeHtml = (s) => md.utils.escapeHtml(s);
+
+const defaultFence = md.renderer.rules.fence;
+md.renderer.rules.fence = (tokens, idx, options, env, self) => {
+  const token = tokens[idx];
+  const [lang, ...name] = token.info.trim().split(/\s+/);
+  if (lang === "flow") return renderFlow(token.content, name.join(" "));
+  return defaultFence(tokens, idx, options, env, self);
+};
 
 function renderChapter(source, ctx) {
   const env = { headings: [], usedIds: new Set(), links: [] };
@@ -87,7 +99,10 @@ function renderChapter(source, ctx) {
       }
     }
   }
-  return { html: md.renderer.render(tokens, md.options, env), headings: env.headings, links: env.links };
+  const html = md.renderer
+    .render(tokens, md.options, env)
+    .replaceAll(`<blockquote>\n<p><strong>${EXAMPLE_LABEL}`, `<blockquote class="example">\n<p><strong>${EXAMPLE_LABEL}`);
+  return { html, headings: env.headings, links: env.links };
 }
 
 export function loadManuscript(dir = "manuscript") {

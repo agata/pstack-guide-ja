@@ -54,6 +54,8 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 | 위임 | [never-block-on-the-human](#skill-principle-never-block-on-the-human) | 되돌릴 수 있는 일에서 "해도 될까요?"를 묻고 싶을 때 | 진행하고 결과를 보여 준다 |
 | 메타 | [encode-lessons-in-structure](#skill-principle-encode-lessons-in-structure) | 같은 지시를 두 번째로 쓰는 자신을 발견했을 때 | 린트, 플래그, 검사, 스크립트로 인코딩한다 |
 
+이 장은 원칙마다 원문이 정한 규칙 위에 네 가지를 덧붙였습니다. 적용하는 때와 아닌 때, 이 책의 저자가 만든 전후 예시, 함정, 함께 보는 원칙입니다. 예시는 점선 테두리 블록으로 표시하고 첫 줄에 "예시 (이 책의 저자가 만든 것, 원본에 없음)"라고 밝혔습니다. 원문의 문구나 pstack이 한 말이 아닙니다. 원문에 없는 해석은 "해설 (이 책의 해석, 원본에 없음)"이라는 표시를 붙였습니다. 원칙이 서로 당길 때는 [장의 끝](#principles-interactions)에 따로 모았습니다.
+
 원칙 사이의 관계는 원문이 곳곳에서 밝힙니다. `experience-first`는 목표를, `foundational-thinking`은 작업의 순서를 다룹니다. `attack-the-premise`는 현재 설계가 가정하는 사실에 의문을 던지고, `redesign-from-first-principles`는 새 요구를 중심으로 설계를 다시 짓습니다. `build-the-lever`는 지금 눈앞의 작업의 처리량과 검토 가능성이고, `encode-lessons-in-structure`는 반복되는 지시를 지속적인 가드레일로 만드는 일입니다.
 
 ## 핵심 원칙
@@ -73,6 +75,28 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **검사.** 사람 개발자가 이 코드를 유지보수하기 지친다고 느낄 것이라면 나쁜 해법입니다. Feature 플레이북에서 이 원칙이 `arena` 위임 의무를 면제해 주지 않는다는 점도 눈여겨볼 만합니다. 그 위임의 이득은 줄 수 절약이 아니라 리뷰의 분리이기 때문입니다.
 
+**적용과 예외.** 원문이 정하는 때는 리팩터링이나 개선을 요청받았을 때, diff 크기를 판단할 때, 추상화와 계층과 신호 전달을 더하고 싶어질 때입니다. 원문은 "실제 일을 많이 숨기는 풍부한 인터페이스"를 깊은 호출 사슬과 구분합니다. 플레이북 쪽에서 두 가지 경계가 나옵니다. Prototype은 "가장 작은 변경"과 검증 기준이 뒤집히는 유일한 플레이북이고, Feature의 `arena` 위임은 이 원칙으로 면제되지 않습니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 작업: `dryRun` 신호를 CLI에서 파일 쓰기까지 전달합니다.
+>
+> ```ts
+> // 전: 신호를 계층마다 타입으로 실어 나릅니다
+> interface CliOptions { dryRun: boolean }
+> interface PipelineConfig { dryRun: boolean }
+> interface StepContext { dryRun: boolean }
+> // parseArgs -> buildConfig -> runPipeline -> runStep 이 모두 dryRun을 통과시킵니다
+>
+> // 후: 결정을 한곳에서 내리고 결과만 넘깁니다
+> const writer = args.dryRun ? noopWriter : fsWriter;
+> runPipeline(steps, writer); // 파이프라인은 dryRun을 모릅니다
+> ```
+
+**함정.** 원문은 "줄이 적은 것이 우아한 상용구보다 낫다"고 하고, 검사 문장은 "사람 개발자가 유지보수하기 지친다고 느낄 코드면 나쁜 해법"입니다. **해설 (이 책의 해석, 원본에 없음).** 둘 사이의 우선순위는 원문에 없습니다. 줄을 줄이려고 여러 곳의 결정을 한 줄짜리 영리한 식으로 뭉치면 이 원칙의 취지와 반대가 됩니다.
+
+**함께 보는 원칙.** [`subtract-before-you-add`](#skill-principle-subtract-before-you-add)와 [`minimize-reader-load`](#skill-principle-minimize-reader-load)와 짝으로 쓰입니다. `architect`의 실행기 프롬프트는 호출 사슬이 세 파일을 넘으면 평평하게 하라며 이 둘을 함께 인용합니다. 원칙 자체는 [`build-the-lever`](#skill-principle-build-the-lever)의 균형 절("가장 작은 스크립트, 프레임워크가 아님")과 [`attack-the-premise`](#skill-principle-attack-the-premise)의 비대칭 제거 절에서 인용됩니다. Refactoring과 Hillclimb 플레이북도 이 원칙을 부릅니다.
+
 ### foundational-thinking {#skill-principle-foundational-thinking}
 
 원문: {{src:skills/principle-foundational-thinking/SKILL.md}}
@@ -84,6 +108,25 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 - **뼈대가 먼저입니다.** 이후 모든 단계에 도움이 되는 것이면 먼저 합니다. "이후의 모든 단계가 이것이 있음으로써 이득을 보는가?"를 묻습니다. CI, 린팅, 테스트 인프라, 공유 타입이 뼈대입니다. 선택지의 가치를 위해 순서를 잡습니다. 기능 전에 준비를, 수정 전에 테스트를. 커밋은 작고 단일 목적으로 유지합니다.
 
 증분마다 일관된 추상화 하나를 랜딩하거나 이미 있는 것을 깊게 해야 합니다. 새 능력을 호출자들에게 특수 사례 조율로 흩뿌리지 않습니다. 뺄셈은 뼈대보다 앞섭니다. 죽은 코드를 먼저 지운 뒤 토대를 놓습니다.
+
+**적용과 예외.** 로직을 쓰기 전 핵심 타입과 데이터 구조를 고를 때, 뼈대 대 기능의 순서를 정할 때, 동시 행위자가 무엇을 공유하는지 물을 때입니다. 원문은 순서에서 뺄셈을 뼈대보다 앞에 둡니다. 줄마다 DRY하지 않고 구조를 DRY하게 하며, 비슷한 문장 셋이 성급한 추상화보다 낫다고 적어 코드 수준에서는 단순함이 우선임을 밝힙니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 요구: 사용자별 최근 알림 20개를 자주 보여 줍니다. 지배적인 접근 경로는 "사용자로 찾아 최신순으로 20개"입니다.
+>
+> ```ts
+> // 전: 모든 알림을 한 배열에 두고 호출마다 걸러 냅니다
+> const feed = all.filter(n => n.userId === id).sort(byTimeDesc).slice(0, 20);
+>
+> // 후: 접근 경로에 맞는 구조를 먼저 정합니다
+> const byUser = new Map<UserId, Notification[]>(); // 사용자별, 최신이 앞
+> const feed = byUser.get(id)?.slice(0, 20) ?? [];
+> ```
+
+**함정.** 원문은 커밋을 작고 단일 목적으로 유지하라고 합니다. 뼈대(CI, 린트, 테스트 기반, 공유 타입)는 "이후의 모든 단계가 이것이 있음으로써 이득을 보는가"에 예라고 답할 때만 앞세웁니다. **해설 (이 책의 해석, 원본에 없음).** 이득이 일부 단계에만 있는 준비 작업을 뼈대라고 부르며 앞세우면 이 질문을 우회하는 셈입니다.
+
+**함께 보는 원칙.** [`experience-first`](#skill-principle-experience-first)가 목표를 다루고 이 원칙은 작업의 순서를 다룹니다. `architect`의 종합 스케치를 별도 커밋으로 내는 방식이 이 원칙의 "뼈대 먼저" 모드입니다. `figure-it-out`은 뼈대와 검증을 기능 앞에 두라며 이 원칙을 인용하고, Refactoring 플레이북은 목표 모양을 정할 때 인용합니다.
 
 ### redesign-from-first-principles {#skill-principle-redesign-from-first-principles}
 
@@ -97,6 +140,30 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 - 재설계 전체를 생각하되 점진적으로 전달합니다.
 
 기존 설계에 변경을 통합할 때 선택지의 가치를 지키는 방법입니다. `refactoring`, `arena`의 이식 단계, `architect`의 E단계(버리기)가 이 원칙을 씁니다.
+
+**적용과 예외.** 기존 설계에 새 요구를 통합할 때입니다. 원문은 예외를 적지 않습니다. 같은 설계를 겨냥하되 다른 질문을 하는 [`attack-the-premise`](#skill-principle-attack-the-premise)와 구분해서 읽어야 합니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 새 요구: 모든 데이터가 테넌트 단위로 격리되어야 합니다.
+>
+> ```ts
+> // 전: 기존 함수에 선택 인자를 덧대고 분기를 넣습니다
+> function getUser(id: UserId, tenantId?: TenantId) {
+>   if (tenantId) { /* 격리 검사 */ }
+>   return db.users.get(id);
+> }
+>
+> // 후: 처음부터 테넌트가 있던 것처럼 다시 그립니다
+> function getUser(scope: TenantScope, id: UserId) {
+>   return scope.users.get(id); // 스코프 밖의 행은 도달할 수 없습니다
+> }
+> // 타입, 문서, 예제, 근거 절의 옛 시그니처도 함께 바꿉니다
+> ```
+
+**함정.** 원문의 마지막 항목은 "재설계 전체를 생각하되 점진적으로 전달한다"입니다. 참조 전파(타입, 문서, 예제, 근거 절)는 원문이 명시하는 단계입니다. **해설 (이 책의 해석, 원본에 없음).** 이 전파를 빠뜨리면 이 원칙을 반쪽만 따른 것이고, 재설계를 한 번에 밀어 넣으라는 뜻도 아닙니다.
+
+**함께 보는 원칙.** `architect`는 마찰이 스케치에 흡수되지 않을 때 스케치를 버리라며 이 원칙과 [`fix-root-causes`](#skill-principle-fix-root-causes)를 인용하고, 새 제약이 생기면 "처음부터 있었던 것처럼" 다시 설계하라고 합니다. `arena`는 접목(graft)을 손으로 접어 넣으라며 인용합니다. Refactoring 플레이북은 목표 모양을 정할 때, `no-comments`는 의도를 이끄는 용도로만 인용합니다.
 
 ### attack-the-premise {#skill-principle-attack-the-premise}
 
@@ -117,6 +184,21 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 이 원칙은 새 요구를 중심으로 설계를 다시 짓는 `redesign-from-first-principles`와 다릅니다. 이것은 현재 설계가 가정하는 사실에 의문을 던집니다. 안내서는 이 원칙을, 실패한 수정들이 공유한 전제를 행위자별 센서스 뒤에 의심하는 것이라고 소개합니다.
 
+**적용과 예외.** 같은 전제를 공유하는 수정 둘 이상이 같은 관문에서 실패했을 때만입니다. 원문의 멈춤 조건이 이 원칙의 경계입니다. 센서스가 행위자들에 고르면 전제는 원인이 아니고, 원인은 다른 곳에서 찾으며 센서스는 증거로 남깁니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 상황: CI의 3번 샤드가 매번 시간 초과입니다. 시간 제한을 늘린 수정과 테스트를 다시 나눈 수정이 모두 실패했습니다.
+>
+> 1. 전제: "느린 테스트는 샤드 사이에 무작위로 퍼져 있다."
+> 2. 센서스(다시 돌릴 수 있는 스크립트): 샤드별 느린 테스트 수를 셉니다. 결과는 3번 샤드가 매번 70% 안팎입니다.
+> 3. 쏠림 읽기: 파일명 순서로 샤드를 배정하는 규칙이 `e2e/` 디렉터리를 전부 3번에 몰아 주고 있습니다.
+> 4. 비대칭 제거: 재분배 작업을 더하지 않고 배정을 해시 기반으로 바꿔 어떤 샤드도 매번 그 역할을 맡지 않게 합니다.
+
+**함정.** 원문이 명시하는 함정은 두 가지입니다. 센서스는 불균형의 크기가 아니라 누가 갖는지를 보여 줍니다. 반환 경로, 공유 풀, 일괄 인계, 주기적 재균형은 배정을 그대로 두고 매번 일을 더하므로 답이 아닙니다.
+
+**함께 보는 원칙.** 센서스는 [`build-the-lever`](#skill-principle-build-the-lever)에 따라 스크립트로 쓰고, 배정이 무엇이냐는 물음은 [`fix-root-causes`](#skill-principle-fix-root-causes)의 다음 "왜"이며, 비대칭 제거는 [`laziness-protocol`](#skill-principle-laziness-protocol)을 따릅니다. 새 요구 중심의 [`redesign-from-first-principles`](#skill-principle-redesign-from-first-principles)와 구분됩니다. 원문에서 이 원칙을 언급하는 곳은 색인과 README와 안내서뿐입니다.
+
 ### subtract-before-you-add {#skill-principle-subtract-before-you-add}
 
 원문: {{src:skills/principle-subtract-before-you-add/SKILL.md}}
@@ -126,6 +208,23 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **이유.** 복잡한 시스템에 더하면 복잡도가 복리로 쌓입니다. 먼저 빼면 코드가 줄고 본질적 구조가 드러나며 대개 다음 설계가 뻔해집니다. 기본은 뺄셈입니다. 단순화를 지속적인 투자로 삼습니다. 설계를 발견했을 때보다 같거나 더 작은 표면 뒤에서 조금 더 단순하고 조금 더 유능하게 남깁니다.
 
 **패턴.** 제거를 건설보다 앞에 놓습니다. 다듬기 전에 자릅니다(품질에 투자하기 전에 최소에 이릅니다). 추측된 엣지 케이스가 아니라 관찰된 사용을 위해 설계합니다. 명세가 요구하는 것 이상의 추측성 검증기, 파서, 가드를 두지 않습니다. 프롬프트를 단순화합니다(중복 지시, 과한 템플릿 제거). 참조에 새 내용이 없으면 스텁으로 남기지 말고 지웁니다.
+
+**적용과 예외.** 추가, 리팩터링, 재작성의 순서를 정할 때입니다. 원문은 "기본은 뺄셈"이라고 하고, 참조에 새 내용이 없으면 스텁으로 남기지 말고 지우라고 합니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 요청: 새 결제 어댑터를 추가해 줘. 코드베이스에는 옛 어댑터 셋이 있습니다.
+>
+> ```text
+> 전: 1. NewAdapter를 만든다  2. 옛 어댑터 셋은 호환을 위해 그대로 둔다
+> 후: 1. 호출자가 없는 어댑터 둘을 지운다 (git grep으로 확인)
+>     2. 남은 하나 위에서 NewAdapter를 설계한다
+>     3. 스텁만 남은 참조 문서를 지운다
+> ```
+
+**함정.** 뺄셈은 "관찰된 사용"을 기준으로 합니다. 원문은 명세가 요구하는 것 이상의 추측성 검증기, 파서, 가드를 더하지 말라고 적습니다. **해설 (이 책의 해석, 원본에 없음).** 지우기 전에 호출자를 실제로 확인하지 않으면 뺄셈이 아니라 도박이 됩니다. 안내서의 steering 예("낡은 어댑터부터 지우고, 남는 것을 설계해")가 그 순서를 보여 줍니다.
+
+**함께 보는 원칙.** [`foundational-thinking`](#skill-principle-foundational-thinking)은 "뺄셈은 뼈대보다 앞선다"고 적어 이 원칙을 순서에서 위에 둡니다. `architect`는 스케치를 버리고 다시 그릴 때 새 스케치가 옛 것보다 작아야 한다며 인용하고, Refactoring 플레이북은 4단계("더하기 전에 뺀다")에서 씁니다.
 
 ### minimize-reader-load {#skill-principle-minimize-reader-load}
 
@@ -142,6 +241,25 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **검사.** 새 독자가 "X는 어디서 오나?"와 "무엇이 X를 바꿀 수 있나?"에 30초 안에 답할 수 있는가. 아니면 계층이나 상태를 줄입니다. `refactoring` 플레이북은 성공의 척도로 이 원칙의 독자 부담 감소를 씁니다.
 
+**적용과 예외.** 따라가기 어려운 코드를 리뷰하거나 다듬을 때입니다. 원문은 두 축이 독립적이라고 밝힙니다. 계층이 없어도 전역 상태가 많으면 어렵고, 상태가 없어도 계층이 깊으면 어렵습니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```ts
+> // 전: 호출자가 하나뿐이고 인자를 그대로 넘기는 계층 셋
+> UserController.find -> UserServiceImpl.find -> UserRepoAdapter.find -> db.users.get
+> let currentUser: User | null; // 모듈 상태, 여러 함수가 바꿉니다
+>
+> // 후: 계층을 접고 상태를 도출합니다
+> users.find(id);               // 컨트롤러가 저장소를 직접 부릅니다
+> const currentUser = session.userId && users.get(session.userId); // 동기화하지 않고 도출
+> ```
+> 검사: "`currentUser`는 어디서 오나?"와 "무엇이 바꿀 수 있나?"에 30초 안에 답할 수 있습니다.
+
+**함정.** 통과 계층을 접는 것과 인터페이스 압축은 다릅니다. 원문은 숨기는 것이 적은 넓은 인터페이스도 부담이라고 하고, 계층이나 상태를 더하기 전에 "다른 곳의 독자 부담을 적어도 그만큼 줄이는가"를 물으라고 합니다. **해설 (이 책의 해석, 원본에 없음).** 계층을 무조건 없애라는 원칙이 아닙니다.
+
+**함께 보는 원칙.** 원문이 [`guard-the-context-window`](#skill-principle-guard-the-context-window)의 사람 버전이라고 밝힙니다. `architect`의 실행기 프롬프트는 이 원칙과 [`laziness-protocol`](#skill-principle-laziness-protocol)을 함께 인용하고, Refactoring 플레이북은 7단계에서 성공의 척도로 씁니다. `benny`의 `triage-issue-reports`는 최종 판정에 이 원칙을 적용하라고 하고, `setup-benny`는 확인할 스킬 목록에 넣습니다.
+
 ### outcome-oriented-execution {#skill-principle-outcome-oriented-execution}
 
 원문: {{src:skills/principle-outcome-oriented-execution/SKILL.md}}
@@ -153,6 +271,25 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **핵심 규칙.** 전환기의 안정성보다 끝 상태의 온전함을 우선합니다. 중간 파손은 계획되고 범위가 정해지고 되돌릴 수 있으면 허용됩니다.
 
 **가드레일.** 단계 경계가 분명한 계획된 재작성과 마이그레이션에 씁니다. 임시 파손이 허용되는 곳을 선언합니다. 마이그레이션하는 동안 활발히 건드리는 영역에는 신호가 높은 검사를 유지합니다. 계획 완료 시점에 완전한 정적, 런타임 검증을 요구합니다.
+
+**적용과 예외.** 단계 경계가 분명한 계획된 재작성과 마이그레이션에만 씁니다. 가드레일이 경계를 정합니다. 임시 파손이 허용되는 곳을 선언하고, 마이그레이션 중 활발히 건드리는 영역에는 신호가 높은 검사를 유지하고, 계획 완료 시점에 완전한 정적, 런타임 검증을 요구합니다. 파손은 계획되고 범위가 정해지고 되돌릴 수 있어야 합니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 세 단계 마이그레이션: 저장소 API를 v1에서 v2로 바꿉니다.
+>
+> ```text
+> 전: 세 단계 내내 v1 어댑터를 유지해 빌드를 항상 초록으로 둔다
+>     -> 어댑터가 마이그레이션이 끝난 뒤에도 남는다
+> 후: 계획서에 선언한다
+>     - 2단계 동안 packages/legacy 빌드가 깨져도 된다 (브랜치 위에서, 되돌릴 수 있음)
+>     - packages/core는 매 커밋마다 테스트를 유지한다
+>     - 3단계 끝에서 전체 타입 검사와 e2e를 통과해야 한다
+> ```
+
+**함정.** "중간에 깨져도 된다"는 허가가 아니라 선언된 예외입니다. 범위와 되돌림 방법이 없는 파손은 이 원칙 밖입니다. **해설 (이 책의 해석, 원본에 없음).** [`sequence-verifiable-units`](#skill-principle-sequence-verifiable-units)와 부딪히는 것처럼 보이지만, 후자는 각 단위의 검사를 요구하고 이 원칙은 그 검사를 어느 영역에서 유지할지 정하는 쪽입니다.
+
+**함께 보는 원칙.** `architect`는 채워 넣는 동안의 계획되고 범위가 정해진 파손을 허용하며 이 원칙을 인용합니다. [`migrate-callers-then-delete-legacy-apis`](#skill-principle-migrate-callers-then-delete-legacy-apis)도 호환 계층을 남기지 않는 쪽입니다. **해설 (이 책의 해석, 원본에 없음).** 둘은 방향이 같지만 범위가 다릅니다. 앞의 것은 단계별 파손 허용이고, 뒤의 것은 API 하나의 호출자 이전입니다.
 
 ### experience-first {#skill-principle-experience-first}
 
@@ -168,6 +305,22 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 사용자는 작업의 결과물을 소비하는 사람입니다. UI라면 최종 사용자이고, 라이브러리나 내부 API라면 그것을 임포트하는 동료입니다. 다음에 코드를 유지보수할 엔지니어도 사용자입니다. 그들의 경험을 같은 무게로 따지고 그들의 관점에서 영향을 설명합니다. 토대는 경험에 봉사해야 합니다. `foundational-thinking`은 작업의 *순서*를, 이 원칙은 *목표*를 다룹니다. `poteto-mode`가 응답에서 소비자와 유지보수자에 미치는 영향을 앞세우라고 하는 규칙이 이 정의에서 나옵니다.
 
+**적용과 예외.** 제품, UX, 기능 범위의 트레이드오프에서 구현 편의와 사용자의 기쁨이 부딪칠 때입니다. 원문은 사용자를 결과물을 소비하는 사람으로 넓게 정의합니다. 최종 사용자, 라이브러리를 임포트하는 동료, 다음에 코드를 유지보수할 엔지니어가 모두 해당합니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 설정 화면 요청: 옵션 열 개를 모두 노출해 달라는 안입니다.
+>
+> ```text
+> 전: 열 개를 그대로 나열한다. 저장 실패는 alert("오류")로 처리한다.
+> 후: 핵심 루프에 봉사하는 세 개만 남기고 나머지는 근거를 요구한다.
+>     저장 실패는 입력을 잃지 않는 인라인 메시지와 재시도로 처리한다.
+> ```
+
+**함정.** 원문의 "모든 기능, 컨트롤, 옵션은 정당화되어야 합니다"는 같은 원문의 "덜 만들고 더 잘 만든다"와 함께 읽어야 합니다. **해설 (이 책의 해석, 원본에 없음).** 기능을 줄이라는 명령이라기보다 근거를 요구하는 규칙으로 읽힙니다. 확약하기 전에 프로토타입을 만들라는 항목은 [`exhaust-the-design-space`](#skill-principle-exhaust-the-design-space)와 주제가 같지만, 두 원문이 서로를 언급하지는 않습니다.
+
+**함께 보는 원칙.** 원문이 직접 구분합니다. [`foundational-thinking`](#skill-principle-foundational-thinking)은 작업의 *순서*를, 이 원칙은 *목표*를 다루고, 토대는 경험에 봉사해야 합니다. `poteto-mode`의 응답 규칙도 소비자와 유지보수자에게 미치는 영향을 앞세우라고 합니다.
+
 ### exhaust-the-design-space {#skill-principle-exhaust-the-design-space}
 
 원문: {{src:skills/principle-exhaust-the-design-space/SKILL.md}}
@@ -179,6 +332,23 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **적용되는 경우.** 새 UI 상호작용(코드베이스에 선례 없음), 여러 실행 가능한 접근이 있는 아키텍처 선택, 사용자 경험이 논리가 아니라 느낌에 달린 제품 설계 결정입니다.
 
 **적용되지 않는 경우.** 패턴이 정립된 기계적 구현, 목표 상태가 분명한 버그 수정이나 리팩터링, 제약이 단일한 실행 가능 접근을 정하는 변경입니다. `architect`의 "두 번 설계한다"와 `prototype` 플레이북의 전환기가 이 원칙의 구체화입니다.
+
+**적용과 예외.** 원문이 적용 세 가지와 비적용 세 가지를 모두 적었습니다(위 규칙 항목). 핵심 경계는 "첫 모양의 두 번째 맛은 대안으로 세지 않는다"는 문장입니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 새 상호작용: 문서 편집기의 되돌리기 UI입니다. 코드베이스에 선례가 없습니다.
+>
+> ```text
+> 전: 익숙한 토스트 "되돌리기" 하나를 구현하고 다듬는다.
+> 후: 한 페이지에 전환기(키 1, 2, 3)를 두고 구조가 다른 셋을 만든다.
+>     1) 토스트  2) 변경 이력 패널  3) 항목별 되돌림
+>     같은 시나리오를 셋에 돌려 나란히 비교한 뒤에 하나를 고른다.
+> ```
+
+**함정.** 원문은 "첫 모양의 두 번째 맛"을 대안으로 세지 않는다고 못 박습니다. **해설 (이 책의 해석, 원본에 없음).** 색이나 위치만 다른 변형이 그 예로 읽힙니다. 패턴이 정립된 기계적 구현이나 목표가 분명한 버그 수정에는 쓰지 않습니다.
+
+**함께 보는 원칙.** `architect`가 "두 번 설계한다"(구조가 다른 후보 둘 이상)로 이 원칙을 구체화하고, Prototype 플레이북이 하나의 전환기 뒤에 라벨 붙은 변형을 두는 방식으로 "값싸게" 만듭니다. [`experience-first`](#skill-principle-experience-first)의 "확약하기 전에 프로토타입"과도 주제가 같습니다.
 
 ### build-the-lever {#skill-principle-build-the-lever}
 
@@ -198,6 +368,25 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 - 작업이 세션보다 오래가면 지렛대를 커밋합니다.
 
 **균형.** 기준은 반복이 아니라 사소함입니다. 일회성 작업도 지렛대가 작업을 검사 가능하게 만든다면 지렛대를 가질 자격이 있습니다. `laziness-protocol`에 따라 일을 하거나 증명하는 가장 작은 스크립트를 만들고 프레임워크는 절대 만들지 않습니다. 반복되는 지시를 지속적인 가드레일로 만드는 `encode-lessons-in-structure`와 다릅니다. 이것은 눈앞의 작업의 처리량과 검토 가능성입니다.
+
+**적용과 예외.** 사소하지 않은 모든 작업이 기본 적용입니다. 예외는 사소한 작업, 즉 한눈에 보이는 뻔한 편집 두어 개입니다. 원문은 기준이 반복이 아니라 사소함이라고 밝힙니다. 일회성이어도 지렛대가 작업을 검사할 수 있게 만든다면 지렛대를 만듭니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 작업: `getUser`를 `fetchUser`로 바꾸는 이름 변경이 호출 300곳에 걸쳐 있습니다.
+>
+> ```text
+> 전: 서브에이전트를 열 개 띄워 파일을 나눠 손으로 고치게 한다.
+> 후: 1) 파일 하나를 손으로 고쳐 요령을 익힌다.
+>     2) 같은 변경을 하는 코드모드 스크립트를 쓴다.
+>     3) 그 파일에 스크립트를 다시 돌려 손으로 한 결과와 diff한다.
+>     4) 스크립트를 전 파일에 돌린다. 재실행해도 안전하게 만든다.
+> ```
+> diff에 스크립트가 없으면 이 원칙을 적용한 것이 아닙니다.
+
+**함정.** 원문의 검사 문장이 가장 분명합니다. 이 원칙을 인용했는데 diff에 코드모드, 스크립트, 생성기, 위임 스킬이 없으면 적용하지 않은 것입니다. 균형도 명시합니다. [`laziness-protocol`](#skill-principle-laziness-protocol)에 따라 일을 하거나 증명하는 가장 작은 스크립트이지 프레임워크가 아닙니다. 결정적 지렛대가 할 수 있는 일을 서브에이전트 팬아웃으로 손으로 적용하지 않습니다.
+
+**함께 보는 원칙.** 원문이 [`encode-lessons-in-structure`](#skill-principle-encode-lessons-in-structure)와 구분합니다. 이 원칙은 눈앞의 작업의 처리량과 검토 가능성이고, 저쪽은 반복되는 지시를 지속적인 가드레일로 만드는 일입니다. 검증 자체의 스크립트화는 [`prove-it-works`](#skill-principle-prove-it-works)로, 단위마다의 검사를 싸게 만드는 역할은 [`sequence-verifiable-units`](#skill-principle-sequence-verifiable-units)로 이어집니다. [`attack-the-premise`](#skill-principle-attack-the-premise)의 센서스와 Hillclimb의 하니스, Worktree cleanup의 감사 스크립트가 예입니다.
 
 ## 아키텍처 원칙
 
@@ -222,6 +411,29 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 추상화를 억지로 넣지 않습니다. 현재 모양이 이미 분명하고 지역적이고 자랄 가능성이 낮으면 지루한 코드를 선호합니다. 분기, 중복된 규칙, 불가능한 상태, 수명 주기 위험을 지우지 않고 간접 계층만 더하는 추상화를 경계합니다. 이 단계를 건너뛰었다는 표시는 기존 if/else 사슬을 분기 하나 더 키우는 새 기능, 또는 첫째와 계속 동기화해야 하는 두 번째 불리언입니다. 시간적 분해도 표시입니다. 단계 이름이 붙은 모듈은 같은 도메인 규칙을 단계마다 반복합니다. `poteto-mode`는 코드를 쓸 때 데이터 모양의 이름을 먼저 정하고 이 원칙에 따라 조직 구조를 고르라고 요구합니다.
 
+**적용과 예외.** 상태가 있는 로직을 쓸 때, 분기가 많거나 모양 가정이 파일마다 반복될 때입니다. 원문은 예외를 분명히 적습니다. 현재 모양이 이미 분명하고 지역적이며 자라지 않을 것 같으면 지루한 코드를 택하고, 분기, 중복 규칙, 불가능한 상태, 수명 주기 위험을 지우지 못하는 간접 계층은 의심합니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 파일 형식마다 다른 처리를 하는 분기입니다.
+>
+> ```ts
+> // 전: 형식이 늘 때마다 if/else 사슬이 한 가지씩 자랍니다 (여러 파일에 반복)
+> if (kind === "png") return renderPng(f);
+> else if (kind === "svg") return renderSvg(f);
+> else if (kind === "pdf") return renderPdf(f);
+>
+> // 후: 등록부 하나가 도메인을 담습니다
+> const renderers: Record<FileKind, (f: File) => View> = {
+>   png: renderPng, svg: renderSvg, pdf: renderPdf,
+> };
+> return renderers[kind](f); // FileKind에 항목을 더하면 컴파일러가 빠진 곳을 알려 줍니다
+> ```
+
+**함정.** 원문이 드는 놓친 신호는 두 가지입니다. 기존 if/else 사슬에 분기가 하나 더 붙는 새 기능, 그리고 첫 번째와 동기화를 유지해야 하는 두 번째 불리언입니다. 시간순으로 쪼갠(load, validate, transform, save) 모듈도 신호입니다. 실행 순서는 소유권이 아닙니다.
+
+**함께 보는 원칙.** `poteto-mode`가 "코드를 쓰기 전에 데이터 모양의 이름을 먼저 붙인다"며 이 원칙을 인용하고, Feature 플레이북이 위임 범위에 조직 구조를 넣으라며, Refactoring 플레이북이 코드에 빠진 구조에 이름을 붙이는 2단계에서 씁니다.
+
 ### boundary-discipline {#skill-principle-boundary-discipline}
 
 원문: {{src:skills/principle-boundary-discipline/SKILL.md}}
@@ -239,6 +451,27 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **적용.** 설정은 비즈니스 로직 안이 아니라 파싱 시점(경계)에 검증합니다. 원시 데이터는 경계에서 도메인 타입으로 파싱합니다. 전송, 저장, 프레임워크, wire 타입을 공개 표면으로 재수출하지 않습니다. 경계가 이미 검증했다면 호출 사슬 깊은 곳에 중복 nil 검사를 두지 않습니다. 코드 구성에서는 프레임워크 의존이 없는 순수 함수에 비즈니스 로직을 두고, 파싱은 원시 바이트에서 타입 있는 상태로의 순수 변환, 프롬프트 구성은 구조화된 상태를 넣어 문자열을 얻는 것, 점수와 평가는 상태에서 결과로의 순수 변환으로 둡니다.
 
 **검사.** "이 데이터가 지금 시스템 경계를 넘고 있는가?" 아니면 검증은 중복입니다. "이것이 셸이 부르기만 하는 순수 함수가 될 수 있는가?" 그렇다면 추출합니다.
+
+**적용과 예외.** 검증, 오류 처리, 프레임워크 어댑터를 연결할 때입니다. 원문의 두 시험이 경계를 정합니다. "이 데이터가 지금 시스템 경계를 넘고 있는가? 아니라면 검증은 중복이다", "순수 함수로 만들 수 있고 셸이 부르기만 하면 되는가? 그렇다면 추출한다".
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```ts
+> // 전: 안쪽 함수마다 같은 방어를 되풀이합니다
+> function score(cfg: any, state: any) {
+>   if (!cfg || typeof cfg.weight !== "number") throw new Error("bad cfg");
+>   if (!state) return 0;
+>   return cfg.weight * state.hits;
+> }
+>
+> // 후: 경계에서 한 번 파싱하고 안쪽은 타입을 믿습니다
+> const cfg: Config = parseConfig(readFileSync(path, "utf8")); // 경계: 검증하고 오류를 돌려줌
+> const score = (cfg: Config, s: State): number => cfg.weight * s.hits; // 순수 함수
+> ```
+
+**함정.** 이 원칙은 검증을 없애라는 것이 아니라 한곳에 모으라는 것입니다. 원문은 경계 밖으로 전송, 저장소, 프레임워크, 와이어 타입을 다시 내보내지 말고, 일반 목적 메커니즘은 안에, 특수 목적 정책은 가장자리에 두라고 합니다.
+
+**함께 보는 원칙.** [`type-system-discipline`](#skill-principle-type-system-discipline)은 경계에서의 파싱을 이 원칙에 맡깁니다. `typescript-best-practices`는 "경계에서 파싱하고 안쪽 타입을 믿는다"는 규칙에서 이 원칙을 참조하고, `interrogate`의 루브릭은 검증이 경계에 있는지 비즈니스 로직에 흩어졌는지 묻습니다. `architect`의 근거 템플릿과 실행기 프롬프트도 인용합니다.
 
 ### type-system-discipline {#skill-principle-type-system-discipline}
 
@@ -261,6 +494,24 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **검사.** "이 필드 조합이 언제 유효한지 설명하는 주석을 쓸 수 있는가?" 그렇다면 타입이 너무 느슨하니 합 타입으로 쪼갭니다. "함수 인자 둘이 같은 원시 타입을 공유하지만 다른 뜻인가?" 브랜드를 붙입니다. "이 `any`, `as`, `assertNotNull`은 어디서 왔나?" 경계까지 추적해 거기서 검증합니다. "다음 달에 새 변형이 추가되면 컴파일러가 다음 에이전트에게 케이스를 추가할 곳을 알려 줄까?" 아니라면 매칭이 완전하지 않습니다. "이 타입이 다른 파일이 소유한 모양을 복제하는가?" 도출합니다. "이 타입을 연산이 전체 함수로 남게 하려고 강화하는가, 그냥 더 정밀해지려는가?" 달리 패닉이 날 것이 없다면 평범한 타입을 유지합니다.
 
+**적용과 예외.** 타입이나 시그니처를 설계하거나 함수 시그니처를 리뷰할 때, 정적 타입 언어라면 어디서든 씁니다. 원문의 마지막 패턴이 상한을 정합니다. 타입은 부분성이 나타나는 곳에서만 강화합니다. 아무것도 패닉을 일으키지 않을 때 타입을 더 정밀하게만 만들 이유는 없습니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```ts
+> // 전: 둘 다 string이라 인자 순서를 바꿔도 컴파일됩니다
+> function transfer(from: string, to: string, amount: number) { /* ... */ }
+> transfer(toId, fromId, 100); // 조용히 반대로 송금
+>
+> // 후: 의미가 다른 원시값에 브랜드를 붙이고, 생성할 때 한 번 검증합니다
+> type AccountId = string & { readonly __brand: "AccountId" };
+> function transfer(from: AccountId, to: AccountId, amount: Cents) { /* ... */ }
+> ```
+
+**함정.** 원문은 캐스트, 안전하지 않은 강제 변환, 컴파일러를 우회하는 단언 함수를 잠재적 런타임 충돌로 봅니다. `as`나 `assertNotNull`의 출처를 경계까지 추적해 거기서 검증하라는 시험이 있습니다.
+
+**함께 보는 원칙.** 경계의 파싱은 [`boundary-discipline`](#skill-principle-boundary-discipline), 권위 있는 스키마에서 타입을 도출하는 규칙은 [`encode-lessons-in-structure`](#skill-principle-encode-lessons-in-structure)를 봅니다. 구체적인 TypeScript 문법은 `typescript-best-practices`가 이 원칙을 먼저 적용하라고 하며 이어받습니다.
+
 ### make-operations-idempotent {#skill-principle-make-operations-idempotent}
 
 원문: {{src:skills/principle-make-operations-idempotent/SKILL.md}}
@@ -273,6 +524,30 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **검사.** (1) 연달아 두 번 돌면 어떻게 되나? (2) 이전 실행이 가능한 모든 지점에서 죽었다면 어떻게 되나? (3) 다시 실행하면 같은 끝 상태로 수렴하나? 답이 하나라도 "남은 상태에 달렸다"면 그 연산에는 조정 단계가 필요합니다. 스스로 치유하는 락은 PID 기반으로 낡은 락을 검출하는 방식입니다.
 
+**적용과 예외.** 충돌, 재시작, 재시도가 정상인 곳에서 도는 명령, 수명 주기 단계, 처리 루프를 설계할 때입니다. 원문의 세 물음이 시험입니다. 연달아 두 번 돌면? 이전 실행이 가능한 모든 지점에서 죽었다면? 재실행이 같은 끝 상태로 수렴하는가? "남은 상태에 달렸다"는 답이 하나라도 있으면 조정 단계가 필요합니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```ts
+> // 전: 이전 실행이 중간에 죽으면 다음 실행이 항상 실패합니다
+> function start(dir: string) {
+>   mkdirSync(dir);          // 이미 있으면 예외
+>   writeLock(dir, process.pid);
+> }
+>
+> // 후: 시작할 때 남은 상태를 훑고 수렴시킵니다
+> function start(dir: string) {
+>   mkdirSync(dir, { recursive: true });
+>   const holder = readLockPid(dir);
+>   if (holder && isAlive(holder)) return adopt(dir, holder); // 살아 있는 세션은 이어받음
+>   writeLock(dir, process.pid);                              // 죽은 소유자의 잠금은 덮어씀
+> }
+> ```
+
+**함정.** 원문이 드는 네 가지 패턴은 수렴하는 시작, 생성 순서가 아니라 내용 동등성 기준의 정리, PID 기반 stale 잠금 감지, 실패한 작업이 깨끗하게 다시 뜨는 스케줄링입니다. **해설 (이 책의 해석, 원본에 없음).** 살아 있는지 보지 않고 잠금 파일의 존재만 믿으면 자가 치유가 되지 않는다는 뜻으로 읽힙니다.
+
+**함께 보는 원칙.** `architect`의 실행기 프롬프트가 상태 전이를 가능한 곳에서 멱등하게 하라며 인용합니다. **해설 (이 책의 해석, 원본에 없음).** Orchestrate의 `orch`가 죽은 PID가 쥔 저장소 잠금을 스스로 교체한다는 서술이 같은 발상의 사례로 읽힙니다.
+
 ### migrate-callers-then-delete-legacy-apis {#skill-principle-migrate-callers-then-delete-legacy-apis}
 
 원문: {{src:skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md}}
@@ -282,6 +557,22 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **규칙.** 내부 호출자가 아직 있다는 이유만으로 레거시 API 경로를 남기지 않습니다. 호출자를 목록화하고, 옮기고, 옛 API를 즉시 지웁니다. 임시 어댑터는 기본 아키텍처가 아니라 예외적이고 기간이 정해진 것으로 취급합니다. 테스트는 새 계약을 단언하도록 고치고, 리팩터링 이전의 구현 세부만 보호하던 테스트는 지웁니다.
 
 **적용되는 경우.** 하위 호환에 의존하는 외부 사용자가 없고, 프로젝트가 조율된 파괴적 변경을 흡수할 수 있고, 새 API가 단순화나 리팩터링 계획의 일부일 때입니다. 옛 API와 새 API를 함께 두면 이중 경로의 복잡도가 생기고 정리가 늦어지며 코드베이스가 덧붙이기만 하는 느낌이 됩니다. `refactoring` 플레이북이 이 원칙을 씁니다.
+
+**적용과 예외.** 원문이 적용 조건 세 가지를 명시합니다. 외부 사용자가 하위 호환에 의존하지 않을 것, 프로젝트가 조율된 깨는 변경을 흡수할 수 있을 것, 새 API가 단순화나 리팩터링 계획의 일부일 것입니다. 셋이 아니면 이 원칙의 대상이 아닙니다. 임시 어댑터는 예외적이고 기한이 정해진 것으로만 다룹니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```text
+> 전: fetchLegacy에 @deprecated를 붙이고 새 fetchV2를 감싸는 어댑터를 둔다.
+>     호출자 14곳은 "차차" 옮긴다.
+> 후: git grep fetchLegacy   -> 호출자 14곳을 목록으로 만든다
+>     같은 웨이브에서 14곳을 fetchV2로 옮기고 fetchLegacy를 지운다
+>     옛 구현의 세부만 지키던 테스트는 지우고 새 계약을 단언하도록 고친다
+> ```
+
+**함정.** 원문은 임시 어댑터를 예외적이고 기한이 정해진 것으로만 허용하고, 옛 API와 새 API를 함께 두면 "덧붙이기만 하는 코드베이스"가 된다고 합니다. Refactoring 플레이북은 호환 shim도, 옛 경로와 새 경로의 병행도 없다고 못 박고, `interrogate`의 루브릭은 새 API와 옛 API가 함께 살아 있는지 봅니다.
+
+**함께 보는 원칙.** Refactoring 플레이북의 5단계가 "모든 호출자를 옮기고 옛 API를 같은 웨이브에서 지운다"로 이 원칙을 씁니다. **해설 (이 책의 해석, 원본에 없음).** [`outcome-oriented-execution`](#skill-principle-outcome-oriented-execution)도 호환 코드를 오래 남기지 않는 쪽으로 읽힙니다.
 
 ### separate-before-serializing-shared-state {#skill-principle-separate-before-serializing-shared-state}
 
@@ -299,6 +590,22 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 2. **기본은 공유 쓰기 대상을 없애는 것입니다.** 이 행위자들이 정본 객체 하나를 필요로 하는지, 독립된 사실을 게시하는지 묻습니다. 행위자마다 자기가 소유하는 파일, 키, 브랜치, 상태 디렉터리를 주고, 읽기나 보고 경계에서만 병합합니다. 두 작업자가 각자의 `lastX` 필드를 하나의 `state.json`에 쓰는 것은 여전히 공유 변경입니다. `indexer-state.json`과 `metrics-state.json`은 그렇지 않습니다.
 3. **공유 쓰기 대상 하나가 진짜 불변식일 때만 접근을 구조적으로 직렬화합니다**(락 파일, 순차 단계, 단일 작성자 액터, 원자적 compare-and-swap). "락이 필요하다"는 기본 답이 아니라 점검해야 할 설계 냄새로 취급합니다. 여러 스킬이 "작업자마다 자기 워크트리"를 요구하는 근거가 이 원칙입니다.
 
+**적용과 예외.** 동시 행위자가 같은 파일, 브랜치, 키, 상태 객체에 쓸 수 있을 때입니다. 원문의 순서는 세 가지입니다. 공유된 가변 상태를 식별하고, 기본은 공유 쓰기 대상을 없애며, 단일 공유 쓰기 대상이 진짜 불변식일 때만 구조적으로 직렬화합니다. "락이 필요하다"는 확인할 설계 냄새이지 기본 답이 아닙니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> 서브에이전트 셋이 각자 새 라우트를 `routes.ts` 한 파일에 추가합니다.
+>
+> ```text
+> 전: 셋이 같은 routes.ts를 편집한다. 락 파일과 "편집 전에 확인" 지침을 둔다.
+> 후: 각자 자기 파일에 쓴다.  routes/orders.ts, routes/users.ts, routes/billing.ts
+>     읽는 경계에서만 합친다.  routes/index.ts가 디렉터리를 훑어 등록부를 만든다
+> ```
+
+**함정.** 원문은 지침과 관례를 동시성 제어로 치지 않습니다. 잠금 파일, 순차 단계, 독점 소유 같은 구조적 수단이어야 합니다. 이름을 나눈 것 같아도 두 작업자가 한 파일에 각자의 필드를 쓰면 여전히 공유 변경입니다.
+
+**함께 보는 원칙.** `arena`가 후보마다 출력 경로를 따로 두고, Feature 플레이북이 공유 가변 상태는 대상을 쪼개는 것을 기본으로 하고, Hillclimb와 Visual parity와 Orchestrate가 소유자마다 워크트리나 브랜치를 나누고, `figure-it-out`이 작업자마다 브랜치를 주는 것이 이 원칙의 적용입니다. `benny`의 이슈 분류도 소스 좌표에 적용합니다.
+
 ## 검증 원칙
 
 ### prove-it-works {#skill-principle-prove-it-works}
@@ -313,6 +620,20 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **가능하면 검사를 스크립트로 만듭니다.** 가장 강한 증명은 같은 비교를 다시 돌리는 결정적 스크립트이고 한 번의 눈대중이 아닙니다. 스크립트를 쓰고, 돌리고, 리뷰어가 내 말을 믿는 대신 다시 돌릴 수 있는 산출물로 출력을 남깁니다. 산출물은 사람에게 보이게 두고, 큰 포팅이나 마이그레이션처럼 나중에 기록을 감사해야 하는 크거나 복잡한 작업에서만 커밋합니다(`show-me-your-work`). 안내서가 강조하는 것은 사용자 쪽의 몫입니다. "실제 산출물"을 검사 가능하게 만드는 것이 사용자의 일이고, 끝 조건을 처음 프롬프트에 적는 것이 그 방법입니다. 끝났다는 답이 증거 없이 자신만만하면 경고 신호입니다.
 
+**적용과 예외.** 작업을 끝낸 뒤 완료를 선언하기 전입니다. 원문의 검증 대상은 실제 산출물입니다. 프로세스의 생존, 실제 값, diff를 직접 봅니다. 검증이 실패하면 시스템보다 관찰 방법을 먼저 의심합니다. 큰 이식이나 마이그레이션처럼 나중에 감사할 흔적이 필요한 작업이 아니면 스크립트 산출물을 커밋하지 않고 사람이 볼 수 있게만 둡니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```text
+> 에이전트 (전): 빌드가 통과했고 타입 오류도 없어서 임포트 기능은 완료입니다.
+> 에이전트 (후): 실제 임포트 흐름을 샘플 CSV로 돌렸습니다. 기록된 행 42개를
+>     조회한 값을 아래에 붙입니다. 재실행하는 check-import.sh도 남깁니다.
+> ```
+
+**함정.** 원문은 간접 검증(파일 mtime, 출력의 신선도, 에이전트 자기 보고, 캐시된 스크린숏)이 직접 관찰보다 싸 보이지만 틀린 추론에 따라 행동하는 비용이 원천을 확인하는 비용보다 훨씬 크다고 경고합니다. Session pickup은 이전 자기 보고를 증명으로 세지 않고, Worktree cleanup은 `safe` 버킷보다 고정된 채팅을 실제 산출물로 봅니다.
+
+**함께 보는 원칙.** 원문이 [`sequence-verifiable-units`](#skill-principle-sequence-verifiable-units)를 검사를 진짜로 만드는 쪽의 짝으로 삼고, 스크립트로 검증하는 것은 [`build-the-lever`](#skill-principle-build-the-lever)의 몫입니다. `show-me-your-work`가 흔적을 커밋해야 하는 경우를 다룹니다. `arena`, `figure-it-out`, Refactoring, Hillclimb, Multi-phase plan도 이 원칙을 인용합니다.
+
 ### fix-root-causes {#skill-principle-fix-root-causes}
 
 원문: {{src:skills/principle-fix-root-causes/SKILL.md}}
@@ -325,6 +646,25 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **재시작 버그는 코드보다 상태를 먼저 의심합니다.** "재시작 뒤에 실패한다"면 먼저 낡은 영속 상태(설정 파일, 캐시, 락 파일, 직렬화된 상태)를 의심합니다. 상태 파일을 지우면 동작이 돌아오면 상태 검증을 수정으로 우선합니다. `architect`의 E단계와 `no-comments`의 4단계가 이 원칙을 인용합니다.
 
+**적용과 예외.** 디버깅할 때입니다. 원문은 "재시작 뒤 실패하는" 버그에서 코드보다 남은 영속 상태(설정 파일, 캐시, 잠금 파일, 직렬화된 상태)를 먼저 의심하라는 별도 규칙도 둡니다. 상태 파일을 지우면 동작이 복원된다면 상태 검증이 수정의 우선순위입니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```ts
+> // 증상: 로그아웃 직후 user.name.trim()에서 TypeError
+> // 전: 증상을 조용히 만드는 가드 (증상 수정)
+> if (!user) return;
+>
+> // 후: 재현 -> "왜 user가 null인가" -> 로그아웃이 세션 저장소를 비우는 사이
+> //     렌더가 한 번 더 도는 순서 문제를 찾고 그 순서를 고칩니다
+> router.replace("/login");   // 먼저 화면을 이탈시키고
+> await session.clear();      // 그다음에 비웁니다
+> ```
+
+**함정.** 원문이 드는 신호 세 가지가 있습니다. 충돌을 잠재우려고 nil 검사를 더하는 것은 증상 수정입니다. 우회에 문단 길이의 주석이 필요하면 코드가 틀린 것입니다. 인스턴스만이 아니라 패턴을 찾아(같은 패턴을 grep해) 모두 고칩니다. 막히면 추측하지 말고 계측합니다.
+
+**함께 보는 원칙.** [`attack-the-premise`](#skill-principle-attack-the-premise)는 배정이 무엇이냐는 물음을 이 원칙의 다음 "왜"로 삼습니다. `no-comments`는 의도를 이끄는 용도로 이 원칙과 [`redesign-from-first-principles`](#skill-principle-redesign-from-first-principles)를 인용하되 범위 밖의 수정을 허가하지 않는다고 합니다. `architect`는 마찰이 스케치에 흡수되지 않을 때 스케치를 버리는 근거로 인용합니다. Bug fix 플레이북은 이 원칙을 인용하지 않지만, 재현부터 시작해 런타임 증거로 원인을 좁히는 절차가 이 원칙의 "재현 먼저"와 "막히면 계측"과 같은 방향입니다. **해설 (이 책의 해석, 원본에 없음).**
+
 ### sequence-verifiable-units {#skill-principle-sequence-verifiable-units}
 
 원문: {{src:skills/principle-sequence-verifiable-units/SKILL.md}}
@@ -336,6 +676,22 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **실행.** 스윕, 마이그레이션, 비슷한 수정의 연속에서는 다음을 시작하기 전에 각 변경을 검증합니다. 단위마다 전과 후의 브래킷입니다. 알려진 좋은 상태, 변경 하나, 검사 실행, 그다음 진행. 모든 검사가 진짜 기준선에 대해 측정하도록 깨끗한 트렁크에 먼저 리베이스합니다. 지렛대가 수정을 하는 경우 단위별 검사는 거의 공짜입니다. 그래도 돌립니다.
 
 **전달.** 작업을 증명하는 순서로 커밋과 PR을 쌓습니다. 표준 형태는 실패하는 테스트가 먼저이고 그 위에 수정입니다. 다른 이야기 순서로는 재구성 전의 뺄셈, 처치 전의 기준선 캡처, 기능 전의 뼈대가 있습니다. 각 커밋은 따로 랜딩되고 순서가 논증처럼 읽힙니다. 각 검사를 진짜로 유지하는 `prove-it-works`, 단위별 검사를 싸게 만드는 `build-the-lever`의 순서 짝입니다. Bug fix, Perf issue, Hillclimb, Autonomous run, Feature, Refactoring 플레이북이 모두 이 원칙을 인용합니다.
+
+**적용과 예외.** 원문이 두 자리를 정합니다. 실행(스윕, 마이그레이션, 같은 편집의 반복)에서는 다음 변경 전에 각 변경을 검증하고, 전달(커밋과 PR을 쌓는 방식)에서는 순서가 스스로를 증명하게 합니다. 지렛대가 편집하면 단위별 검사는 거의 공짜이지만 그래도 돌립니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```text
+> 전 (버그 수정 PR의 커밋 이력)          후
+> a1 fix: invalidate cache               b1 test: reproduce stale total (실패)
+> a2 test: add cache test                b2 fix: invalidate cache (b1이 초록으로)
+> a3 chore: typo                         -> 각 커밋이 단독으로 착륙하고
+>                                           순서가 "빨강, 초록" 논증이 된다
+> ```
+
+**함정.** 한 묶음을 다 고친 뒤에 검사를 몰아서 돌리는 것이 원문이 겨냥하는 실패입니다. 깨짐을 배치 뒤에서 잡으면 이미 깨진 토대 위에 더 쌓은 뒤입니다. 트렁크에 먼저 리베이스해 모든 검사가 실제 기준선에 대해 재도록 합니다.
+
+**함께 보는 원칙.** 원문이 [`prove-it-works`](#skill-principle-prove-it-works)(검사가 진짜이게 함)와 [`build-the-lever`](#skill-principle-build-the-lever)(단위별 검사를 싸게 함)의 짝이라고 밝힙니다. Bug fix 플레이북이 표준 사례("실패하는 테스트가 먼저, 수정이 그 위에")를 들고, Feature, Refactoring, Perf issue, Hillclimb, Autonomous run, `figure-it-out`, Multi-phase plan이 인용합니다. `benny`의 reproduce-and-fix 스킬도 적용합니다.
 
 ### test-behavior-not-implementation {#skill-principle-test-behavior-not-implementation}
 
@@ -359,6 +715,25 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **고치는 법.** 테스트 본문 안에서 구체적 입력 하나로 대상을 호출하고 리터럴 출력이나 관찰 가능한 효과를 단언합니다. `expect(slugify("Hello, World!")).toBe("hello-world")`. 부재의 경우에는 같은 테스트 안에서 다른 입력의 존재를 단언합니다. 상수의 경우에는 값을 되풀이하지 말고 그것을 읽는 메커니즘을 입력 하나로 시험합니다. 모의 객체의 경우에는 그것이 호출되었다는 것이 아니라 받은 페이로드나 호출 뒤 상태를 단언합니다. 그런 단언이 존재하지 않으면 테스트를 지웁니다. 표의 행에 걸친 관계(두 표에 모두 있는 키, 존재하는 부모)의 테스트와 `*.test-d.ts` 파일의 컴파일 타임 검사는 남깁니다.
 
+**적용과 예외.** 테스트를 쓰거나 바꾸거나 남길 때입니다. 원문은 남겨도 되는 것을 명시합니다. 표의 행 사이 관계를 검사하는 테스트(두 표에 있는 키, 존재하는 부모)와 `*.test-d.ts`의 컴파일 시점 검사입니다. 가져온 모든 함수가 `undefined`를 반환해도 통과하는 테스트만 고치거나 지웁니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```ts
+> // 전: 호출 여부만 봅니다 (formatPrice가 undefined를 반환해도 통과)
+> const spy = vi.spyOn(fmt, "formatPrice");
+> render(<Price cents={1999} />);
+> expect(spy).toHaveBeenCalled();
+>
+> // 후: 사용자가 보는 결과를 리터럴 기대값과 비교합니다
+> expect(formatPrice(1999)).toBe("$19.99");
+> expect(render(<Price cents={1999} />).text()).toBe("$19.99");
+> ```
+
+**함정.** 원문의 다섯 모양은 약하거나 없는 단언, 목(mock)이나 부재만 보는 단언, 자기 참조, 상수 고정, 픽스처가 픽스처를 단언하는 것입니다. 상수 고정은 상수나 프롬프트를 고치는 일 자체를 막는 부작용도 있습니다. 부재를 검사할 때는 같은 테스트 안에서 다른 입력의 존재를 함께 단언합니다.
+
+**함께 보는 원칙.** `interrogate`의 루브릭이 테스트가 동작을 검사하는지 구현 세부를 검사하는지 묻습니다. **해설 (이 책의 해석, 원본에 없음).** 위 검사 문장은 [`prove-it-works`](#skill-principle-prove-it-works)와 같은 정신을 테스트에 옮긴 것으로 읽히지만, 두 원문이 서로를 언급하지는 않습니다. 원문 본문에서 이 원칙을 직접 인용하는 다른 스킬은 없습니다.
+
 ## 위임 원칙
 
 ### guard-the-context-window {#skill-principle-guard-the-context-window}
@@ -371,6 +746,21 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **패턴.** 대용량 페이로드를 격리합니다. 장황한 출력, 스크린숏, 큰 문서는 서브에이전트에게 보내고 메인 컨텍스트는 원시 데이터가 아니라 요약을 받습니다. 자주 쓰는 내용은 인라인으로 둡니다. 호출마다 쓰는 템플릿과 참조는 읽을 때마다 비용이 드는 별도 파일이 아니라 스킬 파일에 둡니다. 단계의 크기를 정하고 범위에 상한을 둡니다. 단계당 파일 수를 제한하고, 턴 예산을 정하고, 메커니즘 비용을 계산에 넣습니다. `Runtime forensics`, `Trace forensics`, `Session pickup`, `Worktree cleanup`, `Hillclimb`, `Multi-phase plan` 플레이북이 이 원칙을 인용해 큰 산출물이나 대화 기록의 읽기를 서브에이전트에 맡깁니다.
 
+**적용과 예외.** 컨텍스트가 차오를 때(큰 출력, 긴 파일, 반복되는 읽기, 팬아웃 계획)입니다. 원문은 반대 방향의 규칙도 함께 둡니다. 매 호출에 쓰이는 템플릿과 참조는 읽기 비용이 들지 않도록 스킬 파일 안에 둡니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```text
+> 전: 3만 줄짜리 트레이스 로그를 메인 대화에 그대로 읽어 들인다.
+>     이후 답의 품질이 떨어지고 압축이 일어난다.
+> 후: 서브에이전트에게 "10초 이상 걸린 스팬만 뽑아 라인 번호와 함께 요약"을 맡긴다.
+>     메인 스레드에는 요약 다섯 줄과 원본 경로만 남는다.
+> ```
+
+**함정.** 요약은 원본을 대신하지 않습니다. 원문은 메인 컨텍스트에는 원자료가 아니라 요약을 두라고 하되, 단계 크기를 제한하고 턴 예산을 정하고 메커니즘 비용을 계산에 넣으라고 덧붙입니다. **해설 (이 책의 해석, 원본에 없음).** 결정적 근거는 요약 옆에 원본 경로를 함께 남겨 두는 편이 안전합니다.
+
+**함께 보는 원칙.** [`minimize-reader-load`](#skill-principle-minimize-reader-load)가 사람 버전입니다. Hillclimb(부모가 감독하고 서브에이전트가 침), Runtime forensics와 Trace forensics(큰 산출물은 서브에이전트에서 파싱), Session pickup(긴 대본), Worktree cleanup(대본은 대용량), Multi-phase plan(탐색을 서브에이전트에 맡김)이 이 원칙을 인용합니다. `benny`의 reproduce-and-fix 스킬은 위임된 분석에 씁니다.
+
 ### never-block-on-the-human {#skill-principle-never-block-on-the-human}
 
 원문: {{src:skills/principle-never-block-on-the-human/SKILL.md}}
@@ -382,6 +772,22 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **패턴.** 진행하고, 그다음 제시합니다. 일을 하고 결과를 보여 줍니다. "X를 할까요?"라고 묻지 말고 X를 하고 이유를 설명합니다. 시스템을 스스로 치유하게 만듭니다. 문제를 발견하면 기록하고 다음 라운드에 고칩니다.
 
 **경계.** 되돌릴 수 없는 행동(강제 푸시, 프로덕션 데이터 삭제, 외부 메시지 발송)은 여전히 확인이 필요합니다. 되돌릴 수 있는 행동(코드 작성, 노트 편집, 작업 분할)은 막힘 없이 진행해야 합니다. 제품 방향은 사람에게서 옵니다. *실행*이 막혀서는 안 됩니다. `poteto-mode`의 Autonomy와 Multi-phase plan의 운영자 질문 규칙이 이 원칙을 씁니다.
+
+**적용과 예외.** 원문의 경계 세 줄이 적용 범위를 정합니다. 되돌릴 수 없는 행동(force-push, 운영 데이터 삭제, 외부 메시지 발송)은 여전히 확인을 요구합니다. 되돌릴 수 있는 행동(코드 작성, 노트 편집, 작업 쪼개기)은 막지 않고 진행합니다. 제품 방향은 사람에게서 나오고, 막지 않아야 하는 것은 *실행*입니다.
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```text
+> 전: 에이전트: 이 함수를 두 개로 나눠도 될까요?  (사람이 올 때까지 정지)
+> 후: 에이전트: 두 개로 나눴습니다. 이유는 ... . 마음에 안 들면 이 커밋만 되돌리세요.
+>
+> 전: 에이전트: 공유 브랜치에 force-push 했습니다.
+> 후: 에이전트: 공유 브랜치의 force-push가 필요합니다. 승인해 주세요.  (확인 요구)
+> ```
+
+**함정.** "진행하고 보여 준다"가 "묻지 않는다"의 면허는 아닙니다. 원문이 되돌릴 수 없는 행동을 제외합니다. poteto-mode의 Autonomy도 되돌릴 수 없는 쓰기(공유 브랜치 force-push, 배포, 데이터 삭제, 고객 메시지)는 항상 멈추라고 합니다. **해설 (이 책의 해석, 원본에 없음).** 두 서술이 비슷한 선을 긋는 것으로 읽히지만, Autonomy는 이 원칙을 인용하지 않습니다.
+
+**함께 보는 원칙.** `figure-it-out`은 되돌릴 수 있는 작업은 진행하되 여러 시간짜리 실행 앞에서는 한 번의 확인을 두라며 이 원칙을 인용하고, Multi-phase plan은 프로토타입으로 풀 수 없는 제품이나 취향의 결정에만 옵션과 함께 운영자에게 묻는다고 합니다.
 
 ## 메타 원칙
 
@@ -404,3 +810,44 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 **피드백 루프.** 모든 교정을 포착합니다(사람이 개입하거나 테스트가 실패하면 일회성인지 패턴인지 판단). 맞는 층으로 보냅니다(일회성은 브레인 노트, 반복되는 수정은 스킬이나 린트 규칙, 체계적 문제는 원칙). 루프를 닫습니다(기록만 하지 말고 지금 적용하거나 구체적 할 일을 만듭니다).
 
 **안티패턴.** 기록 없이 인정하기("기억해 두겠습니다"는 지속되지 않습니다), 보내지 않고 기록하기(있어야 할 린트 규칙에 대한 브레인 노트는 그 린트 규칙이 구현되지 않으면 낭비), 일반화 없이 고치기(반복되는 패턴을 그대로 두고 인스턴스 하나만 고치기). `check-plan.mjs`가 계획서 규칙을 스크립트로 강제하는 것이 이 원칙의 사례입니다.
+
+**적용과 예외.** 같은 지시를 두 번째 쓰고 있는 자신을 발견했거나 반복되는 교정을 알아챘을 때입니다. 판단이 필요해서 구조로 옮길 수 없으면 지시를 더 눈에 띄게 하고 실패 모드의 예를 덧붙입니다. 여러 수단이 가능하면 가장 강한 것을 고릅니다(표현할 수 없는 상태, 린트나 금지 API, 표준 헬퍼, 런타임 검사 순).
+
+> **예시 (이 책의 저자가 만든 것, 원본에 없음)**
+>
+> ```text
+> 전: 리뷰 지침에 "테스트에 .only를 남기지 마세요"를 세 번 적었다.
+> 후: CI 린트 규칙 no-focused-tests를 켜고 지침의 문장을 지운다.
+>     사람이 판단해야 하는 "테스트 이름은 동작을 서술하라"만 지침으로 남기고
+>     실패한 예 하나를 붙인다.
+> ```
+
+**함정.** 원문이 이름 붙인 반패턴 세 가지가 있습니다. 인정만 하고 기록하지 않기("기억해 두겠습니다"는 남지 않음), 기록만 하고 경로를 정하지 않기, 한 사례만 고치고 반복되는 패턴을 그대로 두기. 교정은 일회성은 메모, 반복되는 수정은 스킬이나 린트, 시스템 문제는 원칙으로 보냅니다.
+
+**함께 보는 원칙.** `reflect`와 `show-me-your-work`가 이 원칙을 인용합니다. `reflect`는 린트나 스크립트로 더 안정적으로 강제될 항목을 Accepted에서 Backlog로 옮길 때, `show-me-your-work`는 커밋된 스크립트의 증거를 손으로 만든 것보다 선호할 때입니다. Authoring a skill, Orchestrate의 `preferences.md`, Worktree cleanup, Multi-phase plan의 `check-plan.mjs`도 이 원칙을 부릅니다. [`build-the-lever`](#skill-principle-build-the-lever)와의 구분은 위 항목을 봅니다.
+
+
+## 원칙이 서로 당길 때 {#principles-interactions}
+
+원칙 23개를 한꺼번에 적용하는 일은 없습니다. 색인은 원칙마다 "언제 적용하는가"를 붙여 놓았고, 안내서는 `poteto-mode`가 작업이 촉발한 원칙만 적용한다고 설명합니다. 원문은 원칙이 서로 부딪칠 때 어느 쪽을 택하라는 일반 규칙을 따로 두지 않습니다. 대신 개별 원칙과 플레이북이 몇몇 짝의 관계를 직접 밝힙니다. 아래 표는 그 서술만 모은 것입니다.
+
+| 짝 | 원문이 밝히는 관계 | 출처 |
+| --- | --- | --- |
+| `experience-first`와 `foundational-thinking` | 앞의 것은 작업의 목표, 뒤의 것은 작업의 순서를 다룹니다. 토대는 경험에 봉사해야 합니다 | `experience-first` |
+| `subtract-before-you-add`와 `foundational-thinking` | 뺄셈은 뼈대보다 앞섭니다. 죽은 코드를 지운 뒤 토대를 놓습니다 | `foundational-thinking` |
+| `attack-the-premise`와 `redesign-from-first-principles` | 뒤의 것은 새 요구를 중심으로 설계를 다시 짓고, 앞의 것은 현재 설계가 가정하는 사실에 의문을 던집니다 | `attack-the-premise` |
+| `build-the-lever`와 `encode-lessons-in-structure` | 앞의 것은 눈앞의 작업의 처리량과 검토 가능성이고, 뒤의 것은 반복되는 지시를 지속적인 가드레일로 만드는 일입니다 | `build-the-lever` |
+| `build-the-lever`와 `laziness-protocol` | 지렛대는 일을 하거나 증명하는 가장 작은 스크립트이지 프레임워크가 아닙니다 | `build-the-lever` |
+| `sequence-verifiable-units`와 `prove-it-works`, `build-the-lever` | 앞의 것은 검사를 단위마다 두는 순서이고, `prove-it-works`는 각 검사를 진짜로 만들며, `build-the-lever`는 단위별 검사를 싸게 만듭니다 | `sequence-verifiable-units` |
+| `minimize-reader-load`와 `guard-the-context-window` | 앞의 것은 뒤의 것의 사람 버전입니다. 독자의 작업 기억도 유한합니다 | `minimize-reader-load` |
+| `laziness-protocol`과 Feature의 `arena` 위임 | 이 원칙은 `arena` 위임 의무를 면제하지 않습니다. 이득은 줄 수가 아니라 리뷰의 분리입니다 | Feature 플레이북 |
+| `laziness-protocol`과 Prototype | Prototype은 "가장 작은 변경"과 검증 기준이 뒤집히는 유일한 플레이북입니다. 폴리시보다 속도이고 엄밀함은 올바른 설계를 싸게 고르는 데 있습니다 | Prototype 플레이북 |
+| `attack-the-premise`와 `fix-root-causes` | 센서스가 보여 준 배정이 무엇이냐는 물음이 다음 "왜"입니다 | `attack-the-premise` |
+
+> **해설 (이 책의 해석, 원본에 없음)**
+>
+> 아래는 원문에 없는 이 책의 읽기입니다. 두 원칙이 다른 방향을 가리킬 때 먼저 물어 볼 질문을 정리했습니다.
+>
+> - **`laziness-protocol`과 `exhaust-the-design-space`.** 앞의 것은 가장 작은 변경을, 뒤의 것은 대안 2~3개의 탐색을 요구합니다. 선례가 없는 결정이면 먼저 탐색하고, 고른 뒤에 구현은 가장 작게 합니다. 선례가 있는 기계적 구현이면 탐색 없이 가장 작은 변경입니다.
+> - **`outcome-oriented-execution`과 `sequence-verifiable-units`.** 단위마다 검사를 두되, 계획서가 선언한 파손 구간에서는 그 영역의 검사를 계획 완료 시점까지 미룰 수 있습니다. 어느 영역이 파손을 허용하는지가 선언되어 있지 않으면 뒤의 원칙이 이깁니다.
+> - **`boundary-discipline`과 `fix-root-causes`.** 안쪽에서 충돌하는 곳에 방어를 덧대고 싶어질 때, 데이터가 경계를 넘을 때 검증되었는지를 먼저 확인합니다. 경계가 뚫려 있으면 원인은 경계에 있고, 뚫려 있지 않다면 안쪽의 논리 오류이므로 방어가 아니라 그 오류를 고칩니다.

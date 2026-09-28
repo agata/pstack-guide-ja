@@ -91,7 +91,7 @@ ${renderToc(toc, hrefOf)}
     `<item id="css" href="style.css" media-type="text/css"/>`,
     `<item id="cover-image" href="cover.png" media-type="image/png" properties="cover-image"/>`,
     `<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>`,
-    ...items.map((i) => `<item id="${i.id}" href="${i.href}" media-type="application/xhtml+xml"/>`),
+    ...items.map((i) => `<item id="${i.id}" href="${i.href}" media-type="application/xhtml+xml"${i.html.includes("<svg") ? ' properties="svg"' : ""}/>`),
     ...images.map((n, k) => `<item id="img${k}" href="images/${n}" media-type="image/jpeg"/>`),
   ];
   const spine = [`<itemref idref="cover" linear="no"/>`, `<itemref idref="nav"/>`, ...items.map((i) => `<itemref idref="${i.id}"/>`)];

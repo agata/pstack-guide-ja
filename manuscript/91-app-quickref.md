@@ -35,7 +35,7 @@
 
 ## 원칙 스킬 23개
 
-모두 [원칙 장](principles.md)에 절이 있습니다. 트리거 문구는 영어 `description`의 "Apply when ..."을 옮긴 것입니다.
+모두 [원칙 장](principles.md)에 절이 있고, 절마다 적용하는 때와 아닌 때, 예시, 함정, 함께 보는 원칙이 붙어 있습니다. 원칙이 서로 당길 때는 [그 장의 끝 절](principles.md#principles-interactions)에 모았습니다. 트리거 문구는 영어 `description`의 "Apply when ..."을 옮긴 것입니다.
 
 | 스킬 | 묶음 | 언제 적용하는가 |
 | --- | --- | --- |
@@ -64,6 +64,8 @@
 | [`principle-encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure) | 메타 | 같은 지시를 두 번째로 쓰는 자신을 발견했거나 반복되는 교정을 알아챘을 때 |
 
 ## poteto-mode 플레이북 23개
+
+플레이북마다 절 끝에 흐름도, 단계별 산출물, 예시, 실패와 중단 처리, 호출하는 스킬과 스크립트의 표가 붙어 있습니다.
 
 | 플레이북 | 트리거와 용도 | 절 |
 | --- | --- | --- |

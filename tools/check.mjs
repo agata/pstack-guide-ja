@@ -3,7 +3,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import JSZip from "jszip";
 import { EpubCheck } from "@likecoin/epubcheck-ts";
-import { loadManuscript } from "./lib/manuscript.mjs";
+import { loadManuscript, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
 
 let failed = 0;
 const fail = (msg) => {
@@ -16,6 +16,10 @@ const { items } = loadManuscript();
 const ids = new Map(items.map((i) => [i.href, new Set(i.headings.map((h) => h.id).concat(i.id))]));
 for (const item of items) {
   if (item.source.includes("—")) fail(`${item.file}: contains em dash`);
+  // Blockquotes that present author-written examples or commentary must open with the exact label.
+  for (const m of item.source.matchAll(/^> \*\*((?:예시|해설)[^*]*)\*\*/gm)) {
+    if (m[1] !== EXAMPLE_LABEL && m[1] !== COMMENTARY_LABEL) fail(`${item.file}: example or commentary block with a non-standard label: ${m[1]}`);
+  }
   for (const m of item.html.matchAll(/href="([^"]+)"/g)) {
     const href = m[1];
     if (/^(https?:|mailto:)/.test(href)) continue;

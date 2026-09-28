@@ -6,7 +6,7 @@ html, body { margin: 0; }
 body { width: 1200px; height: 1800px; background: #14181f; color: #f2f0e8; font-family: "Noto Sans KR", sans-serif; position: relative; overflow: hidden; }
 .frame { position: absolute; inset: 70px; border: 3px solid #d9a441; }
 .kicker { position: absolute; top: 200px; left: 140px; font-size: 40px; letter-spacing: 8px; color: #d9a441; }
-h1 { position: absolute; top: 560px; left: 140px; right: 140px; margin: 0; font-size: 190px; line-height: 1.05; font-weight: 700; }
+h1 { position: absolute; top: 560px; left: 140px; right: 140px; margin: 0; font-size: 190px; line-height: 1.05; font-weight: 700; word-break: keep-all; }
 .sub { position: absolute; top: 960px; left: 140px; right: 160px; font-size: 56px; line-height: 1.45; font-weight: 700; color: #cfcab9; }
 .foot { position: absolute; bottom: 170px; left: 140px; right: 140px; font-size: 32px; line-height: 1.6; color: #a9a693; }
 .stack { position: absolute; top: 1330px; left: 140px; display: flex; gap: 14px; }

@@ -1,3 +1,105 @@
-# pstack Korean ebook
+# pstack 가이드 (한국어 해설서)
 
-Korean technical ebook built from the pstack Claude Code plugin (MIT). Local project, no remote.
+Lauren Tan의 Cursor 플러그인 [pstack](https://github.com/cursor/plugins/tree/main/pstack)(0.15.5, 커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`)을 한국어로 설명한 기술서입니다.
+
+> **비공식 해설서입니다.** pstack의 원저자나 Cursor가 감수하거나 승인한 자료가 아닙니다. 이 책은 AI의 도움을 받아 쓰고 원문과 대조해 확인했지만 오류가 있을 수 있습니다. 원본이 항상 기준이므로 이 책과 원본이 다르면 원본을 따르십시오.
+
+## 내려받기
+
+[최신 릴리스](https://github.com/jayjongcheolpark/pstack-guide-ko/releases/latest)에서 EPUB와 PDF를 내려받을 수 있습니다.
+
+- `pstack-guide.epub`: 전자책 리더용
+- `pstack-guide.pdf`: 신국판(152x225mm) 크기, 인쇄와 화면 읽기용
+
+## 차례
+
+- 이 책에 대하여
+- 이 책을 읽는 방법
+- 제 1부 시작하기
+  - 제 1장 pstack이란 무엇인가
+  - 제 2장 설치와 첫 사용
+- 제 2부 진입점
+  - 제 3장 poteto-mode
+  - 제 4장 작업 플레이북
+  - 제 5장 PR 플레이북
+  - 제 6장 장시간, 대규모 플레이북
+- 제 3부 이해하기
+  - 제 7장 how: 코드가 어떻게 동작하는가
+  - 제 8장 why: 왜 이런 모양인가
+  - 제 9장 teach와 recall: 이해시키기와 맥락 복원
+- 제 4부 설계하기
+  - 제 10장 architect: 코드 전에 모양을 정한다
+  - 제 11장 arena, swarm, figure-it-out
+  - 제 12장 원칙 스킬 23개
+- 제 5부 고치고 검증하기
+  - 제 13장 tdd와 blast-radius
+  - 제 14장 interrogate: 여러 모델이 diff를 깨뜨린다
+  - 제 15장 검증 스킬: create-verification-skill과 maintain-verification-skill
+- 제 6부 글과 코드 정리
+  - 제 16장 글쓰기: unslop과 technical-writing
+  - 제 17장 코드 정리: no-comments와 typescript-best-practices
+- 제 7부 나만의 방식과 유틸리티
+  - 제 18장 automate-me, reflect, show-me-your-work
+  - 제 19장 bro: 평이한 말로 다시 듣기
+- 제 8부 자동화
+  - 제 20장 make-bot-ui와 benny 자동화 팩
+- 제 9부 실전
+  - 제 21장 밤새 돌리기
+  - 제 22장 레시피와 함정
+- 부록 A 스킬 빠른 참조표
+- 부록 B 용어집
+- 부록 C 스킬 선택 흐름도
+- 부록 D 저작권 표기와 라이선스
+
+## 다루는 범위
+
+- 스킬 47개 (일반 스킬 24개와 `principle-*` 원칙 스킬 23개)
+- `poteto-mode`의 플레이북 23개와 그 references, scripts
+- 에이전트 2개(`poteto-agent`, `Comment Sicko`)
+- 자동화 팩 `benny`와 `make-bot-ui`
+- 원본의 사용 안내서(`docs/guide`), README, 플러그인 매니페스트
+
+같은 저장소의 별개 플러그인 `cursor-team-kit`은 다루지 않고, pstack이 그것을 부르는 자리에서만 출처를 밝히며 언급합니다. 각 스킬 절 제목 아래에는 고정한 커밋의 원문 링크가 있습니다.
+
+## 빌드하는 방법
+
+[Bun](https://bun.sh)과 Google Chrome이 필요합니다. 모든 도구는 저장소 안에 설치되며 시스템 전역 설치는 필요 없습니다.
+
+```shell
+bun install
+bun tools/build.mjs        # dist/pstack-guide.epub, dist/pstack-guide.pdf
+```
+
+검사는 원본의 고정 커밋을 저장소 밖에 클론한 뒤 실행합니다.
+
+```shell
+git clone https://github.com/cursor/plugins.git ../cursor-plugins
+git -C ../cursor-plugins checkout adf3218ca2f5b9971eedc07a76bef22df7701539
+PSTACK_SRC=../cursor-plugins/pstack bun tools/check.mjs   # 원고 규칙, 링크, 스킬 47개와 플레이북 23개의 절 존재, epubcheck
+bun tools/check-layout.mjs                                # EPUB을 좁은 폭에서 열어 가로 넘침 검사
+```
+
+## 어떻게 만들었는가
+
+AI의 도움으로 고정한 커밋의 원문을 읽고 한국어로 다시 설명했고, 스킬과 플레이북마다 원문을 다시 열어 대조했습니다. 절의 존재와 링크, EPUB 유효성(epubcheck), 레이아웃은 위의 검사 스크립트가 기계로 확인합니다. 집필 규칙은 `STYLE.md`, 진행과 사실 확인 기록은 `PROGRESS.md`, 원본 정보는 `SOURCE.md`에 있습니다.
+
+## 오류 제보
+
+틀린 곳을 발견하면 [GitHub Issues](https://github.com/jayjongcheolpark/pstack-guide-ko/issues)에 알려 주십시오. 위치(장과 절)와 원문의 해당 문장을 함께 적어 주시면 확인이 빠릅니다.
+
+## 라이선스
+
+MIT입니다. 원저작물 pstack은 Copyright (c) 2026 Lauren Tan, 이 한국어 해설서는 Copyright (c) 2026 Jay Park입니다. 전문은 [LICENSE](LICENSE), 출처와 삽화 표기는 [NOTICE.md](NOTICE.md)에 있습니다. 책의 여섯 삽화는 pstack의 `docs/guide/images/`에서 가져왔습니다.
+
+---
+
+# pstack Guide (Korean)
+
+An unofficial Korean explanation of [pstack](https://github.com/cursor/plugins/tree/main/pstack), Lauren Tan's Cursor plugin (v0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`). It covers all 47 skills, the 23 `poteto-mode` playbooks, the agents, the `benny` automation pack and the guide docs, with a permalink to the pinned source at each skill section.
+
+**This book is unofficial and was written with AI assistance. It may contain errors, and the original is authoritative.**
+
+- Download the EPUB and PDF from the [latest release](https://github.com/jayjongcheolpark/pstack-guide-ko/releases/latest).
+- Build: `bun install`, then `bun tools/build.mjs` (needs Bun and Google Chrome). Checks are described in the Korean section above.
+- Report errors through [GitHub Issues](https://github.com/jayjongcheolpark/pstack-guide-ko/issues).
+- License: MIT. Copyright (c) 2026 Lauren Tan (original pstack) and Copyright (c) 2026 Jay Park (this explanation). See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md). The six illustrations come from pstack's `docs/guide/images/`.

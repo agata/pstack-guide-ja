@@ -1,0 +1,28 @@
+# NOTICE
+
+This repository is an unofficial Korean explanation of pstack, written with AI assistance. It may contain errors. The original is authoritative.
+
+## Original work
+
+- **pstack** by Lauren Tan, Copyright (c) 2026 Lauren Tan, MIT License.
+- Source: https://github.com/cursor/plugins/tree/main/pstack
+- Pinned version used for this book: 0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`.
+- The MIT notice of the original is quoted in `LICENSE` (with an added copyright line for this explanation) and in the attribution appendix of the book (`manuscript/94-app-attribution.md`).
+
+## What comes from pstack
+
+- Short quotations, code examples, tables and prompt examples taken from pstack's skills, playbooks, agents, automations and documentation. Each skill section cites its source file with a permalink at the pinned commit.
+- The six illustrations in `manuscript/images/` come from pstack's `docs/guide/images/` and are resized to 1000 pixels wide.
+
+## What is new here
+
+- The Korean text, structure and build tooling are Copyright (c) 2026 Jay Park, MIT License.
+
+## Not included
+
+- `cursor-team-kit` is a separate plugin in the same upstream repository. Its skills are mentioned where a pstack file calls them, and are not reproduced.
+- Cursor, Slack, Linear, Notion, Datadog, Sentry, Databricks, Tailscale and GitHub are trademarks of their owners and are named only to identify those tools.
+
+## Fonts used in the PDF
+
+Noto Serif KR, Noto Sans KR and JetBrains Mono, installed as npm packages (`@fontsource/*`) and licensed under the SIL Open Font License. The EPUB embeds no fonts.

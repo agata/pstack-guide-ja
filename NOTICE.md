@@ -2,6 +2,8 @@
 
 This repository is an unofficial Korean explanation of pstack, written with AI assistance. It may contain errors. The original is authoritative.
 
+The original author, Lauren Tan (X: @poteto), gave permission on 2026-09-28 to distribute the guide for free ([reply on X](https://x.com/poteto/status/2104671461827055941)). The author has not reviewed the content, and neither the author nor Cursor endorses or guarantees it. This permission is in addition to the MIT license terms below, which are unchanged.
+
 ## Original work
 
 - **pstack** by Lauren Tan, Copyright (c) 2026 Lauren Tan, MIT License.

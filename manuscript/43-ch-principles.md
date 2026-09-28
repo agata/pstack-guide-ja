@@ -361,7 +361,7 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **균형.** 기준은 반복이 아니라 사소함입니다. 일회성 작업도 지렛대가 작업을 검사 가능하게 만든다면 지렛대를 가질 자격이 있습니다. `laziness-protocol`에 따라 일을 하거나 증명하는 가장 작은 스크립트를 만들고 프레임워크는 절대 만들지 않습니다. 반복되는 지시를 지속적인 가드레일로 만드는 `encode-lessons-in-structure`와 다릅니다. 이것은 눈앞의 작업의 처리량과 검토 가능성입니다.
 
-**적용과 예외.** 사소하지 않은 모든 작업이 기본 적용입니다. 예외는 사소한 작업, 즉 한눈에 보이는 뻔한 편집 두어 개입니다. 원문은 기준이 반복이 아니라 사소함이라고 밝힙니다. 일회성이어도 레버가 작업을 검사할 수 있게 만든다면 레버를 만듭니다.
+**적용과 예외.** 사소하지 않은 모든 작업이 기본 적용입니다. 예외는 사소한 작업, 즉 한눈에 보이는 뻔한 편집 두어 개입니다. 원문은 기준이 반복이 아니라 사소함이라고 밝힙니다. 일회성이어도 지렛대가 작업을 검사할 수 있게 만든다면 지렛대를 만듭니다.
 
 > **예시 (이 책의 저자가 만든 것, 원본에 없음)**
 > 작업: `getUser`를 `fetchUser`로 바꾸는 이름 변경이 호출 300곳에 걸쳐 있습니다.
@@ -375,7 +375,7 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 > ```
 > diff에 스크립트가 없으면 이 원칙을 적용한 것이 아닙니다.
 
-**함정.** 원문의 검사 문장이 가장 분명합니다. 이 원칙을 인용했는데 diff에 코드모드, 스크립트, 생성기, 위임 스킬이 없으면 적용하지 않은 것입니다. 균형도 명시합니다. [`laziness-protocol`](#skill-principle-laziness-protocol)에 따라 일을 하거나 증명하는 가장 작은 스크립트이지 프레임워크가 아닙니다. 결정적 레버가 할 수 있는 일을 서브에이전트 팬아웃으로 손으로 적용하지 않습니다.
+**함정.** 원문의 검사 문장이 가장 분명합니다. 이 원칙을 인용했는데 diff에 코드모드, 스크립트, 생성기, 위임 스킬이 없으면 적용하지 않은 것입니다. 균형도 명시합니다. [`laziness-protocol`](#skill-principle-laziness-protocol)에 따라 일을 하거나 증명하는 가장 작은 스크립트이지 프레임워크가 아닙니다. 결정적 지렛대가 할 수 있는 일을 서브에이전트 팬아웃으로 손으로 적용하지 않습니다.
 
 **함께 보는 원칙.** 원문이 [`encode-lessons-in-structure`](#skill-principle-encode-lessons-in-structure)와 구분합니다. 이 원칙은 눈앞의 작업의 처리량과 검토 가능성이고, 저쪽은 반복되는 지시를 지속적인 가드레일로 만드는 일입니다. 검증 자체의 스크립트화는 [`prove-it-works`](#skill-principle-prove-it-works)로, 단위마다의 검사를 싸게 만드는 역할은 [`sequence-verifiable-units`](#skill-principle-sequence-verifiable-units)로 이어집니다. [`attack-the-premise`](#skill-principle-attack-the-premise)의 센서스와 Hillclimb의 하니스, Worktree cleanup의 감사 스크립트가 예입니다.
 
@@ -666,7 +666,7 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 
 **전달.** 작업을 증명하는 순서로 커밋과 PR을 쌓습니다. 표준 형태는 실패하는 테스트가 먼저이고 그 위에 수정입니다. 다른 이야기 순서로는 재구성 전의 뺄셈, 처치 전의 기준선 캡처, 기능 전의 뼈대가 있습니다. 각 커밋은 따로 랜딩되고 순서가 논증처럼 읽힙니다. 각 검사를 진짜로 유지하는 `prove-it-works`, 단위별 검사를 싸게 만드는 `build-the-lever`의 순서 짝입니다. Bug fix, Perf issue, Hillclimb, Autonomous run, Feature, Refactoring 플레이북이 모두 이 원칙을 인용합니다.
 
-**적용과 예외.** 원문이 두 자리를 정합니다. 실행(스윕, 마이그레이션, 같은 편집의 반복)에서는 다음 변경 전에 각 변경을 검증하고, 전달(커밋과 PR을 쌓는 방식)에서는 순서가 스스로를 증명하게 합니다. 레버가 편집하면 단위별 검사는 거의 공짜이지만 그래도 돌립니다.
+**적용과 예외.** 원문이 두 자리를 정합니다. 실행(스윕, 마이그레이션, 같은 편집의 반복)에서는 다음 변경 전에 각 변경을 검증하고, 전달(커밋과 PR을 쌓는 방식)에서는 순서가 스스로를 증명하게 합니다. 지렛대가 편집하면 단위별 검사는 거의 공짜이지만 그래도 돌립니다.
 
 > **예시 (이 책의 저자가 만든 것, 원본에 없음)**
 >
@@ -826,7 +826,7 @@ separate before serializing shared state. 시도마다 자기 워크트리를 �
 | `subtract-before-you-add`와 `foundational-thinking` | 뺄셈은 뼈대보다 앞섭니다. 죽은 코드를 지운 뒤 토대를 놓습니다 | `foundational-thinking` |
 | `attack-the-premise`와 `redesign-from-first-principles` | 뒤의 것은 새 요구를 중심으로 설계를 다시 짓고, 앞의 것은 현재 설계가 가정하는 사실에 의문을 던집니다 | `attack-the-premise` |
 | `build-the-lever`와 `encode-lessons-in-structure` | 앞의 것은 눈앞의 작업의 처리량과 검토 가능성이고, 뒤의 것은 반복되는 지시를 지속적인 가드레일로 만드는 일입니다 | `build-the-lever` |
-| `build-the-lever`와 `laziness-protocol` | 레버는 일을 하거나 증명하는 가장 작은 스크립트이지 프레임워크가 아닙니다 | `build-the-lever` |
+| `build-the-lever`와 `laziness-protocol` | 지렛대는 일을 하거나 증명하는 가장 작은 스크립트이지 프레임워크가 아닙니다 | `build-the-lever` |
 | `sequence-verifiable-units`와 `prove-it-works`, `build-the-lever` | 앞의 것은 검사를 단위마다 두는 순서이고, `prove-it-works`는 각 검사를 진짜로 만들며, `build-the-lever`는 단위별 검사를 싸게 만듭니다 | `sequence-verifiable-units` |
 | `minimize-reader-load`와 `guard-the-context-window` | 앞의 것은 뒤의 것의 사람 버전입니다. 독자의 작업 기억도 유한합니다 | `minimize-reader-load` |
 | `laziness-protocol`과 Feature의 `arena` 위임 | 이 원칙은 `arena` 위임 의무를 면제하지 않습니다. 이득은 줄 수가 아니라 리뷰의 분리입니다 | Feature 플레이북 |

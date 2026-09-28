@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { loadManuscript } from "./lib/manuscript.mjs";
+import { loadManuscript, bookFile } from "./lib/manuscript.mjs";
 import { coverHtml } from "./lib/cover.mjs";
 import { buildEpub } from "./lib/epub.mjs";
 import { bookHtml, buildPdf } from "./lib/pdf.mjs";
@@ -39,11 +39,11 @@ const coverPng = await renderCover();
 
 if (target === "epub" || target === "all") {
   const buf = await buildEpub({ items, coverPng, css });
-  writeFileSync("dist/pstack-guide.epub", buf);
+  writeFileSync(`dist/${bookFile("epub")}`, buf);
   console.log(`epub: ${buf.length} bytes, ${items.length} documents`);
 }
 if (target === "pdf" || target === "all") {
   const html = bookHtml({ items, css, printCss, coverUrl: "/build/cover.png" });
-  const pages = await buildPdf({ html, buildDir, out: resolve("dist/pstack-guide.pdf") });
+  const pages = await buildPdf({ html, buildDir, out: resolve(`dist/${bookFile("pdf")}`) });
   console.log(`pdf: ${pages} pages`);
 }

@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import JSZip from "jszip";
-import { BOOK, chapterFragment, escapeHtml } from "./manuscript.mjs";
+import { BOOK, SOURCE, chapterFragment, escapeHtml } from "./manuscript.mjs";
 import { buildToc, renderToc } from "./toc.mjs";
 
 const XHTML_HEAD = `<?xml version="1.0" encoding="UTF-8"?>
@@ -98,14 +98,15 @@ ${renderToc(toc, hrefOf)}
   oebps.file(
     "content.opf",
     `<?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="ko">
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="ko" prefix="schema: http://schema.org/">
 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 <dc:identifier id="bookid">${BOOK.identifier}</dc:identifier>
 <dc:title>${escapeHtml(BOOK.title)}: ${escapeHtml(BOOK.subtitle)}</dc:title>
 <dc:language>ko</dc:language>
 <dc:creator>비공식 한국어 해설 (원저 pstack: Lauren Tan)</dc:creator>
 <dc:rights>MIT License. See the attribution appendix.</dc:rights>
-<dc:description>Cursor 플러그인 pstack(0.15.5)의 스킬 47종을 한국어로 해설한 기술서. 비공식판.</dc:description>
+<dc:description>Cursor 플러그인 pstack(${SOURCE.version})의 스킬 47종을 한국어로 해설한 기술서. 비공식판.</dc:description>
+<meta property="schema:version">${SOURCE.version}</meta>
 <meta property="dcterms:modified">${BOOK.date}T00:00:00Z</meta>
 <meta name="cover" content="cover-image"/>
 </metadata>

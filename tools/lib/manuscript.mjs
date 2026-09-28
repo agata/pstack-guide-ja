@@ -17,6 +17,8 @@ export const SOURCE = {
   version: "0.15.5",
   dir: "pstack",
 };
+// The book version is the pstack version it covers. This is the only place it is written down.
+export const bookFile = (ext) => `pstack-guide-${SOURCE.version}.${ext}`;
 export const srcUrl = (path) => `${SOURCE.repo}/blob/${SOURCE.sha}/${SOURCE.dir}/${path}`;
 
 export const BOOK = {
@@ -117,7 +119,7 @@ export function loadManuscript(dir = "manuscript") {
     if (!m || !KINDS.has(m[2])) throw new Error(`bad manuscript file name: ${file}`);
     const [, order, kind, slug] = m;
     const srcPaths = [];
-    const source = readFileSync(join(dir, file), "utf8").replace(/\{\{src:([^}\s]+)\}\}/g, (_, path) => {
+    const source = readFileSync(join(dir, file), "utf8").replaceAll("{{version}}", SOURCE.version).replace(/\{\{src:([^}\s]+)\}\}/g, (_, path) => {
       srcPaths.push(path);
       return `[\`${path}\`](${srcUrl(path)})`;
     });

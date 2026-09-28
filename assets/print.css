@@ -1,4 +1,4 @@
-/* PDF only. Loaded after fonts.css. Page size is the Korean 신국판 (152 x 225 mm). */
+/* PDF only. Loaded after fonts.css. Page size is 152 x 225 mm (a common Korean paperback size). */
 :root { --serif: "Noto Serif KR", serif; --sans: "Noto Sans KR", sans-serif; --mono: "JetBrains Mono", "Noto Sans KR", monospace; }
 @page {
   size: 152mm 225mm;

@@ -624,7 +624,7 @@ step 3. 파일럿
 step 4. 확장
 step 5. 드레인
 step 6. 착륙
-  back 5 | 다음 웨이브
+  back 6 | 다음 웨이브
 step 7. 닫기
 end 응답
 ```
@@ -634,7 +634,7 @@ end 응답
 | 단계 | 산출물 |
 | --- | --- |
 | 1 | 세어지는 완료 술어, 단위 수와 예산, 트랙 이름 |
-| 2 | 저장소 `orchestrate/<project-slug>/`(`preferences.md`, `overview.md`, `units.tsv`, `frontier.json`, `ledger.tsv`, `inbox/`, `gates.md`, `decisions.tsv`, `status.md`) |
+| 2 | `orchestrate/<project-slug>/` 저장소(`orch init`이 `units.tsv`, `ledger.tsv`, `inbox/`, `gates.md`, `preferences.md`, `frontier.json`을 만듭니다), 열어 둔 결정 기록(`decisions.tsv`). `overview.md`는 덧붙여 가고 `status.md`는 `orch status`가 도출합니다 |
 | 3 | 파일럿이 확정한 브리프 템플릿, 검증 레시피, 단위 크기 |
 | 4 | 브리프를 갖춘 워커와 검증자 |
 | 5 | 분류된 포인터(landed, needs-verify, failed, zombie, noise)와 `orch` 명령이 쓴 행, `orch status`의 세 줄 |
@@ -670,7 +670,7 @@ end 응답
 
 | 이름 | 종류 | 부르는 단계 |
 | --- | --- | --- |
-| `scripts/orch/orch.ts` (`orch`) | 스크립트 | 2 `orch init`, `orch frontier set`. 5 `orch inbox push`, `orch inbox drain`, `orch unit add`, `orch unit set`, `orch ledger record`, `orch ledger check`, `orch status` |
+| `scripts/orch/orch.ts` (`orch`) | 스크립트 | 2 `orch init`, `orch frontier set`. 완료 알림이 올 때 `orch inbox push`. 5 `orch inbox drain`, `orch unit add`, `orch unit set`, `orch ledger record`, `orch status`. 검증 절차에서 `orch ledger check` |
 | [`show-me-your-work`](personal.md#skill-show-me-your-work) | 스킬 | 2, 7 (기록 열기와 감사) |
 | [`arena`](arena-swarm.md#skill-arena) | 스킬 | 1, 논쟁적인 분해나 되돌릴 수 없는 결정 |
 | [`separate-before-serializing-shared-state`](principles.md#skill-principle-separate-before-serializing-shared-state), [`encode-lessons-in-structure`](principles.md#skill-principle-encode-lessons-in-structure) | 원칙 | 본문의 각 단계 |
@@ -727,8 +727,8 @@ step 4. 라운드마다 swarm 검증
   alt 증명된 발견이 있음 | 소유자에게 한 번에 고침 전달, 새 head는 새 판정
 step 5. 깨끗한 판정에 소유자가 병합
   stop 운영자가 지명한 항목 | 병합 준비에서 멈추고 클릭을 기다림
+  back 3 | 다음 항목
 step 6. 루트 층
-  back 4 | 다음 항목
 step 7. 운영자의 중지
 end 응답
 ```
@@ -749,7 +749,7 @@ end 응답
 > **예시 (이 책의 저자가 만든 것, 원본에 없음)**
 > 요청: "독립된 PR 여섯 개 대기열, 풀 오토파일럿으로 병합까지. PR 5는 내가 직접 클릭할게."
 >
-> 1. PR 5를 운영자 몫으로 표시합니다. 계획을 진술하고 멈췄다가 사용자의 명시적인 go가 오면 `/goal`을 장전합니다.
+> 1. PR 5를 운영자 몫으로 표시합니다. 사용자가 계획이나 프로토콜의 진술을 따로 요청하지 않았고 요청에 실행 지시가 이미 들어 있으므로 `/goal`을 장전합니다. 진술을 요청받았다면 진술하고 멈춘 뒤 명시적인 go에서 시작합니다.
 > 2. PR마다 소유자를 하나씩 띄웁니다. 15분 안에 각 소유자가 `decisions.tsv`를 열고 첫 스냅숏을 푸시하고 ready PR을 엽니다.
 > 3. PR은 서로 독립이라 병렬로 돕니다. 소유자가 코드 준비 head SHA를 보고하면 루트가 swarm으로 검증합니다.
 > 4. PR 2의 라이브 레인이 실패하면 발견을 소유자에게 한 번에 보내고, 새 head는 새 swarm과 새 판정을 받습니다.
@@ -772,7 +772,7 @@ end 응답
 
 | 이름 | 종류 | 부르는 단계 |
 | --- | --- | --- |
-| Cursor의 `/goal`, `/loop` | 내장 명령 | 1, 6 |
+| `/goal`, `/loop` | Cursor의 명령 | 1, 6 |
 | [`swarm`](arena-swarm.md#skill-swarm) | 스킬 | 4 |
 | `control-cli`, `control-ui` | cursor-team-kit의 스킬 | 4, 라이브 레인 |
 | [`prove-it-works`](principles.md#skill-principle-prove-it-works) | 원칙 | 2 |
@@ -879,5 +879,5 @@ end 응답
 | [Babysit](playbooks-pr.md#playbook-babysit) | 플레이북 | 1, 소유자의 babysit 루프 |
 | [Shipping](playbooks-pr.md#playbook-shipping) | 플레이북 | 7, patch-id 규칙 |
 | `origin pr create/edit`, `gh pr create/edit` | 명령줄 | 6 |
-| Cursor의 `/goal`, `/loop` | 내장 명령 | 2, 3 |
+| `/goal`, `/loop` | Cursor의 명령 | 2, 3 |
 

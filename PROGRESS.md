@@ -10,10 +10,10 @@
 
 ```shell
 bun install
-bun tools/build.mjs        # dist/pstack-guide.epub, dist/pstack-guide.pdf
+bun tools/build.mjs        # dist/pstack-guide-<버전>.epub, dist/pstack-guide-<버전>.pdf
 PSTACK_SRC=<클론 경로>/pstack bun tools/check.mjs   # 원고 규칙, 링크, 스킬 47개와 플레이북 23개의 절 존재, epubcheck
 bun tools/check-layout.mjs                          # EPUB을 390px 폭에서 열어 가로 넘침 검사
-bun tools/pdf-inspect.mjs dist/pstack-guide.pdf <출력 디렉터리> 2,10,300   # PDF 페이지 수, 개요, 글꼴, 한글 텍스트, 선택한 페이지를 PNG로
+bun tools/pdf-inspect.mjs dist/pstack-guide-<버전>.pdf <출력 디렉터리> 2,10,300   # PDF 페이지 수, 개요, 글꼴, 한글 텍스트, 선택한 페이지를 PNG로
 ```
 
 ## 장 목록
@@ -94,14 +94,9 @@ bun tools/pdf-inspect.mjs dist/pstack-guide.pdf <출력 디렉터리> 2,10,300  
 - 보조 에이전트의 지적은 하나씩 원문에서 다시 확인한 뒤 고쳤습니다. 고친 것: 서브에이전트 모델 기본값에서 지어낸 "나머지는 단일 역할 기본값" 삭제, 역할별 줄의 우선순위와 `inherit-parent` 규칙 보강, 전면 자율 부여 규칙과 Babysit 모드 선언과 Shipping 병합 예약 규칙 추가, Feature의 "예외 없음" 과장 교정, `orch`와 `how`/`why`/`recall`이 원칙을 구현한다는 근거 없는 서술 삭제, 원칙 인용처 교정(guard-the-context-window, fix-root-causes), interrogate 코드 품질 렌즈가 0번부터 7번까지 여덟 개라는 점과 1번의 면제 조항, `maintain-verification-skill`의 `blocked` 조건 교정, reflect 기준 수 8개 교정, `watch-pr`의 READY 근거를 원문 문장으로 교정, `bugbotReviewPasses`가 PR 전체 값이라는 점, Bugbot 후보 학습이 네 가지라는 점, `inbox drain`이 4행 제한 밖이라는 점, teach의 문체 규칙과 예시 출처 교정, `Comment Sicko`의 읽기 전용 표현 정리, benny 관련 스킬 링크 문장 교정과 누락 규칙 보강, 저자 이름 표현 교정.
 - 지적했지만 고치지 않은 것: 없음(전부 반영).
 
-## 최종 산출물
+## 원칙과 플레이북 심화
 
-- `dist/pstack-guide.epub` (EPUB 3, epubcheck-ts 오류 0, 경고 0, 390px 폭 가로 넘침 없음)
-- `dist/pstack-guide.pdf` (신국판 152x225mm, 334쪽, Noto Serif KR과 Noto Sans KR과 JetBrains Mono 임베드, 목차 쪽 번호와 개요 441항목, 한글 텍스트 추출 확인)
-
-## v0.2.0: 원칙과 플레이북 심화
-
-v0.1.0 뒤에 원칙 장(`43-ch-principles`)과 플레이북 세 장(`22`, `23`, `24`)을 깊게 다뤘습니다. 다른 장은 다시 쓰지 않았고, 이 변경 때문에 바뀐 앞부분(`01`, `02`), 부록(`91`, `92`), README만 손봤습니다.
+처음 원고를 마친 뒤 원칙 장(`43-ch-principles`)과 플레이북 세 장(`22`, `23`, `24`)을 깊게 다뤘습니다. 다른 장은 다시 쓰지 않았고, 이 변경 때문에 바뀐 앞부분(`01`, `02`), 부록(`91`, `92`), README만 손봤습니다.
 
 추가한 것:
 
@@ -112,14 +107,14 @@ v0.1.0 뒤에 원칙 장(`43-ch-principles`)과 플레이북 세 장(`22`, `23`,
 
 쪽수: 334쪽에서 419쪽으로 85쪽 늘었습니다(원칙 장 약 19쪽, 플레이북 세 장 약 65쪽). 흐름도는 상자 제목만 남겨 크기를 줄였고 표의 여백을 줄였으며 사소한 항목을 잘랐습니다.
 
-### v0.2.0 해석한 부분
+### 해석한 부분 (심화)
 
 - 흐름도의 `back` 화살표는 원문이 반복을 말하는 자리에만 그렸습니다(Hillclimb의 가설 루프, Visual parity의 diff 0 루프, Shipping의 병합 후 재계산, Orchestrate의 웨이브, Autopilot-full의 다음 항목, Autopilot-stack의 재검증 등). 화살표의 도착 단계는 원문의 서술에서 읽은 것입니다.
 - Opening a PR은 원문에 번호 단계가 없어서 굵은 소제목 아홉 개의 순서를 흐름으로 그렸습니다.
 - 원문이 정하지 않은 항목(예: 신호가 잡히지 않는 경우)은 "원문이 정하지 않았다"고 쓰거나 아예 넣지 않았습니다.
 - 원칙 절의 "함께 보는 원칙"은 원문의 다른 파일이 그 원칙을 실제로 이름으로 부르는 경우만 적었습니다. 그렇지 않은 연결은 "해설" 표지를 붙였습니다.
 
-### v0.2.0 사실 확인 기록
+### 사실 확인 기록 (심화)
 
 2026-09-28에 고정한 클론(`adf3218`)에서 바뀐 절 전부를 다시 대조했습니다. 읽기 전용 AI 보조 에이전트 네 개가 원문을 다시 열어 대조했습니다. 묶음: (1) 작업 플레이북 12개, (2) Opening a PR, Babysit, Shipping, Autonomous run, Session pickup, Pause safely, Worktree cleanup, (3) Multi-phase plan, Orchestrate, Autopilot-full, Autopilot-stack, (4) 원칙 23개와 상호작용 절. 예시 블록은 이야기 자체를 대조하지 않고 플레이북 규칙과 어긋나는지만 봤습니다. 지적은 하나씩 원문에서 다시 확인한 뒤 고쳤습니다.
 
@@ -133,8 +128,10 @@ v0.1.0 뒤에 원칙 장(`43-ch-principles`)과 플레이북 세 장(`22`, `23`,
 
 지적했지만 고치지 않은 것: Hillclimb와 Visual parity의 `back` 화살표 도착 단계(원문 서술에서 읽은 대로 의도한 것이라 유지).
 
-### v0.2.0 산출물
+### 산출물
 
-- `dist/pstack-guide.epub` (EPUB 3, epubcheck-ts 오류 0, 경고 0, 390px 폭 가로 넘침 없음, 흐름도는 인라인 SVG)
-- `dist/pstack-guide.pdf` (신국판 152x225mm, 419쪽, 개요 560항목, 한글 텍스트 추출 확인, em dash 0)
+- `dist/pstack-guide-<버전>.epub` (EPUB 3, epubcheck-ts 오류 0, 경고 0, 390px 폭 가로 넘침 없음, 흐름도는 인라인 SVG)
+- `dist/pstack-guide-<버전>.pdf` (가로 152mm, 세로 225mm, 419쪽, 개요 560항목, 한글 텍스트 추출 확인, em dash 0)
 - 저장소에는 넣지 않고 저장소 밖 릴리스 폴더에 SHA256SUMS와 함께 둡니다.
+
+버전: 이 책의 버전은 기준으로 삼은 pstack의 버전(0.15.5)과 같습니다. 값은 `tools/lib/manuscript.mjs`의 `SOURCE.version` 한 곳에만 적고, 표지와 서지 정보, EPUB 메타데이터, 산출물 파일 이름이 이 값을 읽습니다. `tools/check.mjs`가 어긋남을 검사합니다.

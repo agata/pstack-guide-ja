@@ -4,15 +4,9 @@ Lauren Tan의 Cursor 플러그인 [pstack](https://github.com/cursor/plugins/tre
 
 > **비공식 해설서입니다.** 이 책은 AI의 도움을 받아 쓰고 원문과 대조해 확인했지만 오류가 있을 수 있습니다. 원본이 항상 기준이므로 이 책과 원본이 다르면 원본을 따르십시오. 원저자 Lauren Tan(X: @poteto)은 2026년 9월 28일 이 안내서를 무료로 배포해도 좋다고 허락했습니다([X 답글](https://x.com/poteto/status/2104671461827055941)). 원저자는 내용을 검토하지 않았으며, 원저자와 Cursor는 이 책을 보증하거나 품질을 보장하지 않습니다.
 
-## 판
+## 버전
 
-현재 판은 v0.2.1입니다. 파일은 [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases)에서 받을 수 있습니다.
-
-| 판 | 내용 |
-| --- | --- |
-| v0.1.0 | 첫 공개판. 스킬 47개와 플레이북 23개, 334쪽 |
-| v0.2.0 | 원칙과 플레이북을 깊게 다룸. 저자가 쓴 예시를 붙였고 419쪽 |
-| v0.2.1 | 원저자의 배포 허락에 관한 안내 문구만 바꿈 |
+pstack 0.15.5(커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`)를 기준으로 하며, 이 책의 버전은 pstack의 버전과 같습니다. pstack 버전이 그대로일 때 이 책만 고치면 릴리스 태그에 `v0.15.5-ko.2`처럼 접미사가 붙습니다.
 
 예시는 이 책의 저자가 만든 것이고 원본에 없습니다. 점선 테두리 블록의 첫 줄에 "예시 (이 책의 저자가 만든 것, 원본에 없음)"이라고 밝혔고, 원문에 없는 해석은 "해설 (이 책의 해석, 원본에 없음)"으로 표시했습니다.
 
@@ -20,8 +14,8 @@ Lauren Tan의 Cursor 플러그인 [pstack](https://github.com/cursor/plugins/tre
 
 [최신 릴리스](https://github.com/jayjongcheolpark/pstack-guide-ko/releases/latest)에서 EPUB와 PDF를 내려받을 수 있습니다.
 
-- `pstack-guide.epub`: 전자책 리더용
-- `pstack-guide.pdf`: 신국판(152x225mm) 크기, 인쇄와 화면 읽기용
+- `pstack-guide-0.15.5.epub`: 전자책 리더용
+- `pstack-guide-0.15.5.pdf`: 가로 152mm, 세로 225mm(국내 단행본에서 흔한 크기), 인쇄와 화면 읽기용
 
 ## 차례
 
@@ -79,7 +73,7 @@ Lauren Tan의 Cursor 플러그인 [pstack](https://github.com/cursor/plugins/tre
 
 ```shell
 bun install
-bun tools/build.mjs        # dist/pstack-guide.epub, dist/pstack-guide.pdf
+bun tools/build.mjs        # dist/pstack-guide-0.15.5.epub, dist/pstack-guide-0.15.5.pdf
 ```
 
 검사는 원본의 고정 커밋을 저장소 밖에 클론한 뒤 실행합니다.
@@ -117,13 +111,9 @@ MIT입니다. 원저작물 pstack은 Copyright (c) 2026 Lauren Tan, 이 한국�
 
 # pstack Guide (Korean)
 
-An unofficial Korean explanation of [pstack](https://github.com/cursor/plugins/tree/main/pstack), Lauren Tan's Cursor plugin (v0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`). It covers all 47 skills, the 23 `poteto-mode` playbooks, the agents, the `benny` automation pack and the guide docs, with a permalink to the pinned source at each skill section.
+An unofficial Korean explanation of [pstack](https://github.com/cursor/plugins/tree/main/pstack), Lauren Tan's Cursor plugin (0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`). It covers all 47 skills, the 23 `poteto-mode` playbooks, the agents, the `benny` automation pack and the guide docs, with a permalink to the pinned source at each skill section.
 
-The current edition is v0.2.1. Files are on the [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases) page.
-
-- v0.1.0: first public edition (47 skills, 23 playbooks, 334 pages).
-- v0.2.0: principles and playbooks deepened, with worked examples (419 pages).
-- v0.2.1: wording about the original author's permission only.
+The book version equals the pstack version it covers (0.15.5). If the book alone is fixed while pstack stays at the same version, the release tag gets a suffix such as `v0.15.5-ko.2`. Files are on the [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases) page: `pstack-guide-0.15.5.epub` and `pstack-guide-0.15.5.pdf` (152 x 225 mm, a common Korean paperback size).
 
 Examples written for this book are not in the original and are labeled `예시 (이 책의 저자가 만든 것, 원본에 없음)`; interpretation the source does not state is labeled `해설 (이 책의 해석, 원본에 없음)`.
 

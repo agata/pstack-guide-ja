@@ -113,7 +113,7 @@ end 응답
 | --- | --- | --- |
 | `/deslop` | cursor-team-kit의 스킬 | PRs |
 | [`/no-comments`](code-hygiene.md#skill-no-comments) | 스킬 | PRs |
-| [`/technical-writing`](writing.md#skill-technical-writing) | 스킬 | PRs, Titles, Descriptions |
+| [`/technical-writing`](writing.md#skill-technical-writing) | 스킬 | PRs |
 | [`/unslop`](writing.md#skill-unslop) | 스킬 | PRs |
 | [`interrogate`](interrogate.md#skill-interrogate) | 스킬 | 서브에이전트가 PR을 열 때 |
 | `gh` 또는 `origin` | 명령줄 도구 | Forge, Size and stacks, Readiness |
@@ -353,7 +353,6 @@ end 응답
 | [Bugbot 분류 기준](playbooks-pr.md#ref-bugbot-triage) | 참조 문서 | 8, 9 |
 | `/loop` (동적 모드) | Cursor 명령 | 6, `drive`와 `background`의 반복 |
 | [Shipping](playbooks-pr.md#playbook-shipping) | 플레이북 | 병합 요청을 받았을 때 |
-| [Opening a PR](playbooks-pr.md#playbook-opening-a-pr) | 플레이북 | 열기와 babysit의 경계 |
 
 ## Shipping {#playbook-shipping}
 
@@ -413,9 +412,9 @@ step 3. 판정이 아직 패치를 설명하는지 재확인
 step 4. 바닥 PR만 준비
 step 5. 한 번에 PR 하나 착륙
 step 6. autoMergeRequest를 준비 완료로 읽지 않음
+step 8. 프런티어를 병합되거나 실패할 때까지 지켜봄
 step 7. 병합마다 다시 계산
   back 4 | 다음 PR
-step 8. 프런티어를 병합되거나 실패할 때까지 지켜봄
 step 9. 천장에서 멈춤
 end 응답
 ```

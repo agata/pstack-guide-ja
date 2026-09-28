@@ -98,3 +98,43 @@ bun tools/pdf-inspect.mjs dist/pstack-guide.pdf <출력 디렉터리> 2,10,300  
 
 - `dist/pstack-guide.epub` (EPUB 3, epubcheck-ts 오류 0, 경고 0, 390px 폭 가로 넘침 없음)
 - `dist/pstack-guide.pdf` (신국판 152x225mm, 334쪽, Noto Serif KR과 Noto Sans KR과 JetBrains Mono 임베드, 목차 쪽 번호와 개요 441항목, 한글 텍스트 추출 확인)
+
+## v0.2.0: 원칙과 플레이북 심화
+
+v0.1.0 뒤에 원칙 장(`43-ch-principles`)과 플레이북 세 장(`22`, `23`, `24`)을 깊게 다뤘습니다. 다른 장은 다시 쓰지 않았고, 이 변경 때문에 바뀐 앞부분(`01`, `02`), 부록(`91`, `92`), README만 손봤습니다.
+
+추가한 것:
+
+- 원칙 23개 절마다 적용과 예외, 저자가 만든 전후 예시 하나, 함정, 함께 보는 원칙(원문이 서로 연결한 것만). 장 끝에 "원칙이 서로 당길 때" 절(원문이 밝힌 짝의 표와 해설 블록).
+- 플레이북 23개 절마다 흐름도, 단계별 산출물, 저자가 만든 예시, 실패와 중단과 모호할 때, 호출하는 스킬과 스크립트 표.
+- 흐름도는 마크다운의 ` ```flow ` 블록에서 빌드가 인라인 SVG로 그립니다(`tools/lib/flow.mjs`). 문법은 그 파일의 머리말에 있습니다.
+- 표시 규칙: 저자가 만든 예시는 점선 테두리 인용 블록이고 첫 줄이 "예시 (이 책의 저자가 만든 것, 원본에 없음)"입니다. 원문에 없는 해석은 "해설 (이 책의 해석, 원본에 없음)"입니다. `tools/check.mjs`가 이 두 표지의 문구가 정확한지 검사합니다.
+
+쪽수: 334쪽에서 419쪽으로 85쪽 늘었습니다(원칙 장 약 19쪽, 플레이북 세 장 약 65쪽). 흐름도는 상자 제목만 남겨 크기를 줄였고 표의 여백을 줄였으며 사소한 항목을 잘랐습니다.
+
+### v0.2.0 해석한 부분
+
+- 흐름도의 `back` 화살표는 원문이 반복을 말하는 자리에만 그렸습니다(Hillclimb의 가설 루프, Visual parity의 diff 0 루프, Shipping의 병합 후 재계산, Orchestrate의 웨이브, Autopilot-full의 다음 항목, Autopilot-stack의 재검증 등). 화살표의 도착 단계는 원문의 서술에서 읽은 것입니다.
+- Opening a PR은 원문에 번호 단계가 없어서 굵은 소제목 아홉 개의 순서를 흐름으로 그렸습니다.
+- 원문이 정하지 않은 항목(예: 신호가 잡히지 않는 경우)은 "원문이 정하지 않았다"고 쓰거나 아예 넣지 않았습니다.
+- 원칙 절의 "함께 보는 원칙"은 원문의 다른 파일이 그 원칙을 실제로 이름으로 부르는 경우만 적었습니다. 그렇지 않은 연결은 "해설" 표지를 붙였습니다.
+
+### v0.2.0 사실 확인 기록
+
+2026-09-28에 고정한 클론(`adf3218`)에서 바뀐 절 전부를 다시 대조했습니다. 읽기 전용 AI 보조 에이전트 네 개가 원문을 다시 열어 대조했습니다. 묶음: (1) 작업 플레이북 12개, (2) Opening a PR, Babysit, Shipping, Autonomous run, Session pickup, Pause safely, Worktree cleanup, (3) Multi-phase plan, Orchestrate, Autopilot-full, Autopilot-stack, (4) 원칙 23개와 상호작용 절. 예시 블록은 이야기 자체를 대조하지 않고 플레이북 규칙과 어긋나는지만 봤습니다. 지적은 하나씩 원문에서 다시 확인한 뒤 고쳤습니다.
+
+고친 것:
+
+- Shipping 흐름에서 감시(8단계)가 재계산(7단계)보다 먼저 오도록 순서 교정, Babysit 호출 표에서 근거 없는 Opening a PR 행 삭제.
+- Bug fix 표에 `/loop` 추가, Perf issue의 control 스킬 단계 교정, Runtime forensics 예시에 처리량 점검표 추가, Refactoring 표에 control 스킬 추가와 4단계 산출물 교정, Authoring의 "문체" 표현 삭제, Eval 예시를 모델마다 두 변형을 돌리도록 수정.
+- Orchestrate: `orch` 하위 명령을 단계별로 정확히 나눔, 2단계 산출물 교정, 웨이브 루프 도착 단계 교정. Autopilot-full: 예시의 무조건적 "진술 후 대기" 삭제, 루프를 소유자의 병합 단계로 이동. Autopilot-stack: 재검증 루프 추가. `/goal`을 내장 명령이라고 부른 표현 교정.
+- 원칙: 원문이 서로 연결하지 않은 원칙 연결(foundational-thinking과 separate-before-serializing, experience-first와 exhaust-the-design-space, model-the-domain과 type-system-discipline 등)을 삭제하거나 "해설"로 표시, 근거 없는 서술("판정 기준은 줄 수가 아니라")을 원문 표현으로 교정, benny `setup-benny` 서술 교정, Feature의 워크트리 서술 교정, Autonomy와 never-block-on-the-human의 연결을 해설로 표시하고 상호작용 표에서 그 행 삭제, fix-root-causes 예시 코드의 순서 오류 교정, 상호작용 해설의 "앞의 원칙이 이깁니다"를 "뒤의 원칙"으로 교정, 라벨만 있고 본문이 없던 "해설" 표시 정리.
+- 용어 통일: 원장을 장부로, 드리프트를 표류로, 게이트를 관문으로, 레버를 지렛대로, 서브코디네이터를 하위 조정자로.
+
+지적했지만 고치지 않은 것: Hillclimb와 Visual parity의 `back` 화살표 도착 단계(원문 서술에서 읽은 대로 의도한 것이라 유지).
+
+### v0.2.0 산출물
+
+- `dist/pstack-guide.epub` (EPUB 3, epubcheck-ts 오류 0, 경고 0, 390px 폭 가로 넘침 없음, 흐름도는 인라인 SVG)
+- `dist/pstack-guide.pdf` (신국판 152x225mm, 419쪽, 개요 560항목, 한글 텍스트 추출 확인, em dash 0)
+- 저장소에는 넣지 않고 저장소 밖 릴리스 폴더에 SHA256SUMS와 함께 둡니다.

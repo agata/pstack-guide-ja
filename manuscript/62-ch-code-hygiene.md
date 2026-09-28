@@ -24,7 +24,7 @@ Comment Sicko를 띄우고 수용한 발견에 행동합니다. Comment Sicko의
 
 **단계.**
 
-1. `Task`를 `subagent_type: "Comment Sicko"`로 띄우고 범위를 넘깁니다. Comment Sicko의 규칙을 다시 말하지 않습니다.
+1. `Task`를 `subagent_type: "Comment Sicko"`로 띄우고 범위를 넘깁니다. Comment Sicko의 규칙(rule)을 다시 말하지 않습니다.
 2. 보고서와 diff를 점검합니다. 애플리케이션 코드 편집, 범위 이탈, 예외로 보호된 삭제, 잘못 서술된 `MUST KILL` 사유, 의도적으로 유지된 코드를 유죄로 취급하는 플래그는 거부합니다. 우리 코드의 놀라움에 대한 재구성(reshape) 플래그는 여전히 실행 대상이고 그 주석을 복원하지 않습니다. 유지는 우리가 바꿀 수 없는 것에 관한 것이라는 증명이 있어야만 살아남습니다. 놓친 범위 안의 린트와 TypeScript 억제(suppression)를 감사합니다. 정확성이나 안전 억제는 실행 대상인 `MUST KILL`로 남습니다. 삭제를 복원하는 것은 정확한 예외와 범위 증명이 있을 때뿐입니다. 얇은 `IMPORTANT`나 `do not remove` 삭제나 유지를 수용하기 전에 그 심볼에 `/how`나 `/why`를 돌립니다. 삭제가 애매하면 복원하지 않습니다. 유지가 반박되었거나 여전히 애매하면 삭제합니다. 거부된 보고서 하나는 실패를 이름 붙여 되돌리고 다시 돌립니다. 두 번째도 거부하면 열린 채로 보고하고 `/no-comments`를 실패시킵니다.
 3. 사소한 수용된 플래그는 죽은 경로 삭제, 매개변수 제거, 실제 API 사용으로 직접 고칩니다. 어느 수정이든 모양이 필요하면 수용된 집합과 주변 코드에 대해 `/architect`를 한 번 돌립니다. 스케치에서 멈춥니다. architect가 모양을 만들고 4단계가 구현합니다.
 4. 범위 안에서 가장 작은 근본 원인 수정을 구현합니다. 이름 붙은 우회책을 모두 제거합니다. 근본 원인이 범위 밖이면 범위 안의 가장 작은 수정을 랜딩하고 나머지는 열린 채로 보고합니다. `principle-fix-root-causes`와 `principle-redesign-from-first-principles`는 의도만 안내하고, 울타리를 넓히거나 밖의 인스턴스를 고칠 권한을 주지 않습니다. 증상 가드를 덧붙이지 않습니다.
@@ -79,7 +79,7 @@ pstack은 `Comment Sicko`라는 주석 리뷰어(README는 읽기 전용이라�
 
 ### 언제 쓰는가
 
-원문의 `description`은 ".ts나 .tsx 파일을 읽거나 편집할 때"이고 프런트매터에 `paths: ["**/*.ts", "**/*.tsx"]`가 있습니다. 안내서는 이 스킬이 워크플로에 슬래시 명령이 없고 에이전트가 `.ts`나 `.tsx` 파일을 건드릴 때마다 스스로 로드되어 타입 시스템 원칙을 구체적 규칙으로 바꾼다고 설명합니다. 판별 유니온, 경계의 `unknown`, 완전한 변형 매칭, 스키마에서 도출한 타입입니다. 프런트매터에는 다른 스킬처럼 `disable-model-invocation: true`도 있습니다. 원문이 이 스킬의 첫 지시로 두는 것은 `type-system-discipline` 원칙을 먼저 적용하라는 것입니다.
+원문의 `description`은 ".ts나 .tsx 파일을 읽거나 편집할 때"이고 프런트매터에 `paths: ["**/*.ts", "**/*.tsx"]`가 있습니다. 안내서는 이 스킬이 워크플로에 슬래시 명령이 없고 에이전트가 `.ts`나 `.tsx` 파일을 건드릴 때마다 스스로 로드되어 타입 시스템 원칙(principle)을 구체적 규칙(rule)으로 바꾼다고 설명합니다. 판별 유니온, 경계의 `unknown`, 완전한 변형 매칭, 스키마에서 도출한 타입입니다. 프런트매터에는 다른 스킬처럼 `disable-model-invocation: true`도 있습니다. 원문이 이 스킬의 첫 지시로 두는 것은 `type-system-discipline` 원칙을 먼저 적용하라는 것입니다.
 
 ### 동작 방식
 
@@ -88,7 +88,7 @@ pstack은 `Comment Sicko`라는 주석 리뷰어(README는 읽기 전용이라�
 | 규칙 | 요약 |
 | --- | --- |
 | Discriminated unions | 불가능한 상태가 표현될 수 없도록 `kind` 리터럴 판별자로 변형을 모델링합니다. 선택 필드 주머니는 안 됩니다 |
-| Branded types | 원시 타입을 `& { readonly __brand: "X" }`로 브랜딩해 서로 섞이지 않게 합니다. 경계에서 한 번 검증합니다 |
+| Branded types | 원시 타입을 `& { readonly __brand: "X" }`로 브랜딩해 서로 섞이지 않게 합니다. 경계에서 한 번 검증(validation)합니다 |
 | Constructive modeling | 불법 값을 만들 수 없게 모양을 짭니다. 비어 있지 않음은 `[T, ...T[]]`, 짝수 길이는 `[T, T][]`, 범위는 `start`와 `duration`. 런타임 가드도 정제 타입에 대한 소망도 아닙니다 |
 | Simplest total type | 모든 연산이 전체(total)인 동안은 `T[]`를 유지합니다. 느슨한 타입이 `!`, 캐스트, "일어나면 안 되는" throw를 강제하는 곳에서만 `NonEmpty<T>`로 강화합니다 |
 | `unknown` over `any` | 외부 데이터는 `unknown`입니다 |
@@ -101,12 +101,12 @@ pstack은 `Comment Sicko`라는 주석 리뷰어(README는 읽기 전용이라�
 | Boundary validation | 데이터가 들어오는 곳에서 이름 붙은 도메인 타입으로 파싱합니다. `Record<string, unknown>`(어떻게 쓰든)은 그 파싱에서 멈춥니다. 안쪽에서는 타입을 믿습니다 |
 | Schema-derived types | 새 인터페이스를 선언하기 전에 `Pick`, `Omit`, `Parameters`, `ReturnType`, `Awaited`, `typeof`를 씁니다 |
 | Object args | 위치 인자가 아니라 객체를 넘겨 인자 순서가 스스로 설명되게 합니다. 핫 경로(프레임마다 렌더, 토크나이저, 파서)에서는 건너뜁니다 |
-| Real tests | 돌릴 수 있는 것을 목으로 대체하지 않습니다. 누수와 dispose 검사가 있는 프레임워크의 실제 테스트 기본 요소를 선호하고, UI는 실행 중인 빌드에서 검증합니다. 로컬에서 돌릴 수 없는 것만 목으로 만듭니다 |
+| Real tests | 돌릴 수 있는 것을 목으로 대체하지 않습니다. 누수와 dispose 검사가 있는 프레임워크의 실제 테스트 기본 요소를 선호하고, UI는 실행 중인 빌드에서 검증(verification)합니다. 로컬에서 돌릴 수 없는 것만 목으로 만듭니다 |
 | Structured telemetry | 아이디로 디버그할 만큼 충분한 맥락이 있는 구조화된 로거 진단을 선호합니다. 출하되는 코드에 `console.log`는 없습니다 |
 
 #### 코드 예제(`references/patterns.md`)
 
-**브랜드 타입.** `AgentId`는 밑바닥이 문자열이지만 섞이면 안 됩니다. 경계에서 한 번 검증하고 아래에서는 타입을 믿습니다. `readonly __brand: 'X'` 모양을 맞추고 새 관례를 만들지 않습니다.
+**브랜드 타입.** `AgentId`는 밑바닥이 문자열이지만 섞이면 안 됩니다. 경계에서 한 번 검증(validation)하고 아래에서는 타입을 믿습니다. `readonly __brand: 'X'` 모양을 맞추고 새 관례를 만들지 않습니다.
 
 ```ts
 type AgentId = string & { readonly __brand: "AgentId" };
@@ -226,7 +226,7 @@ function parseUser(input: unknown): User {
 
 ### 함정과 주의점
 
-- 규칙의 바탕은 언어에 무관한 [`type-system-discipline`](principles.md#skill-principle-type-system-discipline) 원칙입니다. 이 스킬은 그 원칙의 TypeScript 문법 접지일 뿐이고 원칙을 먼저 적용합니다.
+- 규칙(rule)의 바탕은 언어에 무관한 [`type-system-discipline`](principles.md#skill-principle-type-system-discipline) 원칙(principle)입니다. 이 스킬은 그 원칙의 TypeScript 문법 접지일 뿐이고 원칙을 먼저 적용합니다.
 - 브랜드는 반사적으로 붙이지 않습니다. 원시 값이 잘못 넘어올 수 있을 때만 붙입니다.
 - 모든 타입을 `NonEmpty<T>`로 강화하지 않습니다. 느슨한 타입이 `!`, 캐스트, throw를 강제하는 곳만입니다.
 - 스키마 라이브러리가 저장소에 없는데 가드 하나 때문에 새 의존성을 추가하지 않습니다.

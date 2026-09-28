@@ -134,4 +134,83 @@ bun tools/pdf-inspect.mjs dist/pstack-guide-<버전>.pdf <출력 디렉터리> 2
 - `dist/pstack-guide-<버전>.pdf` (가로 152mm, 세로 225mm, 419쪽, 개요 560항목, 한글 텍스트 추출 확인, em dash 0)
 - 저장소에는 넣지 않고 저장소 밖 릴리스 폴더에 SHA256SUMS와 함께 둡니다.
 
-버전: 이 책의 버전은 기준으로 삼은 pstack의 버전(0.15.5)과 같습니다. 값은 `tools/lib/manuscript.mjs`의 `SOURCE.version` 한 곳에만 적고, 표지와 서지 정보, EPUB 메타데이터, 산출물 파일 이름이 이 값을 읽습니다. `tools/check.mjs`가 어긋남을 검사합니다.
+버전: 이 책의 버전은 기준으로 삼은 pstack의 버전(0.15.5)에 개정 번호를 붙인 `0.15.5-ko.2`입니다. 값은 `tools/lib/manuscript.mjs`의 `SOURCE.version`과 `BOOK_REVISION` 두 상수에만 적고, 표지와 서지 정보, EPUB 메타데이터, 산출물 파일 이름이 이 값을 읽습니다. `tools/check.mjs`가 어긋남을 검사합니다.
+
+## 0.15.5-ko.2: 용어 병기와 감사
+
+원문이 같은 pstack 0.15.5인 채로 책의 표기만 고친 개정입니다. 한국어 단어 하나가 원문의 서로 다른 영어 용어를 옮기거나, 원문에 없는 낱말로 옮긴 곳에 영어를 병기했습니다(`원칙(principle)`처럼). 표기 규칙은 `STYLE.md`의 "용어 병기", 짝의 목록은 용어집 "일대일로 옮겨지지 않는 용어" 표입니다.
+
+### 방법
+
+- 원본은 저장소 밖에 읽기 전용으로 클론하고 커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`로 고정해 읽었습니다(`PSTACK_SRC`).
+- 한국어 단어마다 원고의 용례를 전부 뽑고(`원칙` 242곳, `규칙` 210곳, `기준` 132곳 등), 원문에서 그 자리가 어떤 영어 낱말인지 찾아 대조했습니다. 반대 방향으로는 원문의 영어 낱말(`principle` 266곳, `rule` 140곳 등)이 책에서 어떤 한국어로 옮겨졌는지 봤습니다.
+- 한국어 단어 하나가 영어 용어 둘 이상에 대응하거나, 영어 용어 하나가 한국어 단어 둘 이상으로 옮겨진 것이 원문에서 확인될 때만 병기 대상으로 삼았습니다.
+
+### 감사한 용어와 판정
+
+병기 대상(용어집 표에 있음):
+
+| 한국어 | 원문 영어 | 판정 |
+| --- | --- | --- |
+| 원칙 | principle | 영어는 하나이지만 가리키는 것이 여럿입니다. `principle-*` 스킬 23개, `poteto-mode`의 Principles 색인, `interrogate` 리드 판단 틀의 Filtering Principles, `reflect` 리뷰어의 "Principle:" 항목, `automate-me`의 "principles cited", README의 "engineering principles". 원문이 그 내용을 "rule"이라 부르므로 규칙과 나란히 나올 때 구분이 필요합니다 |
+| 규칙 | rule, Non-negotiables, 절 이름 | 원문이 "rule"이라 한 곳(Cursor rule 파일, lint rule, unslop 규칙, patch-id rule, 원칙이 담은 rule)이 대부분입니다. `poteto-mode`의 Non-negotiables 절, Autonomy와 Stack safety 절, "Mandatory", request-to-mode mapping, bucket은 원문에 rule이라는 말이 없어서 그 낱말을 병기했습니다 |
+| 기준 | criteria, bar, standard, base, baseline, rubric | 한 단어가 여섯 낱말에 대응합니다(acceptance criteria, verification bar, strict standard, worktree base, baseline preconditions, Bugbot triage의 Decision rubric). 합성어 기준안(base)과 기준선(baseline)은 이미 용어집에 있어서 그대로 뒀습니다 |
+| 검증, 검증기 | verification, validation, validator, verifier | `boundary-discipline`의 validation과 `prove-it-works`의 verification을 모두 검증이라 옮겼습니다. 검증기도 redundant validators와 flaky verifiers 둘입니다 |
+| 뼈대 | scaffold, skeleton | `foundational-thinking`의 scaffold, multi-phase plan의 skeleton, orchestrate의 "4KB scaffold", eval의 "project skeleton"을 모두 뼈대라 옮겼습니다 |
+| 관문, 게이트, 관문 시험 | gate, gauntlet | gate를 관문과 게이트 둘로 옮겼고, `swarm`의 gauntlet도 관문 시험이라 옮겼습니다 |
+| 지침 | guideline, guide, instruction | "instructions"를 지시와 지침 둘로 옮긴 곳(원칙 장 두 줄)이 있고, style guide의 guideline과 phrasing guide도 지침입니다 |
+| 절차 | procedure, playbook | 이 책이 playbook 자체를 "절차"라 부른 곳이 있습니다(figure-it-out이 설계하는 것) |
+| 규약 | contract, shape | 기능 지도의 "Feature entry contract"는 규약이고, "Follow the shape in"도 규약이라 옮겼습니다. 같은 영어 contract는 다른 곳에서 계약입니다 |
+| 산출물 | artifact, deliverable, output | 세 영어 낱말이 하나로 옮겨졌습니다. 뜻이 가까워서 장마다 처음에만 병기했습니다 |
+| 예시 | example | 원문의 예(Example signal, `*.example.yaml`)와 이 책의 저자가 만든 예시(worked example)를 같은 단어로 쓰므로, 원문의 예에는 병기했습니다 |
+
+일대일이라 바꾸지 않은 용어(용례를 원문과 대조해 확인):
+
+| 한국어 | 원문 영어 | 판정 |
+| --- | --- | --- |
+| 계약 | contract | 일대일입니다(triage contract, output contract, pinned contract). 예외인 규약은 위 표 |
+| 정책 | policy | 일대일입니다(retention policy, special-purpose policy, 모델 정책) |
+| 프로토콜 | protocol | 일대일입니다 |
+| 관례 | convention | 일대일입니다(driving conventions, working conventions) |
+| 표준 | standard | 형용사로 쓴 "표준 사례" 몇 곳뿐이고, 용어로서의 standard는 기준(standard)으로 병기했습니다 |
+| 흐름, 흐름도 | flow, flow chart | 흐름은 flow(runtime flow, guided flow)이고 흐름도는 이 책이 붙인 flow chart입니다 |
+| 위임 | delegate, delegation | 일대일입니다. 위임 원칙은 Delegation 묶음입니다 |
+| 조향 | steer, steering | 일대일입니다(조향 프롬프트는 "steering prompt") |
+| 플레이북 | playbook | 일대일입니다. 절차와 섞인 곳만 위 표에 |
+| 스킬, 에이전트 | skill, agent | 일대일입니다. principle skill, control skill 같은 합성어는 영어를 그대로 드러내고 있습니다 |
+| 하니스 | harness | 일대일입니다. 뜻은 검증, 측정, 시각 회귀, 동등성 하니스로 갈리지만 영어는 모두 harness입니다. 용어집의 "에이전트를 감싸 실행하는 도구" 풀이는 원고에 그 용례가 없어서 뺐습니다 |
+| 훅, 웹훅 | hook, webhook | 일대일입니다(훅은 두 곳, git hooks와 플러그인 훅) |
+| 조율, 조정, 조정자 | coordinated, coordinator, adjust | 조정자는 coordinator이고 일대일입니다. 조율은 coordinated breaking changes 등이고 조정은 일반 동사(adapt, resize)라 용어가 아닙니다 |
+| 오케스트레이션, 워크플로, 규율 | orchestration, workflow, discipline | 일대일입니다 |
+| 용어집의 나머지 항목 | 용어집 참고 | 판정, 조각, 단위, 브리프, 재현, 경계, 술어, 증명, 증거, 역할, 패널, 작업자, 표류, 전제, 트렁크, 장부, 운영자, 불안정, 포지, 루브릭, 워크트리는 원문 영어 낱말과 책의 한국어 낱말의 출현 수를 맞춰 보고 표본 용례를 대조했습니다. 다른 영어 용어를 옮긴 사례를 찾지 못했습니다. 전수 대조는 아닙니다 |
+
+### 장별 병기 개수
+
+새로 붙은 `한국어(영어)`의 수입니다. 본문은 30개 파일 206곳이고, 용어집은 표와 설명 38곳을 따로 셉니다. 원문에 그 뜻의 영어 낱말이 없는 자리(책이 만든 표제와 풀이)와 표의 좁은 칸은 건너뛰었습니다.
+
+| 장 | 개수 |
+| --- | --- |
+| 이 책에 대하여, 이 책을 읽는 방법 | 1, 4 |
+| 제 1부 시작하기: 11장 pstack이란 무엇인가, 12장 설치와 첫 사용 | 4, 3 |
+| 제 2부 진입점: 부 소개, 3장 poteto-mode, 4장 작업 플레이북, 5장 PR 플레이북, 6장 장시간, 대규모 플레이북 | 1, 14, 19, 8, 19 |
+| 제 3부 이해하기: 7장 how, 8장 why, 9장 teach와 recall | 1, 4, 3 |
+| 제 4부 설계하기: 부 소개, 10장 architect, 11장 arena, swarm, figure-it-out, 12장 원칙 스킬 23개 | 2, 4, 10, 26 |
+| 제 5부 고치고 검증하기: 부 소개, 13장 tdd와 blast-radius, 14장 interrogate, 15장 검증 스킬 | 2, 3, 9, 11 |
+| 제 6부 글과 코드 정리: 부 소개, 16장 글쓰기, 17장 코드 정리 | 2, 4, 8 |
+| 제 7부 나만의 방식과 유틸리티: 18장 automate-me, reflect, show-me-your-work, 19장 bro | 14, 1 |
+| 제 8부 자동화: 20장 make-bot-ui와 benny | 12 |
+| 제 9부 실전: 21장 밤새 돌리기, 22장 레시피와 함정 | 2, 3 |
+| 부록 A 스킬 빠른 참조표, 부록 C 스킬 선택 흐름도 | 11, 1 |
+| 부록 B 용어집 | 표와 설명 38 |
+
+### 코드와 검사
+
+- `tools/lib/manuscript.mjs`에 `BOOK_REVISION`과 `BOOK_VERSION`을 두고 표지, 서지 정보, EPUB 메타데이터, 파일 이름이 읽게 했습니다.
+- 표지 제목이 "pstack 가 / 이드"로 낱말 가운데서 줄바꿈되던 것을 `word-break: keep-all`로 고쳤습니다.
+- `tools/check.mjs`가 두 가지를 더 검사합니다. 용어집 표가 있고 첫 행이 원칙일 것, 표의 짝마다 "처음 표기하는 장"에 `한국어(영어)` 꼴이 있을 것(공백이 낀 꼴은 오류). 책의 버전이 colophon, README, EPUB 메타데이터, 파일 이름과 어긋나면 실패합니다.
+
+### 실행한 검사
+
+- `PSTACK_SRC=<클론>/pstack bun tools/check.mjs`: 스킬 47개와 플레이북 23개의 절 존재, 링크, 용어 병기 짝 29개, 버전 일치, epubcheck 오류 0, 경고 0.
+- `bun tools/check-layout.mjs`: 390px 폭에서 가로 넘침 없음. 원칙 장의 표 칸에 병기를 넣었을 때 넘쳐서 그 칸들은 표 밖의 첫 용례로 옮겼습니다.
+- `bun tools/pdf-inspect.mjs`: 425쪽, 개요 561항목, 한글 텍스트 추출 확인, em dash 0, 표지와 용어집 쪽을 PNG로 눈으로 확인했습니다.

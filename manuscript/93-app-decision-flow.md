@@ -57,7 +57,7 @@
 | `SKILL.md`를 쓰거나 고친다 | [Authoring or modifying a skill](playbooks-work.md#playbook-authoring-a-skill) |
 | 스킬이나 프롬프트 변경의 영향을 시험하고 싶다 | [Eval](playbooks-work.md#playbook-eval) |
 
-**검증하고 싶다.**
+**검증(verification)하고 싶다.**
 
 | 상황 | 스킬 |
 | --- | --- |

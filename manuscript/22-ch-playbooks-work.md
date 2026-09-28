@@ -180,6 +180,7 @@ end 응답
 | [`architect`](architect.md#skill-architect) | 스킬 | 3, 함수 경계를 넘을 때 |
 | [`tdd`](tdd-blast.md#skill-tdd) | 스킬 | 5, 값싼 테스트 경로가 있을 때 |
 | [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 5 |
+| Cursor의 `/loop` 명령 | 내장 명령 | 2, 길거나 끈질긴 사냥 |
 | [Opening a PR](playbooks-pr.md#playbook-opening-a-pr) | 플레이북 | 6 |
 
 ## Perf issue {#playbook-perf-issue}
@@ -272,7 +273,7 @@ end 응답
 
 | 이름 | 종류 | 부르는 단계 |
 | --- | --- | --- |
-| `control-cli`, `control-ui` | cursor-team-kit의 스킬 | 1, 3 |
+| `control-cli`, `control-ui` | cursor-team-kit의 스킬 | 1 |
 | [`how`](how.md#skill-how) | 스킬 | 2 |
 | [`architect`](architect.md#skill-architect) | 스킬 | 3, 함수 경계를 넘을 때 |
 | [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 3 |
@@ -440,7 +441,7 @@ end 응답
 > 2. 프로파일이 크므로 서브에이전트에서 파싱하고, 메인 스레드에는 "입력 없이 250ms마다 도는 타이머 콜백이 시간의 대부분을 차지한다"는 줄인 결과만 받습니다.
 > 3. 실행 중인 프로세스에 CDP eval로 계측을 넣어 콜백이 실제로 타이머에서 호출된다는 것을 확인합니다.
 > 4. 타이머를 등록하는 줄을 파일과 심볼로 짚습니다.
-> 5. 수정하지 않고 진단을 응답합니다. 고치려면 Bug fix로 넘긴다고 덧붙입니다.
+> 5. 처리량 점검표는 `throughput checkpoint: n/a, read-only forensics` 한 줄로 끝내고, 수정하지 않고 진단을 응답합니다. 고치려면 Bug fix로 넘긴다고 덧붙입니다.
 
 ### 실패, 중단, 모호할 때
 
@@ -689,7 +690,7 @@ end 응답
 | 1 | 현재 동작을 담는 특성화 테스트, 스냅숏, 또는 동등성 하니스 |
 | 2 | 코드에 빠진 구조의 이름 |
 | 3 | 목표 모양(모듈 배치, 타입, 호출 그래프) |
-| 4 | 삭제 커밋 |
+| 4 | 죽은 코드, 한 호출자 래퍼, 중복 검증기, 고아 참조의 삭제(8단계에서 삭제 커밋으로 정리) |
 | 5 | 고정이 초록인 작은 이동들, 옛 API 삭제, 이름 바꾸기의 실제 파일 대조 |
 | 6 | 동등성 증명(출력 diff 스크립트, 기록된 기준선의 재생, 스모크 실행 중 하나) |
 | 7 | 독자 부담이 줄었다는 판단, 아니면 되돌림 |
@@ -723,6 +724,7 @@ end 응답
 | [`model-the-domain`](principles.md#skill-principle-model-the-domain), [`foundational-thinking`](principles.md#skill-principle-foundational-thinking), [`redesign-from-first-principles`](principles.md#skill-principle-redesign-from-first-principles) | 원칙 | 본문의 각 단계 |
 | [`architect`](architect.md#skill-architect) | 스킬 | 3, 목표가 함수 경계를 넘을 때 |
 | [`subtract-before-you-add`](principles.md#skill-principle-subtract-before-you-add), [`laziness-protocol`](principles.md#skill-principle-laziness-protocol), [`migrate-callers-then-delete-legacy-apis`](principles.md#skill-principle-migrate-callers-then-delete-legacy-apis), [`prove-it-works`](principles.md#skill-principle-prove-it-works), [`minimize-reader-load`](principles.md#skill-principle-minimize-reader-load), [`sequence-verifiable-units`](principles.md#skill-principle-sequence-verifiable-units) | 원칙 | 본문의 각 단계 |
+| `control-cli`, `control-ui` | cursor-team-kit의 스킬 | 6, 맞는 표면의 스모크 실행 |
 | [`figure-it-out`](arena-swarm.md#skill-figure-it-out) | 스킬 | 큰 구조 작업일 때 |
 | [Opening a PR](playbooks-pr.md#playbook-opening-a-pr) | 플레이북 | 8 |
 
@@ -940,13 +942,13 @@ end 응답
 >
 > 1. Cursor의 `create-skill`로 초안을 만들고, 이유를 길게 풀어 쓰지 않고 결정을 바꾸는 문장만 남깁니다. 다른 스킬이 하는 일은 다시 쓰지 않고 경로로 가리킵니다.
 > 2. 프런트매터에 `name`과 `description`이 있는지, 참조한 파일이 있는지, 다른 스킬로 가는 링크가 풀리는지 검증합니다.
-> 3. 출력이 구조적(정해진 섹션)이라 테스트 케이스를 하나 씁니다. 문체가 핵심이었다면 주관적이므로 건너뜁니다.
+> 3. 출력이 구조적(정해진 섹션)이라 테스트 케이스를 하나 씁니다. 검증할 구조가 없고 주관적이라면 건너뜁니다.
 > 4. Opening a PR로 끝내고, 응답에 요약, 설계 결정, 검증 메모를 적습니다.
 
 ### 실패, 중단, 모호할 때
 
 - **애매하면 지웁니다.** 결정을 바꾸는 문장만 남깁니다.
-- **문체가 주관적일 때.** 테스트 케이스를 건너뜁니다.
+- **주관적일 때.** 테스트 케이스를 건너뜁니다. 구조적일 때만 씁니다.
 - **반복되지만 스킬로 잡히지 않은 워크플로를 만났을 때.** 새 스킬을 제안합니다.
 - **정해진 구조가 이미 있을 때.** 구조적 출처(타입, README, 설정)를 가리킵니다(`encode-lessons-in-structure`).
 
@@ -1040,10 +1042,10 @@ end 응답
 > 요청: "새로 쓴 리뷰 스킬 문구가 실제로 에이전트의 리뷰를 바꾸는지 시험해 줘."
 >
 > 1. 성공을 "PR 설명의 검증 섹션에 실행한 명령이 적힌다"로 정하고, 이 기준 세 개를 루브릭으로 씁니다. 후보에게는 보이지 않습니다.
-> 2. 후보마다 프로젝트처럼 보이는 이름의 디렉터리를 만들고 옛 문구와 새 문구를 한쪽씩 둡니다. 디렉터리와 파일에 `eval`, `judge` 같은 단어를 쓰지 않습니다.
+> 2. 모델마다 프로젝트처럼 보이는 이름의 디렉터리를 둘씩 만들고, 하나에는 옛 문구를, 하나에는 새 문구를 둡니다. 디렉터리와 파일에 `eval`, `judge` 같은 단어를 쓰지 않습니다.
 > 3. 프롬프트는 "이 브랜치의 PR 설명을 써 줘"처럼 사용자가 실제로 칠 만한 말 한 줄입니다.
-> 4. 서로 다른 모델 셋이 각자 디렉터리에서 돕니다. 어떤 스킬을 적용했는지 자기 보고를 요구하지 않습니다.
-> 5. 다른 모델 계열의 심사자가 라벨 A, B만 보고 한 번에 채점합니다. 대본에서 각 후보가 실제로 연 파일을 따로 확인합니다.
+> 4. 서로 다른 모델 셋이 각자 자기 디렉터리 둘에서 같은 프롬프트로 돕니다. 어떤 스킬을 적용했는지 자기 보고를 요구하지 않습니다.
+> 5. 다른 모델 계열의 심사자가 소독된 라벨만 보고 두 묶음을 한 번에 같은 척도로 채점합니다. 대본에서 각 후보가 실제로 연 파일을 따로 확인합니다.
 > 6. 모든 출력을 직접 읽고 심사자와 비교해 종합하고 승격 여부를 권고합니다.
 
 ### 실패, 중단, 모호할 때

@@ -60,17 +60,17 @@
 
 ```flow Opening a PR 플레이북의 흐름
 start 다른 플레이북의 마지막 단계
-step Worktree | main에서 딴 워크트리에서 작업
+step Worktree
   alt 브랜치가 더럽거나 워크트리가 엉킴 | 패치로 빼고 새 워크트리에 적용, 또는 main에서 리셋해 최소로 다시 함
-step Commits | 작고 순서 있는 커밋으로 리베이스
-step PRs 준비 | deslop, no-comments, technical-writing, unslop
-step Titles | type(scope): subject
-step Descriptions | Why, Scope, Tradeoffs, Blast Radius, Verification
-step Forge 결정 | gh가 기본, Origin을 풀 수 있으면 origin
-step Size and stacks | 좁은 PR 여럿, 자식은 부모 브랜치를 base로
-step Readiness | 초안이 아닌 ready로 열고 상태를 다시 읽음
-step Babysit | 열었다고 babysit를 시작하지 않음, URL만 게시
-end 응답 | PR 링크
+step Commits
+step PRs 준비
+step Titles
+step Descriptions
+step Forge 결정
+step Size and stacks
+step Readiness
+step Babysit
+end 응답
 ```
 
 ### 단계별 산출물
@@ -292,19 +292,19 @@ GitHub가 병합을 거부하는 조건은 `mergeStateStatus`가 `BLOCKED`이고
 
 ```flow Babysit 플레이북의 흐름
 start PR이나 스택을 병합 준비 상태로
-step 1. 모드 선언과 포지 결정 | drive, background, threads-only, check
-step 2. 병합 프런티어 | 가장 낮은 미병합 PR만
-step 3. 스택당 babysitter 하나 | 이미 있으면 시작하지 않음
+step 1. 모드 선언과 포지 결정
+step 2. 병합 프런티어
+step 3. 스택당 babysitter 하나
 step 4. 스택 토폴로지를 바꾸지 않음
 step 5. 충돌, 리뷰 스레드, CI 순서
   stop 충돌 | 리베이스가 필요한 브랜치를 알리고 멈춤, drift 스윕을 언급
 step 6. 포지의 판정을 신뢰
   alt READY (GitHub 단일, 스택) | 멈춤
   alt WAITING merge-queue (대기열 모드) | 프런티어가 병합 준비로 보고하고 감시자를 멈춤
-step 7. CI 분류 후에만 재시도 | 플레이크는 새 빌드 한 번
-step 8. Bugbot을 회의적으로 분류 | fix, dismiss, ask
+step 7. CI 분류 후에만 재시도
+step 8. Bugbot을 회의적으로 분류
 step 9. 사람의 선에서 멈춤
-end 응답 | 모드, 프런티어 상태, 고친 것과 기각한 것, 사람이 필요한 것
+end 응답
 ```
 
 ### 단계별 산출물
@@ -320,7 +320,6 @@ end 응답 | 모드, 프런티어 상태, 고친 것과 기각한 것, 사람이
 | 7 | CI 분류(플레이크 또는 인프라, 낡은 베이스, diff 자체의 코드 실패) |
 | 8 | 스레드마다 `fix`, `dismiss`, `ask` 분류, 고침 커밋과 그 SHA를 인용한 답글, 기각 스레드의 구체적 반증 |
 | 9 | 세션의 분류 결정을 훑은 뒤 공유 루브릭의 후보 항목과 그것을 위한 PR |
-| 응답 | 모드, 프런티어와 활성 포지의 상태, GitHub라면 감시자의 네 열 표, 고친 것과 기각한 것과 이유, 아직 남은 것, 사람이 필요한 것 |
 
 ### 예시
 
@@ -407,19 +406,19 @@ Babysit 다음 단계입니다. 병합할 준비가 되면 말합니다.
 
 ```flow Shipping 플레이북의 흐름
 start 초록 스택을 착륙시키기
-step 1. 포지 결정과 PR마다 독립 검증 | PR당 서브에이전트 하나, PASS, PASS+NOTES, FAIL
-step 2. 바닥에서 이어진 검증된 구간만 | 첫 미검증 PR에서 멈추고 천장을 보고
+step 1. 포지 결정과 PR마다 독립 검증
+step 2. 바닥에서 이어진 검증된 구간만
   stop 판정이 없는 PR을 만남 | 그 위는 착륙 불가, 무엇이 사슬을 끊는지 보고
-step 3. 판정이 아직 패치를 설명하는지 재확인 | 판정 head SHA, base SHA, patch-id
+step 3. 판정이 아직 패치를 설명하는지 재확인
   alt 패치가 달라짐 | 잡음만이면 유효, 아니면 다시 검증
-step 4. 바닥 PR만 준비 | 트렁크에 리베이스하고 base를 트렁크로 바꿈
-step 5. 한 번에 PR 하나 착륙 | squash 병합, 요청이 있으면 --auto는 그 PR에만
+step 4. 바닥 PR만 준비
+step 5. 한 번에 PR 하나 착륙
 step 6. autoMergeRequest를 준비 완료로 읽지 않음
-step 7. 병합마다 다시 계산 | 트렁크 가져오기, 병합된 PR 제거, 새 바닥 검사
+step 7. 병합마다 다시 계산
   back 4 | 다음 PR
-step 8. 프런티어를 병합되거나 실패할 때까지 지켜봄 | 큐를 건드리지 않음
+step 8. 프런티어를 병합되거나 실패할 때까지 지켜봄
 step 9. 천장에서 멈춤
-end 응답 | 검증된 구간과 천장, 판정, 무장한 것, 착륙한 것
+end 응답
 ```
 
 ### 단계별 산출물
@@ -435,7 +434,6 @@ end 응답 | 검증된 구간과 천장, 판정, 무장한 것, 착륙한 것
 | 7 | 병합된 PR을 뺀 고정 목록과 새 바닥 PR의 base, head, 체크, patch-id |
 | 8 | 병합이나 실패 확인, 병합마다 새 천장 보고 |
 | 9 | 착륙한 것, 다음 미검증 PR, 그것을 검증하려면 필요한 것 |
-| 응답 | 검증된 구간과 천장, PR마다의 판정과 판정을 낸 주체, 무장한 것과 확인 방법, 착륙한 것, 다음 간격에 필요한 것 |
 
 ### 예시
 

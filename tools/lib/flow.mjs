@@ -13,8 +13,8 @@ const W = 520;
 const FS = 14;
 const FS_SMALL = 12.5;
 const LH = 1.4;
-const PAD = 8;
-const GAP = 24;
+const PAD = 6;
+const GAP = 16;
 const SIDE_GAP = 8;
 const LEFT = 44;
 
@@ -84,9 +84,9 @@ export function renderFlow(source, name) {
   const hasSide = mains.some((n) => n.sides.length);
   const hasBack = mains.some((n) => n.backs.length);
   const left = hasBack ? LEFT : 8;
-  const mainW = hasSide ? 236 : 360;
+  const mainW = hasSide ? 250 : 380;
   const mainX = hasSide ? left : left + Math.max(0, (W - left - 8 - mainW) / 2);
-  const sideX = mainX + mainW + 34;
+  const sideX = mainX + mainW + 30;
   const sideW = W - 8 - sideX;
 
   let y = 6;
@@ -153,7 +153,7 @@ export function renderFlow(source, name) {
       }
       const sc = sy + s.h / 2;
       const x1 = mainX + mainW;
-      const xm = x1 + 17;
+      const xm = x1 + 15;
       const from = Math.min(Math.max(sc, r.top + 6), r.top + r.h - 6);
       parts.push(
         `<path class="fl-line${s.kind === "stop" ? " fl-dash" : ""}" d="M${x1} ${from} H${xm} V${sc} H${sideX - 1}" marker-end="url(#${uid})"/>`,

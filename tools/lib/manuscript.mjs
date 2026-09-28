@@ -29,6 +29,8 @@ export const BOOK = {
 
 // Worked examples written for this book (not from the source) open with this label.
 export const EXAMPLE_LABEL = "예시 (이 책의 저자가 만든 것, 원본에 없음)";
+// Commentary blocks (interpretation that is not in the source) open with this label.
+export const COMMENTARY_LABEL = "해설 (이 책의 해석, 원본에 없음)";
 
 const KINDS = new Set(["front", "part", "ch", "app"]);
 
@@ -99,9 +101,10 @@ function renderChapter(source, ctx) {
       }
     }
   }
-  const html = md.renderer
-    .render(tokens, md.options, env)
-    .replaceAll(`<blockquote>\n<p><strong>${EXAMPLE_LABEL}`, `<blockquote class="example">\n<p><strong>${EXAMPLE_LABEL}`);
+  let html = md.renderer.render(tokens, md.options, env);
+  for (const label of [EXAMPLE_LABEL, COMMENTARY_LABEL]) {
+    html = html.replaceAll(`<blockquote>\n<p><strong>${label}`, `<blockquote class="example">\n<p><strong>${label}`);
+  }
   return { html, headings: env.headings, links: env.links };
 }
 

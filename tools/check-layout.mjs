@@ -5,9 +5,10 @@ import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { pathToFileURL } from "node:url";
 import JSZip from "jszip";
+import { bookFile } from "./lib/manuscript.mjs";
 import { launch } from "./lib/chrome.mjs";
 
-const zip = await JSZip.loadAsync(readFileSync("dist/pstack-guide.epub"));
+const zip = await JSZip.loadAsync(readFileSync(`dist/${bookFile("epub")}`));
 const dir = mkdtempSync(join(tmpdir(), "epub-"));
 for (const [name, entry] of Object.entries(zip.files)) {
   if (entry.dir) continue;

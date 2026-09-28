@@ -3,7 +3,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import JSZip from "jszip";
 import { EpubCheck } from "@likecoin/epubcheck-ts";
-import { loadManuscript, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
+import { loadManuscript, bookFile, SOURCE, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
 
 let failed = 0;
 const fail = (msg) => {
@@ -54,12 +54,26 @@ for (const f of readdirSync(".").filter((f) => f.endsWith(".md"))) {
 }
 
 // 2. EPUB structure and validity.
-const epubPath = "dist/pstack-guide.epub";
+// The book version is SOURCE.version. The colophon, EPUB metadata, output file names and README must all agree.
+const version = SOURCE.version;
+const colophon = items.find((i) => i.file === "01-front-colophon.md");
+if (!colophon || !colophon.source.includes(`| 이 책의 버전 | ${version} `)) fail(`colophon does not state book version ${version}`);
+const readme = readFileSync("README.md", "utf8");
+for (const ext of ["epub", "pdf"]) if (!readme.includes(bookFile(ext))) fail(`README.md does not name ${bookFile(ext)}`);
+if (!readme.includes(`pstack ${version}(커밋`)) fail(`README.md does not state version ${version}`);
+if (existsSync("dist")) {
+  const want = new Set([bookFile("epub"), bookFile("pdf")]);
+  for (const f of readdirSync("dist").filter((f) => /^pstack-guide.*\.(epub|pdf)$/.test(f))) if (!want.has(f)) fail(`dist/${f}: file name does not match version ${version}`);
+}
+
+const epubPath = `dist/${bookFile("epub")}`;
 if (!existsSync(epubPath)) fail(`${epubPath} missing`);
 else {
   const data = readFileSync(epubPath);
   const zip = await JSZip.loadAsync(data);
   const names = Object.keys(zip.files);
+  const opf = await zip.file("OEBPS/content.opf").async("string");
+  if (opf.match(/<meta property="schema:version">([^<]*)</)?.[1] !== version) fail(`EPUB metadata version does not equal ${version}`);
   if (names[0] !== "mimetype") fail("mimetype is not the first zip entry");
   const result = await EpubCheck.validate(new Uint8Array(data));
   const msgs = result.messages ?? [];

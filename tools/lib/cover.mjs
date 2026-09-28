@@ -1,4 +1,4 @@
-import { BOOK } from "./manuscript.mjs";
+import { BOOK, SOURCE } from "./manuscript.mjs";
 
 export const coverHtml = () => `<!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><link rel="stylesheet" href="FONTS_CSS"><style>
@@ -18,5 +18,5 @@ h1 { position: absolute; top: 560px; left: 140px; right: 140px; margin: 0; font-
 <h1>${BOOK.title}</h1>
 <div class="sub">${BOOK.subtitle}</div>
 <div class="stack">${"<i></i>".repeat(9)}</div>
-<div class="foot">비공식 한국어 해설서<br>원저 pstack: Lauren Tan (MIT)<br>pstack 0.15.5 기준</div>
+<div class="foot">비공식 한국어 해설서<br>원저 pstack: Lauren Tan (MIT)<br>pstack ${SOURCE.version} 기준</div>
 </body></html>`;

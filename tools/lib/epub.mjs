@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import JSZip from "jszip";
-import { BOOK, SOURCE, chapterFragment, escapeHtml } from "./manuscript.mjs";
+import { BOOK, BOOK_VERSION, SOURCE, chapterFragment, escapeHtml } from "./manuscript.mjs";
 import { buildToc, renderToc } from "./toc.mjs";
 
 const XHTML_HEAD = `<?xml version="1.0" encoding="UTF-8"?>
@@ -106,7 +106,7 @@ ${renderToc(toc, hrefOf)}
 <dc:creator>비공식 한국어 해설 (원저 pstack: Lauren Tan)</dc:creator>
 <dc:rights>MIT License. See the attribution appendix.</dc:rights>
 <dc:description>Cursor 플러그인 pstack(${SOURCE.version})의 스킬 47종을 한국어로 해설한 기술서. 비공식판.</dc:description>
-<meta property="schema:version">${SOURCE.version}</meta>
+<meta property="schema:version">${BOOK_VERSION}</meta>
 <meta property="dcterms:modified">${BOOK.date}T00:00:00Z</meta>
 <meta name="cover" content="cover-image"/>
 </metadata>

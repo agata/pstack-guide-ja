@@ -3,7 +3,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import JSZip from "jszip";
 import { EpubCheck } from "@likecoin/epubcheck-ts";
-import { loadManuscript, bookFile, SOURCE, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
+import { loadManuscript, bookFile, BOOK_VERSION, SOURCE, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
 
 let failed = 0;
 const fail = (msg) => {
@@ -54,13 +54,14 @@ for (const f of readdirSync(".").filter((f) => f.endsWith(".md"))) {
 }
 
 // 2. EPUB structure and validity.
-// The book version is SOURCE.version. The colophon, EPUB metadata, output file names and README must all agree.
-const version = SOURCE.version;
+// The book version is BOOK_VERSION. The colophon, EPUB metadata, output file names and README must all agree.
+const version = BOOK_VERSION;
 const colophon = items.find((i) => i.file === "01-front-colophon.md");
 if (!colophon || !colophon.source.includes(`| 이 책의 버전 | ${version} `)) fail(`colophon does not state book version ${version}`);
 const readme = readFileSync("README.md", "utf8");
 for (const ext of ["epub", "pdf"]) if (!readme.includes(bookFile(ext))) fail(`README.md does not name ${bookFile(ext)}`);
-if (!readme.includes(`pstack ${version}(커밋`)) fail(`README.md does not state version ${version}`);
+if (!readme.includes(`pstack ${SOURCE.version}(커밋`)) fail(`README.md does not state pstack version ${SOURCE.version}`);
+if (!readme.includes(`이 책의 현재 버전은 \`${version}\``)) fail(`README.md does not state book version ${version}`);
 if (existsSync("dist")) {
   const want = new Set([bookFile("epub"), bookFile("pdf")]);
   for (const f of readdirSync("dist").filter((f) => /^pstack-guide.*\.(epub|pdf)$/.test(f))) if (!want.has(f)) fail(`dist/${f}: file name does not match version ${version}`);

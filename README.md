@@ -6,7 +6,7 @@ Lauren Tan의 Cursor 플러그인 [pstack](https://github.com/cursor/plugins/tre
 
 ## 버전
 
-pstack 0.15.5(커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`)를 기준으로 하며, 이 책의 버전은 pstack의 버전과 같고, 첫 릴리스는 `v0.15.5`입니다. pstack 버전이 그대로일 때 이 책만 고치면 릴리스 태그에 `v0.15.5-ko.2`처럼 접미사가 붙습니다.
+pstack 0.15.5(커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`)를 기준으로 합니다. 이 책의 버전은 pstack의 버전에서 시작하고, 첫 릴리스는 `v0.15.5`입니다. pstack 버전이 그대로일 때 이 책만 고치면 릴리스 태그에 `v0.15.5-ko.2`처럼 접미사가 붙습니다. 이 책의 현재 버전은 `0.15.5-ko.2`입니다.
 
 예시는 이 책의 저자가 만든 것이고 원본에 없습니다. 점선 테두리 블록의 첫 줄에 "예시 (이 책의 저자가 만든 것, 원본에 없음)"이라고 밝혔고, 원문에 없는 해석은 "해설 (이 책의 해석, 원본에 없음)"으로 표시했습니다.
 
@@ -14,8 +14,8 @@ pstack 0.15.5(커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`)를 기준으로
 
 [최신 릴리스](https://github.com/jayjongcheolpark/pstack-guide-ko/releases/latest)에서 EPUB와 PDF를 내려받을 수 있습니다.
 
-- `pstack-guide-0.15.5.epub`: 전자책 리더용
-- `pstack-guide-0.15.5.pdf`: 가로 152mm, 세로 225mm(국내 단행본에서 흔한 크기), 인쇄와 화면 읽기용
+- `pstack-guide-0.15.5-ko.2.epub`: 전자책 리더용
+- `pstack-guide-0.15.5-ko.2.pdf`: 가로 152mm, 세로 225mm(국내 단행본에서 흔한 크기), 인쇄와 화면 읽기용
 
 ## 차례
 
@@ -73,7 +73,7 @@ pstack 0.15.5(커밋 `adf3218ca2f5b9971eedc07a76bef22df7701539`)를 기준으로
 
 ```shell
 bun install
-bun tools/build.mjs        # dist/pstack-guide-0.15.5.epub, dist/pstack-guide-0.15.5.pdf
+bun tools/build.mjs        # dist/pstack-guide-0.15.5-ko.2.epub, dist/pstack-guide-0.15.5-ko.2.pdf
 ```
 
 검사는 원본의 고정 커밋을 저장소 밖에 클론한 뒤 실행합니다.
@@ -113,7 +113,7 @@ MIT입니다. 원저작물 pstack은 Copyright (c) 2026 Lauren Tan, 이 한국�
 
 An unofficial Korean explanation of [pstack](https://github.com/cursor/plugins/tree/main/pstack), Lauren Tan's Cursor plugin (0.15.5, commit `adf3218ca2f5b9971eedc07a76bef22df7701539`). It covers all 47 skills, the 23 `poteto-mode` playbooks, the agents, the `benny` automation pack and the guide docs, with a permalink to the pinned source at each skill section.
 
-The book version equals the pstack version it covers (0.15.5). If the book alone is fixed while pstack stays at the same version, the release tag gets a suffix such as `v0.15.5-ko.2`. Files are on the [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases) page: `pstack-guide-0.15.5.epub` and `pstack-guide-0.15.5.pdf` (152 x 225 mm, a common Korean paperback size).
+The book version starts from the pstack version it covers (0.15.5), and the first release was `v0.15.5`. If the book alone is fixed while pstack stays at the same version, the release tag gets a suffix such as `v0.15.5-ko.2`. The current book version is `0.15.5-ko.2`. Files are on the [Releases](https://github.com/jayjongcheolpark/pstack-guide-ko/releases) page: `pstack-guide-0.15.5-ko.2.epub` and `pstack-guide-0.15.5-ko.2.pdf` (152 x 225 mm, a common Korean paperback size).
 
 Examples written for this book are not in the original and are labeled `예시 (이 책의 저자가 만든 것, 원본에 없음)`; interpretation the source does not state is labeled `해설 (이 책의 해석, 원본에 없음)`.
 

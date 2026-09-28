@@ -7,7 +7,7 @@
 | 저장소 | https://github.com/cursor/plugins |
 | 디렉터리 | `pstack/` |
 | 커밋 (전체 SHA) | `adf3218ca2f5b9971eedc07a76bef22df7701539` |
-| 플러그인 버전 | 0.15.5 (`pstack/.cursor-plugin/plugin.json`). 이 책의 버전은 이 값과 같습니다 |
+| 플러그인 버전 | 0.15.5 (`pstack/.cursor-plugin/plugin.json`). 이 책의 버전은 이 값에 개정 번호를 붙인 `0.15.5-ko.N`입니다(`tools/lib/manuscript.mjs`) |
 | 기본 브랜치 | `main` |
 | 클론 날짜 | 2026-09-28 |
 | 저작권 | MIT, Copyright (c) 2026 Lauren Tan (`pstack/LICENSE`) |

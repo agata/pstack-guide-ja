@@ -1,36 +1,27 @@
-# 원본 (Source)
+# 原文と派生元
 
-이 책의 유일한 원본입니다. pstack을 다른 환경으로 옮긴 포팅이나 다른 판은 원본으로 쓰지 않았습니다.
+## 技術説明の原文
 
-| 항목 | 값 |
-| --- | --- |
-| 저장소 | https://github.com/cursor/plugins |
-| 디렉터리 | `pstack/` |
-| 커밋 (전체 SHA) | `adf3218ca2f5b9971eedc07a76bef22df7701539` |
-| 플러그인 버전 | 0.15.5 (`pstack/.cursor-plugin/plugin.json`). 이 책의 버전은 이 값에 개정 번호를 붙인 `0.15.5-ko.N`입니다(`tools/lib/manuscript.mjs`) |
-| 기본 브랜치 | `main` |
-| 클론 날짜 | 2026-09-28 |
-| 저작권 | MIT, Copyright (c) 2026 Lauren Tan (`pstack/LICENSE`) |
+- リポジトリ： https://github.com/cursor/plugins
+- 対象：`pstack/`
+- pstack版：`0.15.5`
+- 固定コミット：`adf3218ca2f5b9971eedc07a76bef22df7701539`
+- 参照日：2026年9月29日
+- 著作権：Copyright (c) 2026 Lauren Tan、MIT。
 
-범위는 `pstack/` 아래 전부입니다: `skills/`(47개), `agents/`, `automations/`, `docs/`, `README.md`, `.cursor-plugin/plugin.json`, `LICENSE`. 별개 플러그인인 `cursor-team-kit`(deslop, fix-ci, fix-merge-conflicts, get-pr-comments, make-pr-easy-to-review, thermo-nuclear-code-quality-review, what-did-i-get-done 등)은 장으로 다루지 않고, pstack 파일이 그것을 부르는 곳에서 한두 문장으로 언급합니다.
+`README.md`、`docs/guide/`、47個の `skills/*/SKILL.md`、23個の `skills/poteto-mode/playbooks/*.md`、2個の `agents/*.md`、bennyのREADME、FOR_AGENTS、導入・分類・再現の各手順を基準に執筆しています。補助資料は節に必要なものをリンクします。本文にリンクがあることは、その補助ファイル全体を逐語訳したことを意味しません。
 
-## 읽는 방법
+原文は本書リポジトリ外のcheckoutで参照します。`{{src:...}}` はビルド時に上記SHAへのpermalinkへ展開します。現行mainの内容と混ぜません。
 
-원본은 이 저장소 밖에 읽기 전용으로 클론해서 읽습니다. 이 저장소에 복사하거나 서브모듈로 넣지 않습니다.
+## 構成と出版ツールの派生元
 
-```shell
-git clone https://github.com/cursor/plugins.git <저장소 밖 임시 경로>/cursor-plugins
-cd <저장소 밖 임시 경로>/cursor-plugins
-git checkout adf3218ca2f5b9971eedc07a76bef22df7701539
-chmod -R a-w .
-```
+- リポジトリ： https://github.com/jayjongcheolpark/pstack-guide-ko
+- 元の書籍版：`0.15.5-ko.3`
+- フォーク時点：`81a6eec37fa5186fe598113cf3cb507f6b0c3e10`。
+- 著作権：Copyright (c) 2026 Jay Park、MIT。
 
-## 원문 링크 형식
+9部・22章・4付録、MarkdownからEPUB/PDFを生成する仕組み、表紙とSVGフローの生成、6枚の原著由来の図版を引き継ぎます。日本語本文は英語原文を基準に再執筆し、フォント、言語タグ、目次ラベル、組版、検査を日本語向けに変更しています。
 
-각 스킬 절 제목 아래의 `원문` 줄은 이 커밋에 고정한 GitHub permalink입니다.
+## 版管理
 
-```text
-https://github.com/cursor/plugins/blob/adf3218ca2f5b9971eedc07a76bef22df7701539/pstack/skills/<name>/SKILL.md
-```
-
-글에서 다룬 다른 파일(`references/`, `playbooks/`, `scripts/`, `agents/`, `docs/`, `automations/`)도 같은 커밋의 permalink로 적습니다.
+本書の版は `tools/lib/manuscript.mjs` の `SOURCE.version` と `BOOK_REVISION` から `0.15.5-ja.1` の形式で生成します。pstackを変えずに本だけを直す場合は末尾の改訂番号を増やします。

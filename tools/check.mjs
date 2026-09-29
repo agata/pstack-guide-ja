@@ -3,7 +3,7 @@
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import JSZip from "jszip";
 import { EpubCheck } from "@likecoin/epubcheck-ts";
-import { loadManuscript, bookFile, BOOK_VERSION, SOURCE, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
+import { loadManuscript, bookFile, BOOK_VERSION, BOOK, SOURCE, EXAMPLE_LABEL, COMMENTARY_LABEL } from "./lib/manuscript.mjs";
 
 let failed = 0;
 const fail = (msg) => {
@@ -17,7 +17,7 @@ const ids = new Map(items.map((i) => [i.href, new Set(i.headings.map((h) => h.id
 for (const item of items) {
   if (item.source.includes("—")) fail(`${item.file}: contains em dash`);
   // Blockquotes that present author-written examples or commentary must open with the exact label.
-  for (const m of item.source.matchAll(/^> \*\*((?:예시|해설)[^*]*)\*\*/gm)) {
+  for (const m of item.source.matchAll(/^> \*\*((?:例|解説)[^*]*)\*\*/gm)) {
     if (m[1] !== EXAMPLE_LABEL && m[1] !== COMMENTARY_LABEL) fail(`${item.file}: example or commentary block with a non-standard label: ${m[1]}`);
   }
   for (const m of item.html.matchAll(/href="([^"]+)"/g)) {
@@ -45,6 +45,7 @@ if (srcRoot) {
     }
   };
   want("skills", "skill");
+  want("agents", "agent");
   want("skills/poteto-mode/playbooks", "playbook");
   console.log(`coverage: ${readdirSync(`${srcRoot}/skills`).length} skills, ${readdirSync(`${srcRoot}/skills/poteto-mode/playbooks`).length} playbooks`);
 }
@@ -53,24 +54,28 @@ for (const f of readdirSync(".").filter((f) => f.endsWith(".md"))) {
   if (readFileSync(f, "utf8").includes("—")) fail(`${f}: contains em dash`);
 }
 
-// 2. Notation: the glossary lists the Korean words that do not map one to one to the source.
-// Each row pairs a Korean word with one English term and names the chapter that introduces the pair,
-// and that chapter must contain the pair in the fixed form 한국어(영어).
-const TERMS_HEADING = "일대일로 옮겨지지 않는 용어";
-const glossary = items.find((i) => i.file === "92-app-glossary.md");
-const termsSection = glossary?.source.split(/^## /m).find((s) => s.startsWith(TERMS_HEADING));
-if (!termsSection) fail(`glossary has no "${TERMS_HEADING}" section`);
-else {
-  const rows = termsSection.split("\n").filter((l) => l.startsWith("| ")).slice(2).map((l) => l.split("|").slice(1, -1).map((c) => c.trim().replaceAll("`", "")));
-  if (rows[0]?.[0] !== "원칙") fail("glossary terms table must start with 원칙");
-  for (const [ko, en, slug] of rows) {
-    const chapter = items.find((i) => i.slug === slug);
-    if (!chapter) fail(`glossary terms table: unknown chapter "${slug}" for ${ko}(${en})`);
-    else if (!chapter.source.includes(`${ko}(${en})`)) fail(`${chapter.file}: missing ${ko}(${en}), the glossary says this chapter introduces it`);
-    for (const item of items) if (item.source.includes(`${ko} (${en})`)) fail(`${item.file}: write ${ko}(${en}) without a space`);
-  }
-  console.log(`notation: ${rows.length} Korean(English) pairs`);
+// 2. Japanese edition completeness and source correspondence.
+if (BOOK.language !== "ja") fail("book language must be ja");
+const expectedKinds = { front: 2, part: 9, ch: 22, app: 4 };
+for (const [kind, count] of Object.entries(expectedKinds)) {
+  if (items.filter(i => i.kind === kind).length !== count) fail(`expected ${count} ${kind} documents`);
 }
+for (const item of items) {
+  if (/[\p{Script=Hangul}]/u.test(item.source)) fail(`${item.file}: untranslated Korean text`);
+  if (/\{\{/.test(item.source)) fail(`${item.file}: unexpanded placeholder`);
+  if (item.kind !== "part" && !/[\p{Script=Hiragana}\p{Script=Katakana}]/u.test(item.source)) fail(`${item.file}: missing Japanese text`);
+  for (const h of item.headings.filter(h => /^(skill|playbook|agent)-/.test(h.id))) {
+    const match = h.id.match(/^(skill|playbook|agent)-(.*)$/);
+    const path = match[1] === "skill" ? `skills/${match[2]}/SKILL.md` : match[1] === "playbook" ? `skills/poteto-mode/playbooks/${match[2]}.md` : `agents/${match[2]}.md`;
+    if (!item.srcPaths.includes(path)) fail(`${item.file}: missing source for ${h.id}`);
+  }
+}
+const anchors = items.flatMap(i => i.headings.map(h => h.id));
+for (const [prefix, count] of [["skill-", 47], ["playbook-", 23], ["agent-", 2]]) {
+  const found = anchors.filter(id => id.startsWith(prefix));
+  if (found.length !== count || new Set(found).size !== count) fail(`expected ${count} distinct ${prefix} sections`);
+}
+console.log("Japanese edition: 37 documents, 47 skills, 23 playbooks, 2 agents");
 
 // 3. Dark screen palette. Print and the PDF stay on the light rules: the dark
 // block is scoped to screen, and every text or stroke color clears WCAG against its fill.
@@ -148,11 +153,11 @@ else {
 // The book version is BOOK_VERSION. The colophon, EPUB metadata, output file names and README must all agree.
 const version = BOOK_VERSION;
 const colophon = items.find((i) => i.file === "01-front-colophon.md");
-if (!colophon || !colophon.source.includes(`| 이 책의 버전 | ${version} `)) fail(`colophon does not state book version ${version}`);
+if (!colophon || !colophon.source.includes(`| 本書の版 | ${version} `)) fail(`colophon does not state book version ${version}`);
 const readme = readFileSync("README.md", "utf8");
 for (const ext of ["epub", "pdf"]) if (!readme.includes(bookFile(ext))) fail(`README.md does not name ${bookFile(ext)}`);
-if (!readme.includes(`pstack ${SOURCE.version}(커밋`)) fail(`README.md does not state pstack version ${SOURCE.version}`);
-if (!readme.includes(`이 책의 현재 버전은 \`${version}\``)) fail(`README.md does not state book version ${version}`);
+if (!readme.includes(`pstack ${SOURCE.version}`)) fail(`README.md does not state pstack version ${SOURCE.version}`);
+if (!readme.includes(`現在の本書の版は \`${version}\``)) fail(`README.md does not state book version ${version}`);
 if (existsSync("dist")) {
   const want = new Set([bookFile("epub"), bookFile("pdf")]);
   for (const f of readdirSync("dist").filter((f) => /^pstack-guide.*\.(epub|pdf)$/.test(f))) if (!want.has(f)) fail(`dist/${f}: file name does not match version ${version}`);
@@ -166,6 +171,12 @@ else {
   const names = Object.keys(zip.files);
   const opf = await zip.file("OEBPS/content.opf").async("string");
   if (opf.match(/<meta property="schema:version">([^<]*)</)?.[1] !== version) fail(`EPUB metadata version does not equal ${version}`);
+  if (!opf.includes("<dc:language>ja</dc:language>")) fail("EPUB language is not ja");
+  for (const name of names.filter(n => n.endsWith(".xhtml"))) {
+    const xhtml = await zip.file(name).async("string");
+    if (!xhtml.includes('xml:lang="ja" lang="ja"')) fail(`${name}: language is not ja`);
+    if (/\p{Script=Hangul}/u.test(xhtml)) fail(`${name}: Korean text remains`);
+  }
   if (names[0] !== "mimetype") fail("mimetype is not the first zip entry");
   const result = await EpubCheck.validate(new Uint8Array(data));
   const msgs = result.messages ?? [];

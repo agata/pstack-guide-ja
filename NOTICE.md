@@ -1,30 +1,19 @@
 # NOTICE
 
-This repository is an unofficial Korean explanation of pstack, written with AI assistance. It may contain errors. The original is authoritative.
+This is an unofficial Japanese explanation of pstack, written with AI assistance from the pinned English sources. It may contain errors; the original source is authoritative. Lauren Tan and Cursor have not reviewed, endorsed, or guaranteed this Japanese edition.
 
-The original author, Lauren Tan (X: @poteto), gave permission on 2026-09-28 to distribute the guide for free ([reply on X](https://x.com/poteto/status/2104671461827055941)). The author has not reviewed the content, and neither the author nor Cursor endorses or guarantees it. This permission is in addition to the MIT license terms below, which are unchanged.
+## Attribution
 
-## Original work
+- Original pstack: Copyright (c) 2026 Lauren Tan, MIT License. https://github.com/cursor/plugins/tree/adf3218ca2f5b9971eedc07a76bef22df7701539/pstack
+- Korean guide structure, build tooling, and inherited presentation: Copyright (c) 2026 Jay Park, MIT License. https://github.com/jayjongcheolpark/pstack-guide-ko
+- Japanese adaptation maintained at https://github.com/agata/pstack-guide-ja, distributed under the same MIT License.
 
-- **pstack** by Lauren Tan, Copyright (c) 2026 Lauren Tan, MIT License.
-- Source: https://github.com/cursor/plugins/tree/main/pstack
-- Based on pstack 0.15.5; the book version is the pstack version plus the book revision suffix (`-ko.N`). Pinned commit: `adf3218ca2f5b9971eedc07a76bef22df7701539`.
-- The MIT notice of the original is quoted in `LICENSE` (with an added copyright line for this explanation) and in the attribution appendix of the book (`manuscript/94-app-attribution.md`).
+The original copyright notices and permission text are preserved in LICENSE and the book's attribution appendix. The Korean edition records permission to distribute that guide for free. This edition relies on the MIT license and does not claim separate approval of the Japanese text.
 
-## What comes from pstack
+## Illustrations and fonts
 
-- Short quotations, code examples, tables and prompt examples taken from pstack's skills, playbooks, agents, automations and documentation. Each skill section cites its source file with a permalink at the pinned commit.
-- The six illustrations in `manuscript/images/` come from pstack's `docs/guide/images/` and are resized to 1000 pixels wide.
+The six images in manuscript/images originate from pstack/docs/guide/images and were resized to 1000 pixels wide in the Korean guide. The inherited cover and flow-chart generators are adapted for Japanese text.
 
-## What is new here
+The PDF uses Noto Serif JP, Noto Sans JP, and JetBrains Mono from @fontsource packages, under the SIL Open Font License. The EPUB embeds no fonts. Font licenses remain in the installed font packages.
 
-- The Korean text, structure and build tooling are Copyright (c) 2026 Jay Park, MIT License.
-
-## Not included
-
-- `cursor-team-kit` is a separate plugin in the same upstream repository. Its skills are mentioned where a pstack file calls them, and are not reproduced.
-- Cursor, Slack, Linear, Notion, Datadog, Sentry, Databricks, Tailscale and GitHub are trademarks of their owners and are named only to identify those tools.
-
-## Fonts used in the PDF
-
-Noto Serif KR, Noto Sans KR and JetBrains Mono, installed as npm packages (`@fontsource/*`) and licensed under the SIL Open Font License. The EPUB embeds no fonts.
+Product and service names identify the respective products; their trademarks belong to their owners. cursor-team-kit is a separate upstream plugin, mentioned only where pstack uses it.

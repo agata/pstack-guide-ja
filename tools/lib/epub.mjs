@@ -5,7 +5,7 @@ import { buildToc, renderToc } from "./toc.mjs";
 
 const XHTML_HEAD = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ko" lang="ko">`;
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="ja" lang="ja">`;
 
 const page = (title, body) => `${XHTML_HEAD}
 <head>
@@ -37,8 +37,8 @@ export async function buildEpub({ items, coverPng, css }) {
   oebps.file(
     "cover.xhtml",
     page(
-      "표지",
-      `<section epub:type="cover" style="text-align:center"><img src="cover.png" alt="${escapeHtml(BOOK.title)} 표지" style="max-height:100%;max-width:100%" /></section>`,
+      "表紙",
+      `<section epub:type="cover" style="text-align:center"><img src="cover.png" alt="${escapeHtml(BOOK.title)} 表紙" style="max-height:100%;max-width:100%" /></section>`,
     ),
   );
   for (const item of items) oebps.file(item.href, page(item.fullTitle, chapterFragment(item)));
@@ -51,14 +51,14 @@ export async function buildEpub({ items, coverPng, css }) {
   oebps.file(
     "nav.xhtml",
     page(
-      "차례",
-      `<nav epub:type="toc" id="toc"><h1>차례</h1>
+      "目次",
+      `<nav epub:type="toc" id="toc"><h1>目次</h1>
 ${renderToc(toc, hrefOf)}
 </nav>
 <nav epub:type="landmarks" hidden="hidden"><h2>Landmarks</h2><ol>
-<li><a epub:type="cover" href="cover.xhtml">표지</a></li>
-<li><a epub:type="toc" href="nav.xhtml">차례</a></li>
-<li><a epub:type="bodymatter" href="${items.find((i) => i.kind === "part" || i.kind === "ch").href}">본문</a></li>
+<li><a epub:type="cover" href="cover.xhtml">表紙</a></li>
+<li><a epub:type="toc" href="nav.xhtml">目次</a></li>
+<li><a epub:type="bodymatter" href="${items.find((i) => i.kind === "part" || i.kind === "ch").href}">本文</a></li>
 </ol></nav>`,
     ),
   );
@@ -98,14 +98,14 @@ ${renderToc(toc, hrefOf)}
   oebps.file(
     "content.opf",
     `<?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="ko" prefix="schema: http://schema.org/">
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="bookid" xml:lang="ja" prefix="schema: http://schema.org/">
 <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 <dc:identifier id="bookid">${BOOK.identifier}</dc:identifier>
 <dc:title>${escapeHtml(BOOK.title)}: ${escapeHtml(BOOK.subtitle)}</dc:title>
-<dc:language>ko</dc:language>
-<dc:creator>비공식 한국어 해설 (원저 pstack: Lauren Tan)</dc:creator>
+<dc:language>ja</dc:language>
+<dc:creator>非公式日本語解説（原著 pstack：Lauren Tan）</dc:creator>
 <dc:rights>MIT License. See the attribution appendix.</dc:rights>
-<dc:description>Cursor 플러그인 pstack(${SOURCE.version})의 스킬 47종을 한국어로 해설한 기술서. 비공식판.</dc:description>
+<dc:description>Cursorプラグインpstack ${SOURCE.version}の47スキルを英語原文から解説した非公式日本語版。</dc:description>
 <meta property="schema:version">${BOOK_VERSION}</meta>
 <meta property="dcterms:modified">${BOOK.date}T00:00:00Z</meta>
 <meta name="cover" content="cover-image"/>

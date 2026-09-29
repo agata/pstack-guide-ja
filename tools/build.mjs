@@ -18,7 +18,7 @@ const css = readFileSync("assets/style.css", "utf8");
 const printCss = readFileSync("assets/print.css", "utf8");
 
 async function renderCover() {
-  const fontsCss = pathToFileURL(resolve("node_modules/@fontsource/noto-sans-kr/700.css")).href;
+  const fontsCss = pathToFileURL(resolve("node_modules/@fontsource/noto-sans-jp/700.css")).href;
   const path = resolve(buildDir, "cover.html");
   writeFileSync(path, coverHtml().replace("FONTS_CSS", fontsCss));
   const browser = await launch();

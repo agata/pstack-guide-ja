@@ -1,8 +1,8 @@
 // Loads manuscript/*.md and renders each file to an XHTML fragment.
 //
 // File names: NN-kind-slug.md with kind in front | part | ch | app.
-//   front: unnumbered front matter    part: part divider (numbered 제 N부)
-//   ch: numbered chapter (제 N장)     app: appendix (부록 A, B, ...)
+//   front: unnumbered front matter    part: part divider (numbered 第N部)
+//   ch: numbered chapter (第N章)     app: appendix (付録A, B, ...)
 // Heading ids: "## text {#id}" sets an explicit id, otherwise ids are derived from the text.
 // Links to other chapters: [text](slug.md#anchor) where slug is the file name after kind.
 import { readdirSync, readFileSync } from "node:fs";
@@ -17,25 +17,25 @@ export const SOURCE = {
   version: "0.15.5",
   dir: "pstack",
 };
-// The book version is the pstack version it covers plus the book revision: ${SOURCE.version}-ko.${BOOK_REVISION}.
+// The book version is the pstack version it covers plus the book revision: ${SOURCE.version}-ja.${BOOK_REVISION}.
 // SOURCE.version and BOOK_REVISION are the only places either is written down.
-export const BOOK_REVISION = 3;
-export const BOOK_VERSION = `${SOURCE.version}-ko.${BOOK_REVISION}`;
+export const BOOK_REVISION = 1;
+export const BOOK_VERSION = `${SOURCE.version}-ja.${BOOK_REVISION}`;
 export const bookFile = (ext) => `pstack-guide-${BOOK_VERSION}.${ext}`;
 export const srcUrl = (path) => `${SOURCE.repo}/blob/${SOURCE.sha}/${SOURCE.dir}/${path}`;
 
 export const BOOK = {
-  title: "pstack 가이드",
-  subtitle: "Cursor 플러그인 스킬 47종 해설",
-  language: "ko",
-  identifier: "urn:uuid:5f6d1c1e-4a0b-4c7e-9a52-7d1b3c0e9a11",
-  date: "2026-09-28",
+  title: "pstackガイド",
+  subtitle: "Cursorプラグインの47スキルを理解する",
+  language: "ja",
+  identifier: "urn:uuid:4580b864-7b18-4fd1-9700-2e534ef7e749",
+  date: "2026-09-29",
 };
 
 // Worked examples written for this book (not from the source) open with this label.
-export const EXAMPLE_LABEL = "예시 (이 책의 저자가 만든 것, 원본에 없음)";
+export const EXAMPLE_LABEL = "例（本書独自の例。原文にはありません）";
 // Commentary blocks (interpretation that is not in the source) open with this label.
-export const COMMENTARY_LABEL = "해설 (이 책의 해석, 원본에 없음)";
+export const COMMENTARY_LABEL = "解説（本書の解釈。原文の規定ではありません）";
 
 const KINDS = new Set(["front", "part", "ch", "app"]);
 
@@ -106,7 +106,7 @@ function renderChapter(source, ctx) {
       }
     }
   }
-  let html = md.renderer.render(tokens, md.options, env);
+  let html = md.renderer.render(tokens, md.options, env).replaceAll("<p>原文：", '<p class="source">原文：');
   for (const label of [EXAMPLE_LABEL, COMMENTARY_LABEL]) {
     html = html.replaceAll(`<blockquote>\n<p><strong>${label}`, `<blockquote class="example">\n<p><strong>${label}`);
   }
@@ -129,9 +129,9 @@ export function loadManuscript(dir = "manuscript") {
     const first = source.match(/^#\s+(.+?)\s*$/m);
     if (!first) throw new Error(`${file}: missing h1`);
     let label = "";
-    if (kind === "part") label = `제 ${++counters.part}부`;
-    if (kind === "ch") label = `제 ${++counters.ch}장`;
-    if (kind === "app") label = `부록 ${String.fromCharCode(64 + ++counters.app)}`;
+    if (kind === "part") label = `第${++counters.part}部`;
+    if (kind === "ch") label = `第${++counters.ch}章`;
+    if (kind === "app") label = `付録${String.fromCharCode(64 + ++counters.app)}`;
     items.push({ file, order: Number(order), kind, slug, label, title: first[1], source, srcPaths });
   }
   const bySlug = new Map(items.map((i) => [i.slug, i]));

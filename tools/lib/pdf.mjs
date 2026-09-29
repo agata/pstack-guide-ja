@@ -4,18 +4,18 @@ import { BOOK, chapterFragment, escapeHtml } from "./manuscript.mjs";
 import { buildToc, renderToc } from "./toc.mjs";
 import { launch } from "./chrome.mjs";
 
-const FONT_CSS = ["noto-serif-kr/400", "noto-serif-kr/700", "noto-sans-kr/400", "noto-sans-kr/700", "jetbrains-mono/400", "jetbrains-mono/700"];
+const FONT_CSS = ["noto-serif-jp/400", "noto-serif-jp/700", "noto-sans-jp/400", "noto-sans-jp/700", "jetbrains-mono/400", "jetbrains-mono/700"];
 
 export function bookHtml({ items, css, printCss, coverUrl }) {
   const toc = buildToc(items);
   const hrefOf = (item, frag) => `#${frag ?? item.id}`;
   const fonts = FONT_CSS.map((f) => `<link rel="stylesheet" href="/node_modules/@fontsource/${f}.css">`).join("\n");
   return `<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><title>${escapeHtml(BOOK.title)}</title>
+<html lang="ja"><head><meta charset="utf-8"><title>${escapeHtml(BOOK.title)}</title>
 ${fonts}
 <style>${css}</style><style>${printCss}</style></head><body>
 <section class="cover"><img src="${coverUrl}" alt="cover"></section>
-<nav class="toc" id="toc"><h1>차례</h1>
+<nav class="toc" id="toc"><h1>目次</h1>
 ${renderToc(toc, hrefOf, { sections: false })}
 </nav>
 ${items.map(chapterFragment).join("\n").replaceAll('src="images/', 'src="/manuscript/images/')}

@@ -3,6 +3,8 @@ import puppeteer from "puppeteer-core";
 
 const CANDIDATES = [
   process.env.CHROME_PATH,
+  "/usr/bin/chromium",
+  "/usr/bin/google-chrome",
   "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
   "/Applications/Chromium.app/Contents/MacOS/Chromium",
 ].filter(Boolean);

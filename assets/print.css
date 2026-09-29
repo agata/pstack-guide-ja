@@ -1,5 +1,5 @@
 /* PDF only. Loaded after fonts.css. Page size is 152 x 225 mm (a common Korean paperback size). */
-:root { --serif: "Noto Serif KR", serif; --sans: "Noto Sans KR", sans-serif; --mono: "JetBrains Mono", "Noto Sans KR", monospace; }
+:root { --serif: "Noto Serif JP", serif; --sans: "Noto Sans JP", sans-serif; --mono: "JetBrains Mono", "Noto Sans JP", monospace; }
 @page {
   size: 152mm 225mm;
   margin: 20mm 17mm 22mm 17mm;
@@ -41,3 +41,14 @@ section#ch-playbooks-work td, section#ch-playbooks-work th,
 section#ch-playbooks-pr td, section#ch-playbooks-pr th,
 section#ch-playbooks-long td, section#ch-playbooks-long th,
 section#ch-principles td, section#ch-principles th { padding: 0.18em 0.5em; line-height: 1.55; }
+
+blockquote.example { break-inside: avoid; }
+nav.toc li.part-entry { break-inside: avoid; }
+
+h2 + p { break-after: avoid; }
+#ch-principles h2 + p + p { break-after: avoid; }
+#app-decision-flow table { font-size: 8pt; }
+#app-decision-flow td, #app-decision-flow th { padding: 0.22em 0.5em; line-height: 1.5; }
+
+p.source { break-inside: avoid; break-after: avoid; }
+#app-attribution h2:last-of-type ~ p { font-size: 8.5pt; line-height: 1.45; }

@@ -1,5 +1,5 @@
 // Usage: bun tools/pdf-inspect.mjs <pdf> <outDir> <page,page,...>
-// Prints page count, embedded fonts, Hangul text sample, and renders the given pages to PNG.
+// Prints page count, embedded fonts, Japanese text sample, and renders the given pages to PNG.
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 import { createCanvas } from "@napi-rs/canvas";
@@ -14,18 +14,18 @@ console.log("outline entries", count(outline), "top-level", outline.length);
 const meta = await doc.getMetadata();
 console.log("title", meta.info?.Title);
 const fonts = new Set();
-let hangul = 0, replacement = 0, chars = 0, emDash = 0;
+let japanese = 0, replacement = 0, chars = 0, emDash = 0;
 for (let i = 1; i <= doc.numPages; i++) {
   const page = await doc.getPage(i);
   const tc = await page.getTextContent();
   for (const it of tc.items) {
     if (!it.str) continue;
     chars += it.str.length;
-    hangul += (it.str.match(/[가-힣]/g) ?? []).length;
+    japanese += (it.str.match(/[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/gu) ?? []).length;
     replacement += (it.str.match(/�/g) ?? []).length;
   }
 }
-console.log({ chars, hangul, replacement, emDash });
+console.log({ chars, japanese, replacement, emDash });
 for (const n of pagesArg.split(",").map(Number)) {
   const page = await doc.getPage(n);
   const vp = page.getViewport({ scale: 1.6 });

@@ -20,7 +20,7 @@ const LEFT = 44;
 
 // Approximate advance width of one character in em.
 function em(ch) {
-  if (/[ᄀ-ᇿ　-㆏가-힯＀-￯]/.test(ch)) return 1;
+  if (/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\u3000-\u303f\uff00-\uffef]/u.test(ch)) return 1;
   if (ch === " ") return 0.3;
   if (/[A-Z0-9]/.test(ch)) return 0.62;
   if (/[.,:;'`|!()\-]/.test(ch)) return 0.4;
@@ -98,7 +98,7 @@ export function renderFlow(source, name) {
     const detailLines = node.detail ? wrap(node.detail, FS_SMALL, inner) : [];
     const h = PAD * 2 + titleLines.length * FS * LH + detailLines.length * FS_SMALL * LH - 2;
     const sides = node.sides.map((s) => {
-      const labelLines = wrap(s.kind === "stop" ? `중단: ${s.label}` : s.label, FS_SMALL, sideW - PAD * 2);
+      const labelLines = wrap(s.kind === "stop" ? `終了： ${s.label}` : s.label, FS_SMALL, sideW - PAD * 2);
       const textLines = s.text ? wrap(s.text, FS_SMALL, sideW - PAD * 2) : [];
       const sh = PAD * 2 + (labelLines.length + textLines.length) * FS_SMALL * LH - 2;
       return { ...s, labelLines, textLines, h: sh };
@@ -175,6 +175,6 @@ export function renderFlow(source, name) {
     });
   });
 
-  const aria = escapeHtml(name || "흐름도");
+  const aria = escapeHtml(name || "フローチャート");
   return `<figure class="flow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${W} ${Math.ceil(H)}" role="img" aria-label="${aria}"><title>${aria}</title><defs><marker id="${uid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" class="fl-head"/></marker></defs>${parts.join("")}</svg></figure>\n`;
 }

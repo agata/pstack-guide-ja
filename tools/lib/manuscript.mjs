@@ -19,7 +19,7 @@ export const SOURCE = {
 };
 // The book version is the pstack version it covers plus the book revision: ${SOURCE.version}-ko.${BOOK_REVISION}.
 // SOURCE.version and BOOK_REVISION are the only places either is written down.
-export const BOOK_REVISION = 2;
+export const BOOK_REVISION = 3;
 export const BOOK_VERSION = `${SOURCE.version}-ko.${BOOK_REVISION}`;
 export const bookFile = (ext) => `pstack-guide-${BOOK_VERSION}.${ext}`;
 export const srcUrl = (path) => `${SOURCE.repo}/blob/${SOURCE.sha}/${SOURCE.dir}/${path}`;

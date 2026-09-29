@@ -83,3 +83,58 @@ figure.flow svg { width: 100%; max-width: 520px; height: auto; font-family: var(
 .fl-t { font-size: 14px; font-weight: 700; fill: #111; }
 .fl-d { font-size: 12.5px; fill: #222; }
 .fl-sl { font-size: 12.5px; font-weight: 700; fill: #111; }
+
+/* Screen dark mode only. `screen` keeps print and the PDF on the light rules above. */
+@media screen and (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --dm-bg: #161616;
+    --dm-fg: #eceae6;
+    --dm-muted: #c8c4bc;
+    --dm-code-bg: #2c2a28;
+    --dm-code-fg: #f3f0ea;
+    --dm-pre-bg: #242220;
+    --dm-border: #8a8680;
+    --dm-th-bg: #343230;
+    --dm-quote-bg: #201e1c;
+    --dm-quote-fg: #e6e2dc;
+    --dm-quote-border: #a39e96;
+    --dm-example-bg: #1a1917;
+    --dm-link: #a9d0ff;
+    --dm-link-line: #a9d0ff;
+    --dm-flow-fill: #1e1c1a;
+    --dm-flow-end: #2e2c29;
+    --dm-flow-alt: #262421;
+    --dm-flow-stroke: #d9d5ce;
+    --dm-flow-stroke-alt: #c4bfb6;
+    --dm-flow-text: #f6f3ee;
+    --dm-flow-sub: #e4e0d8;
+    --dm-hl-comment: #c2beb6;
+    --dm-hl-keyword: #ffb0a8;
+    --dm-hl-string: #8ee0a8;
+    --dm-hl-title: #9dcbff;
+  }
+  body { background: var(--dm-bg); color: var(--dm-fg); }
+  .label { color: var(--dm-muted); }
+  blockquote { background: var(--dm-quote-bg); color: var(--dm-quote-fg); border-left-color: var(--dm-quote-border); }
+  code { background: var(--dm-code-bg); color: var(--dm-code-fg); }
+  pre { background: var(--dm-pre-bg); color: var(--dm-code-fg); border-color: var(--dm-border); }
+  pre code { background: none; color: inherit; }
+  th, td { border-color: var(--dm-border); }
+  th { background: var(--dm-th-bg); color: var(--dm-code-fg); }
+  hr { border-top-color: var(--dm-border); }
+  a { color: var(--dm-link); text-decoration-color: var(--dm-link-line); }
+  blockquote.example { background: var(--dm-example-bg); border-color: var(--dm-quote-border); }
+  blockquote.example pre { background: var(--dm-pre-bg); }
+  .hljs-comment, .hljs-quote { color: var(--dm-hl-comment); }
+  .hljs-keyword, .hljs-selector-tag, .hljs-literal { color: var(--dm-hl-keyword); }
+  .hljs-string, .hljs-attr, .hljs-meta .hljs-string { color: var(--dm-hl-string); }
+  .hljs-number, .hljs-built_in, .hljs-title, .hljs-section { color: var(--dm-hl-title); }
+  .fl-box, .fl-stop { fill: var(--dm-flow-fill); stroke: var(--dm-flow-stroke); }
+  .fl-end { fill: var(--dm-flow-end); stroke: var(--dm-flow-stroke); }
+  .fl-alt { fill: var(--dm-flow-alt); stroke: var(--dm-flow-stroke-alt); }
+  .fl-line { stroke: var(--dm-flow-stroke); }
+  .fl-head { fill: var(--dm-flow-stroke); }
+  .fl-t, .fl-sl { fill: var(--dm-flow-text); }
+  .fl-d { fill: var(--dm-flow-sub); }
+}

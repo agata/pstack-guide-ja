@@ -72,7 +72,79 @@ else {
   console.log(`notation: ${rows.length} Korean(English) pairs`);
 }
 
-// 3. EPUB structure and validity.
+// 3. Dark screen palette. Print and the PDF stay on the light rules: the dark
+// block is scoped to screen, and every text or stroke color clears WCAG against its fill.
+const styleCss = readFileSync("assets/style.css", "utf8");
+const printCss = readFileSync("assets/print.css", "utf8");
+if (/prefers-color-scheme/.test(printCss)) fail("print.css must stay light; it declares prefers-color-scheme");
+const darkBlocks = [];
+for (const m of styleCss.matchAll(/@media\s+([^{]+)\{/g)) {
+  if (!/prefers-color-scheme:\s*dark/.test(m[1])) continue;
+  let i = m.index + m[0].length;
+  let depth = 1;
+  while (i < styleCss.length && depth) {
+    if (styleCss[i] === "{") depth++;
+    else if (styleCss[i] === "}") depth--;
+    i++;
+  }
+  darkBlocks.push({ prelude: m[1], body: styleCss.slice(m.index + m[0].length, i - 1) });
+}
+if (darkBlocks.length !== 1) fail(`style.css should have one dark palette, found ${darkBlocks.length}`);
+else {
+  const { prelude, body } = darkBlocks[0];
+  if (!/\bscreen\b/.test(prelude)) fail("dark palette must be @media screen so print and PDF stay light");
+  const channel = (c) => {
+    const s = c / 255;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  const lum = (hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    return 0.2126 * channel((n >> 16) & 255) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255);
+  };
+  const contrast = (a, b) => {
+    const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+  const vars = Object.fromEntries([...body.matchAll(/(--dm-[\w-]+)\s*:\s*(#[0-9a-fA-F]{6})\b/g)].map((v) => [v[1], v[2].toLowerCase()]));
+  for (const name of Object.keys(vars)) if (!body.includes(`var(${name})`)) fail(`dark palette ${name} is never applied`);
+  const pairs = [
+    ["--dm-fg", "--dm-bg", 4.5],
+    ["--dm-fg", "--dm-example-bg", 4.5],
+    ["--dm-muted", "--dm-bg", 4.5],
+    ["--dm-code-fg", "--dm-code-bg", 4.5],
+    ["--dm-code-fg", "--dm-pre-bg", 4.5],
+    ["--dm-code-fg", "--dm-th-bg", 4.5],
+    ["--dm-link", "--dm-bg", 4.5],
+    ["--dm-link", "--dm-code-bg", 4.5],
+    ["--dm-link", "--dm-th-bg", 4.5],
+    ["--dm-link-line", "--dm-bg", 3],
+    ["--dm-quote-fg", "--dm-quote-bg", 4.5],
+    ["--dm-quote-border", "--dm-quote-bg", 3],
+    ["--dm-border", "--dm-bg", 3],
+    ["--dm-flow-text", "--dm-flow-fill", 4.5],
+    ["--dm-flow-text", "--dm-flow-end", 4.5],
+    ["--dm-flow-text", "--dm-flow-alt", 4.5],
+    ["--dm-flow-sub", "--dm-flow-fill", 4.5],
+    ["--dm-flow-sub", "--dm-flow-end", 4.5],
+    ["--dm-flow-sub", "--dm-flow-alt", 4.5],
+    ["--dm-flow-stroke", "--dm-flow-fill", 3],
+    ["--dm-flow-stroke-alt", "--dm-flow-alt", 3],
+    ["--dm-hl-comment", "--dm-pre-bg", 4.5],
+    ["--dm-hl-keyword", "--dm-pre-bg", 4.5],
+    ["--dm-hl-string", "--dm-pre-bg", 4.5],
+    ["--dm-hl-title", "--dm-pre-bg", 4.5],
+  ];
+  for (const [fg, bg, min] of pairs) {
+    if (!vars[fg] || !vars[bg]) fail(`dark palette missing ${vars[fg] ? bg : fg}`);
+    else {
+      const ratio = contrast(vars[fg], vars[bg]);
+      if (ratio < min) fail(`dark contrast ${fg} on ${bg} is ${ratio.toFixed(2)}:1, need ${min}:1`);
+    }
+  }
+  console.log(`dark palette: ${Object.keys(vars).length} colors, ${pairs.length} contrast pairs`);
+}
+
+// 4. EPUB structure and validity.
 // The book version is BOOK_VERSION. The colophon, EPUB metadata, output file names and README must all agree.
 const version = BOOK_VERSION;
 const colophon = items.find((i) => i.file === "01-front-colophon.md");
